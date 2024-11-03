@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Moon, Sun, Copy, Check } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import Navigation from './components/Navigation';
+import Summary from './components/Summary';
 
 export default function ProjectPlanner (){
   const [hourlyRate, setHourlyRate] = useState(30);
@@ -203,199 +205,190 @@ export default function ProjectPlanner (){
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleSprintClick = (index) => {
+    const sprintElement = document.getElementById(`sprint-${index}`);
+    if (sprintElement) {
+      sprintElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className={`max-w-6xl mx-auto p-4 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'} shadow-lg rounded-lg`}>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Project Planner</h2>
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className={`p-2 rounded-full ${darkMode ? 'bg-yellow-400 text-gray-800' : 'bg-gray-800 text-yellow-400'}`}
-        >
-          {darkMode ? <Sun size={24} /> : <Moon size={24} />}
-        </button>
-      </div>
-
-      <div className="mb-4">
-        <label className="block mb-2">Hourly Rate (USD)</label>
-        <input
-          type="number"
-          value={hourlyRate}
-          onChange={(e) => setHourlyRate(Math.max(1, Number(e.target.value)))}
-          className={`w-full max-w-xs p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
-        />
-      </div>
-
-      {sprints.map((sprint) => (
-        <div key={sprint.id} className={`mb-8 border p-4 rounded ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
-          <div className={`sticky top-0 z-10 p-5 mb-4 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-sm pt-2`}>
-            <input
-              value={sprint.name}
-              onChange={(e) => updateSprint(sprint.id, 'name', e.target.value)}
-              className={`text-xl font-bold mb-2 w-full p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
-            />
-            <div className="flex justify-between">
-              <span>Duration: {sprint.duration.toFixed(2)} days</span>
-              <span>Labor Cost: {formatCurrency(sprint.laborCost)}</span>
-            </div>
-          </div>
-          <table className="w-full mb-4">
-            <thead>
-              <tr>
-                <th className="text-left p-2">Task</th>
-                <th className="text-left p-2">Time (days)</th>
-                <th className="text-left p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sprint.tasks.map((task, index) => (
-                <tr key={index}>
-                  <td className="p-2">
-                    <input
-                      value={task.name}
-                      onChange={(e) => updateTask(sprint.id, index, 'name', e.target.value)}
-                      className={`w-full p-1 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
-                      title={task.name}
-                      />
-                  </td>
-                  <td className="p-2">
-                    <input
-                      type="number"
-                      value={task.time}
-                      onChange={(e) => updateTask(sprint.id, index, 'time', Number(e.target.value))}
-                      className={`w-full p-1 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
-                    />
-                  </td>
-                  <td className="p-2">
-                    <button 
-                      onClick={() => removeTask(sprint.id, index)}
-                      className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <button 
-            onClick={() => addTask(sprint.id)}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-4"
+    <div className="flex">
+      <Navigation sprints={sprints} onSprintClick={handleSprintClick} />
+      <div className={`max-w-6xl mx-auto p-4 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'} shadow-lg rounded-lg`}>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold">Project Planner</h2>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className={`p-2 rounded-full ${darkMode ? 'bg-yellow-400 text-gray-800' : 'bg-gray-800 text-yellow-400'}`}
           >
-            Add Task
-          </button>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-2">Tech Cost (USD)</label>
-              <input
-                type="number"
-                value={sprint.techCost}
-                onChange={(e) => updateSprint(sprint.id, 'techCost', Number(e.target.value))}
-                className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
-                />
-            </div>
-            <div>
-              <label className="block mb-2">Labor Cost (USD)</label>
-              <input
-                type="number"
-                value={(sprint.laborCost || 0).toFixed(2)}
-                readOnly
-                className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-600 text-white' : 'bg-gray-100'}`}
-                />
-            </div>
-            <div>
-              <label className="block mb-2">Monthly Cost (USD)</label>
-              <input
-                type="number"
-                value={sprint.monthlyCost}
-                onChange={(e) => updateSprint(sprint.id, 'monthlyCost', Number(e.target.value))}
-                className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
-              />
-            </div>
-          </div>
-          <button 
-            onClick={() => removeSprint(sprint.id)}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-4"
-          >
-            Remove Sprint
+            {darkMode ? <Sun size={24} /> : <Moon size={24} />}
           </button>
         </div>
-      ))}
 
-      <button 
-        onClick={addSprint}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4"
-      >
-        Add Sprint
-      </button>
-
-      <div className="mt-8">
-        <h3 className="text-lg font-bold mb-2">Project Maintenance Cost</h3>
-        <label className="block mb-2">Monthly Maintenance Cost (USD)</label>
-        <input
-          type="number"
-          value={maintenanceCost}
-          onChange={(e) => setMaintenanceCost(Number(e.target.value))}
-          className={`w-full max-w-xs p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
+        <div className="mb-4">
+          <label className="block mb-2">Hourly Rate (USD)</label>
+          <input
+            type="number"
+            value={hourlyRate}
+            onChange={(e) => setHourlyRate(Math.max(1, Number(e.target.value)))}
+            className={`w-full max-w-xs p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
           />
-      </div>
+        </div>
 
-      <div className="mt-8">
-        <h3 className="text-lg font-bold mb-2">Totals</h3>
-        <p>Total Days: {totals.days.toFixed(2)}</p>
-        <p>Total Tech Cost: {formatCurrency(totals.techCost)}</p>
-        <p>Total Labor Cost: {formatCurrency(totals.laborCost)}</p>
-        <p>Total Project Cost: {formatCurrency(totals.techCost + totals.laborCost)}</p>
-        <p>Monthly Maintenance Cost: {formatCurrency(maintenanceCost)}</p>
-        <p>Total Monthly Cost: {formatCurrency(totals.monthlyCost)}</p>
-      </div>
-
-      <div className="mt-8 flex space-x-4 flex-wrap">
-        <button 
-          onClick={exportJSON}
-          className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
-          >
-          Export JSON
-        </button>
-        <input
-          type="file"
-          ref={fileInputRef}
-          style={{ display: 'none' }}
-          onChange={importJSON}
-          accept=".json"
-          />
-        <button 
-          onClick={() => fileInputRef.current.click()}
-          className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
-        >
-          Import JSON
-        </button>
-        <Dialog>
-          <DialogTrigger asChild>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-              JSON Info
-            </button>
-          </DialogTrigger>
-          <DialogContent className={darkMode ? 'bg-gray-800 text-white' : 'bg-white'}>
-            <DialogHeader>
-              <DialogTitle>JSON Structure for Import/Export</DialogTitle>
-            </DialogHeader>
-            <div className="mt-2">
-              <p>The JSON file for import/export follows this structure:</p>
-              <div className="relative">
-                <pre className={`mt-2 p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                  {jsonStructure}
-                </pre>
-                <button
-                  onClick={copyJsonStructure}
-                  className="absolute top-2 right-2 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                >
-                  {copied ? <Check size={16} /> : <Copy size={16} />}
-                </button>
+        {sprints.map((sprint, index) => (
+          <div key={sprint.id} id={`sprint-${index}`} className={`mb-8 border p-4 rounded ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+            <div className={`sticky top-0 z-10 p-5 mb-4 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-sm pt-2`}>
+              <input
+                value={sprint.name}
+                onChange={(e) => updateSprint(sprint.id, 'name', e.target.value)}
+                className={`text-xl font-bold mb-2 w-full p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
+              />
+              <div className="flex justify-between">
+                <span>Duration: {sprint.duration.toFixed(2)} days</span>
+                <span>Labor Cost: {formatCurrency(sprint.laborCost)}</span>
               </div>
-              <p className="mt-2">This structure allows for easy import and export of your project planning data, including maintenance costs.</p>
             </div>
-          </DialogContent>
-        </Dialog>
+            <table className="w-full mb-4">
+              <thead>
+                <tr>
+                  <th className="text-left p-2">Task</th>
+                  <th className="text-left p-2">Time (days)</th>
+                  <th className="text-left p-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sprint.tasks.map((task, index) => (
+                  <tr key={index}>
+                    <td className="p-2">
+                      <input
+                        value={task.name}
+                        onChange={(e) => updateTask(sprint.id, index, 'name', e.target.value)}
+                        className={`w-full p-1 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
+                        title={task.name}
+                        />
+                    </td>
+                    <td className="p-2">
+                      <input
+                        type="number"
+                        value={task.time}
+                        onChange={(e) => updateTask(sprint.id, index, 'time', Number(e.target.value))}
+                        className={`w-full p-1 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
+                      />
+                    </td>
+                    <td className="p-2">
+                      <button 
+                        onClick={() => removeTask(sprint.id, index)}
+                        className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button 
+              onClick={() => addTask(sprint.id)}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-4"
+            >
+              Add Task
+            </button>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block mb-2">Tech Cost (USD)</label>
+                <input
+                  type="number"
+                  value={sprint.techCost}
+                  onChange={(e) => updateSprint(sprint.id, 'techCost', Number(e.target.value))}
+                  className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
+                  />
+              </div>
+              <div>
+                <label className="block mb-2">Labor Cost (USD)</label>
+                <input
+                  type="number"
+                  value={(sprint.laborCost || 0).toFixed(2)}
+                  readOnly
+                  className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-600 text-white' : 'bg-gray-100'}`}
+                  />
+              </div>
+              <div>
+                <label className="block mb-2">Monthly Cost (USD)</label>
+                <input
+                  type="number"
+                  value={sprint.monthlyCost}
+                  onChange={(e) => updateSprint(sprint.id, 'monthlyCost', Number(e.target.value))}
+                  className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
+                />
+              </div>
+            </div>
+            <button 
+              onClick={() => removeSprint(sprint.id)}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-4"
+            >
+              Remove Sprint
+            </button>
+          </div>
+        ))}
+
+        <button 
+          onClick={addSprint}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4"
+        >
+          Add Sprint
+        </button>
+
+        <Summary totals={totals} maintenanceCost={maintenanceCost} darkMode={darkMode} />
+
+        <div className="mt-8 flex space-x-4 flex-wrap">
+          <button 
+            onClick={exportJSON}
+            className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600"
+            >
+            Export JSON
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={importJSON}
+            accept=".json"
+            />
+          <button 
+            onClick={() => fileInputRef.current.click()}
+            className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+          >
+            Import JSON
+          </button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                JSON Info
+              </button>
+            </DialogTrigger>
+            <DialogContent className={darkMode ? 'bg-gray-800 text-white' : 'bg-white'}>
+              <DialogHeader>
+                <DialogTitle>JSON Structure for Import/Export</DialogTitle>
+              </DialogHeader>
+              <div className="mt-2">
+                <p>The JSON file for import/export follows this structure:</p>
+                <div className="relative">
+                  <pre className={`mt-2 p-2 rounded ${darkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                    {jsonStructure}
+                  </pre>
+                  <button
+                    onClick={copyJsonStructure}
+                    className="absolute top-2 right-2 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    {copied ? <Check size={16} /> : <Copy size={16} />}
+                  </button>
+                </div>
+                <p className="mt-2">This structure allows for easy import and export of your project planning data, including maintenance costs.</p>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
     </div>
   );
