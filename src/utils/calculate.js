@@ -12,7 +12,8 @@ export const calculateTotals = (sprints) => {
     days: acc.days + sprint.duration,
     techCost: acc.techCost + sprint.techCost,
     laborCost: acc.laborCost + (sprint.laborCost || 0),
-  }), { days: 0, techCost: 0, laborCost: 0 });
+    monthlyCost: acc.monthlyCost + (sprint.monthlyCost || 0)
+  }), { days: 0, techCost: 0, laborCost: 0, monthlyCost: 0 });
 };
 
 export const exportJSON = ({ hourlyRate, sprints, maintenanceCost }) => {
@@ -66,4 +67,8 @@ export const importJSON = (event, setHourlyRate, setSprints, setMaintenanceCost)
   };
 
   reader.readAsText(file);
+};
+
+export const calculateTotalMonthlyCost = (sprints) => {
+  return sprints.reduce((total, sprint) => total + (sprint.monthlyCost || 0), 0);
 };

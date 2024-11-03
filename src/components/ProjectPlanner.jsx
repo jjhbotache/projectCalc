@@ -33,7 +33,7 @@ export default function ProjectPlanner() {
         <input
           type="number"
           value={hourlyRate}
-          onChange={(e) => setHourlyRate(Number(e.target.value))}
+          onChange={(e) => setHourlyRate(Math.max(1, Number(e.target.value)))}
           className={`w-full max-w-xs p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
         />
       </div>
@@ -76,6 +76,7 @@ export default function ProjectPlanner() {
         <p>Total Labor Cost: {formatCurrency(totals.laborCost)}</p>
         <p>Total Project Cost: {formatCurrency(totals.techCost + totals.laborCost)}</p>
         <p>Monthly Maintenance Cost: {formatCurrency(maintenanceCost)}</p>
+        <p>Total Monthly Cost: {formatCurrency(totals.monthlyCost)}</p>
       </div>
 
       <div className="mt-8 flex space-x-4 flex-wrap">

@@ -71,7 +71,8 @@ export default function ProjectPlanner (){
       tasks: [], 
       techCost: 0, 
       laborCost: 0,
-      duration: 0
+      duration: 0,
+      monthlyCost: 0
     }]);
   };
 
@@ -114,7 +115,8 @@ export default function ProjectPlanner (){
       days: acc.days + sprint.duration,
       techCost: acc.techCost + sprint.techCost,
       laborCost: acc.laborCost + (sprint.laborCost || 0),
-    }), { days: 0, techCost: 0, laborCost: 0 });
+      monthlyCost: acc.monthlyCost + (sprint.monthlyCost || 0)
+    }), { days: 0, techCost: 0, laborCost: 0, monthlyCost: 0 });
   };
 
   const totals = calculateTotals();
@@ -218,7 +220,7 @@ export default function ProjectPlanner (){
         <input
           type="number"
           value={hourlyRate}
-          onChange={(e) => setHourlyRate(Number(e.target.value))}
+          onChange={(e) => setHourlyRate(Math.max(1, Number(e.target.value)))}
           className={`w-full max-w-xs p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
         />
       </div>
@@ -300,6 +302,15 @@ export default function ProjectPlanner (){
                 className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-600 text-white' : 'bg-gray-100'}`}
                 />
             </div>
+            <div>
+              <label className="block mb-2">Monthly Cost (USD)</label>
+              <input
+                type="number"
+                value={sprint.monthlyCost}
+                onChange={(e) => updateSprint(sprint.id, 'monthlyCost', Number(e.target.value))}
+                className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
+              />
+            </div>
           </div>
           <button 
             onClick={() => removeSprint(sprint.id)}
@@ -335,6 +346,7 @@ export default function ProjectPlanner (){
         <p>Total Labor Cost: {formatCurrency(totals.laborCost)}</p>
         <p>Total Project Cost: {formatCurrency(totals.techCost + totals.laborCost)}</p>
         <p>Monthly Maintenance Cost: {formatCurrency(maintenanceCost)}</p>
+        <p>Total Monthly Cost: {formatCurrency(totals.monthlyCost)}</p>
       </div>
 
       <div className="mt-8 flex space-x-4 flex-wrap">

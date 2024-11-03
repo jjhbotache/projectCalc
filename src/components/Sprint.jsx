@@ -62,6 +62,15 @@ export default function Sprint({ sprint, updateSprint, updateTask, addTask, remo
             className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-600 text-white' : 'bg-gray-100'}`}
           />
         </div>
+        <div>
+          <label className="block mb-2">Monthly Cost (USD)</label>
+          <input
+            type="number"
+            value={sprint.monthlyCost}
+            onChange={(e) => updateSprint(sprint.id, 'monthlyCost', Number(e.target.value))}
+            className={`w-full p-2 border rounded ${darkMode ? 'bg-gray-700 text-white' : 'bg-white'}`}
+          />
+        </div>
       </div>
       <button 
         onClick={() => removeSprint(sprint.id)}
