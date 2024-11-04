@@ -94,10 +94,11 @@ export default function ProjectPlanner() {
 
   const totals = calculateTotals(sprints);
 
-  const handleSprintClick = (index) => {
-    const sprintElement = document.getElementById(`sprint-${index}`);
-    if (sprintElement) {
-      sprintElement.scrollIntoView({ behavior: 'smooth' });
+  const handleSprintClick = (element) => {
+    console.log(element);
+    
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 

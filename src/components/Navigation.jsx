@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useRef } from "react";
 
 export default function Navigation({ sprints, onSprintClick }) {
-  const [expanded, setExpanded] = useState(null);
+  const ref = useRef(null);
 
-  const handleSprintClick = (index) => {
-    setExpanded(index === expanded ? null : index);
-    onSprintClick(index);
+  const handleSprintClick = (element) => {
+    onSprintClick(element);
   };
 
   return (
@@ -20,12 +19,6 @@ export default function Navigation({ sprints, onSprintClick }) {
             >
               {sprint.name}
             </button>
-            {expanded === index && (
-              <div className="sprint-details mt-2 p-2 bg-white border rounded shadow">
-                <p>Duration: {sprint.duration.toFixed(2)} days</p>
-                <p>Labor Cost: {sprint.laborCost.toFixed(2)}</p>
-              </div>
-            )}
           </li>
         ))}
       </ul>

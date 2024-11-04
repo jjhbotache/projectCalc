@@ -8,7 +8,7 @@ export default function HourlyRateInput({ hourlyRate, setHourlyRate }) {
         type="number"
         value={hourlyRate}
         onChange={(e) => setHourlyRate(Math.max(1, Number(e.target.value)))}
-        className={`w-full max-w-xs p-2 border rounded`}
+        className={`w-full max-w-xs p-2 border rounded text-black`}
       />
     </div>
   );
