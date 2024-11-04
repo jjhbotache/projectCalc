@@ -4,7 +4,7 @@ import { formatCurrency } from '../utils/format';
 export default function Sprint({ sprint, updateSprint, updateTask, addTask, removeTask, removeSprint, darkMode }) {
   return (
     <div className={`mb-8 border p-4 pt-0 rounded ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
-      <div className={`sticky top-0 z-10 p-5 mb-4 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-sm pt-2`}>
+      <div className={`sticky top-0 z-10 p-5 mb-4 border border-blue-200 border-t-0  ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg`}>
         <input
           value={sprint.name}
           onChange={(e) => updateSprint(sprint.id, 'name', e.target.value)}

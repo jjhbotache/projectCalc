@@ -7,7 +7,7 @@ export default function Header() {
   const darkMode = useSelector((state) => state.theme.darkMode);
 
   return (
-    <div className="flex justify-between items-center mb-4">
+    <div className="flex justify-between items-center my-4 ">
       <h2 className="text-2xl font-bold">Project Planner</h2>
       <button
         onClick={() => dispatch(toggleDarkMode())}

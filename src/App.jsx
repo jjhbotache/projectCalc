@@ -190,7 +190,7 @@ export default function ProjectPlanner() {
   return (
     <div className="flex h-screen scroll-smooth">
       <Navigation sprints={sprints} onSprintClick={handleSprintClick} />
-      <div className={`p-4 w-full h-full overflow-y-auto scroll-smooth ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'} shadow-lg rounded-lg`}>
+      <div className={`p-4 pt-0 w-full h-full overflow-y-auto scroll-smooth ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'} shadow-lg rounded-lg`}>
         <Header />
         <HourlyRateInput hourlyRate={hourlyRate} setHourlyRate={(rate) => dispatch(setHourlyRate(rate))} />
         <SprintList
