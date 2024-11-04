@@ -213,9 +213,9 @@ export default function ProjectPlanner (){
   };
 
   return (
-    <div className="flex">
+    <div className="flex h-screen scroll-smooth">
       <Navigation sprints={sprints} onSprintClick={handleSprintClick} />
-      <div className={`max-w-6xl mx-auto p-4 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'} shadow-lg rounded-lg`}>
+      <div className={`p-4 w-full h-full overflow-y-auto scroll-smooth ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'} shadow-lg rounded-lg`}>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Project Planner</h2>
           <button
@@ -237,7 +237,7 @@ export default function ProjectPlanner (){
         </div>
 
         {sprints.map((sprint, index) => (
-          <div key={sprint.id} id={`sprint-${index}`} className={`mb-8 border p-4 rounded ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+          <div key={sprint.id} id={`sprint-${index}`} className={`mb-8 border p-4 pt-0 rounded ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
             <div className={`sticky top-0 z-10 p-5 mb-4 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-sm pt-2`}>
               <input
                 value={sprint.name}

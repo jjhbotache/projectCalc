@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Moon, Sun, Copy, Check } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import Sprint from './Sprint';
 import JsonInfoDialog from './JsonInfoDialog';
 import useDarkMode from '../hooks/useDarkMode';
