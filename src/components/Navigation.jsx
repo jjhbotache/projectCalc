@@ -1,27 +1,57 @@
-import { useRef } from "react";
+'use client'
 
-export default function Navigation({ sprints, onSprintClick }) {
-  const ref = useRef(null);
+import { Home, Settings, Users, HelpCircle, Menu, Icon, House } from 'lucide-react';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarProvider,
+  SidebarTrigger,
+  SidebarGroup
+} from '@/components/ui/sidebar';
 
-  const handleSprintClick = (element) => {
-    onSprintClick(element);
-  };
+export default function Navigation({ functionalities, onHelp }) {
 
+  
   return (
-    <div className="navigation p-4 bg-gray-100 rounded-lg shadow-md w-52 h-full overflow-y-auto ">
-      <h2 className="text-xl font-bold mb-4">Navigation</h2>
-      <ul className="space-y-2">
-        {sprints.map((sprint, index) => (
-          <li key={sprint.id}>
-            <button
-              className="w-full text-left p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
-              onClick={() => handleSprintClick(index)}
-            >
-              {sprint.name}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarTrigger/>
+      </SidebarHeader>
+
+      <SidebarContent>
+        <SidebarGroup>
+          {functionalities.map((functionality) => (
+            <SidebarMenuItem key={functionality.id} className="list-none">
+              <SidebarMenuButton asChild>
+                <a href={`#functionality-${functionality.id}`}>
+                  <span className="h-5 w-5" >
+                    {functionality.id.toString().substring(0, 2)}
+                  </span>
+                  <span>{functionality.name}</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <a href="#ayuda" onClick={onHelp}>
+                <HelpCircle className="h-5 w-5" />
+                <span>Ayuda</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
   );
 }

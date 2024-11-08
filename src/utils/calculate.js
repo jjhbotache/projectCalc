@@ -1,74 +1,52 @@
+import { calculateFunctionTotalPrices } from "./calculateTotalPrices";
+
 export const calculateLaborCost = (tasks, hourlyRate) => {
   const totalHours = tasks.reduce((sum, task) => sum + task.time, 0) * 8; // Assuming 8 hours per day
   return totalHours * hourlyRate;
 };
 
-export const calculateSprintDuration = (tasks) => {
+export const calculateFunctionalityDuration = (tasks) => {
   return tasks.reduce((sum, task) => sum + task.time, 0); // Sum of all task times
 };
 
-export const calculateTotals = (sprints) => {
-  return sprints.reduce((acc, sprint) => ({
-    days: acc.days + sprint.duration,
-    techCost: acc.techCost + sprint.techCost,
-    laborCost: acc.laborCost + (sprint.laborCost || 0),
-    monthlyCost: acc.monthlyCost + (sprint.monthlyCost || 0)
-  }), { days: 0, techCost: 0, laborCost: 0, monthlyCost: 0 });
+export const calculateTotalMonthlyCost = (functionalities) => {
+  return functionalities.reduce((total, functionality) => total + (functionality.monthlyCost || 0), 0);
 };
 
-export const exportJSON = ({ hourlyRate, sprints, maintenanceCost }) => {
-  const dataStr = JSON.stringify({ hourlyRate, sprints, maintenanceCost }, null, 2);
-  const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-  const exportFileDefaultName = 'project-plan.json';
+export const calculateTotals = (project) => {
+  
+  const { functionalities, settings } = project;
+  
 
-  const linkElement = document.createElement('a');
-  linkElement.setAttribute('href', dataUri);
-  linkElement.setAttribute('download', exportFileDefaultName);
-  linkElement.click();
-};
+  let totalDays = 0;
+  let totalTechCost = 0;
+  let totalLaborCost = 0;
+  let totalMonthlyCost = 0;
+  
+  let totalHours = 0;
+  functionalities.forEach(func => {
+    func.tasks.forEach(task => {
+      totalHours += task.hours;
+    });
+    const { techCost, laborCost, monthlyCost } = calculateFunctionTotalPrices(func, settings.hourlyRate);
+    
+    totalTechCost += techCost;
+    totalLaborCost += laborCost;
+    totalMonthlyCost += monthlyCost;
+  });
+  
+  totalDays = totalHours / settings.hoursPerDay;
+  
+  const totalProjectCost = totalTechCost + totalLaborCost;
 
-export const importJSON = (event, setHourlyRate, setSprints, setMaintenanceCost) => {
-  const file = event.target.files[0];
-  if (!file) {
-    console.error("No file selected");
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const content = e.target.result;
-      const parsedContent = JSON.parse(content);
-
-      if (parsedContent.hourlyRate !== undefined) {
-        setHourlyRate(parsedContent.hourlyRate);
-      } else {
-        console.error("hourlyRate not found in JSON");
-      }
-
-      if (Array.isArray(parsedContent.sprints)) {
-        setSprints(parsedContent.sprints.map(sprint => ({
-          ...sprint,
-          laborCost: calculateLaborCost(sprint.tasks, parsedContent.hourlyRate),
-          duration: calculateSprintDuration(sprint.tasks)
-        })));
-      } else {
-        console.error("sprints not found or not an array in JSON");
-      }
-
-      setMaintenanceCost(parsedContent.maintenanceCost || 0);
-    } catch (error) {
-      console.error("Error parsing JSON file:", error);
-    }
+  
+  return {
+    hours: totalHours,
+    days: totalDays,
+    techCost: totalTechCost,
+    laborCost: totalLaborCost,
+    projectCost: totalProjectCost,
+    monthlyCost: totalMonthlyCost,
   };
-
-  reader.onerror = (error) => {
-    console.error("Error reading file:", error);
-  };
-
-  reader.readAsText(file);
 };
 
-export const calculateTotalMonthlyCost = (sprints) => {
-  return sprints.reduce((total, sprint) => total + (sprint.monthlyCost || 0), 0);
-};

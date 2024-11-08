@@ -2,9 +2,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Copy, Check } from 'lucide-react';
 
 const jsonStructure = `{
-  "hourlyRate": number,
-  "maintenanceCost": number,
-  "sprints": [
+  "settings": {
+    "hourlyRate": number,
+    "hoursPerDay": number,
+    "daysPerWeek": number,
+  }
+  "functionalities": [
     {
       "id": number,
       "name": string,

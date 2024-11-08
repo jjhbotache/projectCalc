@@ -1,14 +1,24 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateSettings } from '../slices/projectSlice';
+import { Input } from '@/components/ui/input'; // Added import
 
-export default function HourlyRateInput({ hourlyRate, setHourlyRate }) {
+export default function HourlyRateInput() {
+  const hourlyRate = useSelector((state) => state.project.settings.hourlyRate);
+  const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+    dispatch(updateSettings({ hourlyRate: Number(e.target.value) }));
+  };
+
   return (
-    <div className="pb-4">
+    <div className="pb-4 ">
       <label className="block mb-2">Hourly Rate (USD)</label>
-      <input
+      <Input
         type="number"
         value={hourlyRate}
-        onChange={(e) => setHourlyRate(Math.max(1, Number(e.target.value)))}
-        className={`w-full max-w-xs p-2 border rounded text-black`}
+        onChange={handleChange}
+        className="w-full max-w-xs p-2 border rounded "
       />
     </div>
   );
