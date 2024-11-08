@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateSettings } from '../slices/projectSlice';
+import { updateSettings } from '../../slices/projectSlice';
 import { Input } from '@/components/ui/input'; // Added import
 
 export default function HoursPerDayInput() {

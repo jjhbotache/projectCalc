@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Task from './Task';
-import { formatCurrency } from '../utils/format';
-import { updateFunctionalities } from '../slices/projectSlice';
+import { formatCurrency } from '../../utils/format';
+import { updateFunctionalities } from '../../slices/projectSlice';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableHead, TableRow, TableCell, TableBody } from '@/components/ui/table';
@@ -18,8 +18,8 @@ import {
   AlertDialogCancel,
   AlertDialogAction, 
 } from '@/components/ui/alert-dialog';
-import { ArrowDownFromLine, ArrowUpFromLine, ClipboardPlus, Expand, Trash } from 'lucide-react';
-import { calculateFunctionTotalPrices } from '../utils/calculateTotalPrices';
+import { ArrowDownFromLine, ArrowUpFromLine, ClipboardPlus, Expand, TimerReset, Trash } from 'lucide-react';
+import { calculateFunctionTotalPrices } from '../../utils/calculateTotalPrices';
 import TaskList from './TaskList';
 
 export default function Functionality({ functionality, isCollapsed, onToggle }) {
@@ -27,6 +27,15 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
   
   const dispatch = useDispatch();
   const {settings} = useSelector((state) => state.project);
+
+  const durationInDays = functionality.tasks.reduce((sum, task) => sum + task.hours, 0) / settings.hoursPerDay;
+  const formattedDuration = durationInDays > 0
+    ? Number.isInteger(durationInDays)
+      ? `${durationInDays}`
+      : durationInDays - Math.floor(durationInDays) < 0.5
+        ? `${Math.floor(durationInDays)}+`
+        : `${Math.ceil(durationInDays)}-`
+    : 'No tasks';
 
   const handleFieldChange = (field, value) => {
     dispatch(updateFunctionalities({
@@ -45,7 +54,6 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
     }));
   };
 
-  // Calculate the total price
   const {totalPrice, laborCost} = calculateFunctionTotalPrices(functionality,settings.hourlyRate);
 
   
@@ -57,6 +65,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
     >
       {/* sticky header */}
       <div className="flex  items-center sticky top-0 z-10 p-4 bg-white shadow-sm  dark:bg-gray-900 rounded-xl gap-2 dark:bg-opacity-55  bg-opacity-5">
+        <Label className="block text-gray-800 dark:text-gray-200">#{functionality.id}</Label>
         <Input
           value={functionality.name}
           onChange={(e) => handleFieldChange('name', e.target.value)}
@@ -90,10 +99,14 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
       </div>
 
       {/* details */}
-      <div className="flex justify-between">
-        <span className="text-gray-500">
-          Duration: {functionality.duration.toFixed(2)} days
+      <div className="flex justify-between text-2xl">
+
+        <span className="text-gray-500 flex items-center">
+          <TimerReset size={24} />
+          <span>{formattedDuration}</span>
+          <small className='self-end text-xs ml-1'>days</small> 
         </span>
+
         <span className="text-gray-500">
           Total Price: {formatCurrency(totalPrice)}
         </span>

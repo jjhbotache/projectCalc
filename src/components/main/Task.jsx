@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { updateFunctionalities } from '../slices/projectSlice';
+import { updateFunctionalities } from '../../slices/projectSlice';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from '@/components/ui/table';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Copy, Check, ChevronUp, CalendarRange, Cpu, SquareCode, CircleDollarSign, DollarSign, Timer } from 'lucide-react';
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger, DrawerClose } from "@/components/ui/drawer";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger, DialogClose } from "@/components/ui/dialog"; // Import Dialog components
-import { calculateTotals } from '../utils/calculate';
+import { calculateTotals } from '../../utils/calculate';
 
 
 
@@ -25,7 +25,7 @@ export default function Summary() { // Removed props
   
   
   return (  
-    <div className="sticky mt-auto z-10 bottom-0 h-auto w-full flex justify-center shadow-lg">
+    <div className="fixed mt-auto z-10 bottom-0 h-auto w-full flex justify-center shadow-lg">
 
       <Drawer open={isDrawerOpen} onOpenChange={setDrawerOpen}>
 

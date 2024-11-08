@@ -15,7 +15,7 @@ function HelpContent({ open, onOpenChange }) {
           <DialogTitle>Ayuda</DialogTitle>
         </DialogHeader>
         <DialogDescription>
-          Aquí va el contenido de ayuda.
+          Esta es una calculadora para proyectos de programación, que calcula el tiempo y coste de desarrollo.
         </DialogDescription>
         <DialogClose />
       </DialogContent>

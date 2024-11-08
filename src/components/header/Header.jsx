@@ -1,19 +1,20 @@
 import React, { useState, useRef } from 'react';
 import { Moon, Settings, Sun, Copy, Check, FileArchive } from 'lucide-react'; // Agrega Copy y Check
-import toggleDarkMode from '../utils/toggleDarkMode';
+import toggleDarkMode from '../../utils/toggleDarkMode';
 import { Button } from '@/components/ui/button';
-import HourlyRateInput from './HourlyRateInput';
-import HoursPerDayInput from './HoursPerDayInput';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
+import HourlyRateInput from '../settings/HourlyRateInput';
+import HoursPerDayInput from '../settings/HoursPerDayInput';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateSettings, updateFunctionalities, initialState } from '../slices/projectSlice';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from './ui/dropdown-menu'; // Añadir import de DropdownMenu
-import { exportJSON, importJSON } from '../utils/jsonHandler';
+import { updateSettings, updateFunctionalities, initialState } from '../../slices/projectSlice';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '../ui/dropdown-menu'; // Añadir import de DropdownMenu
+import { exportJSON, importJSON } from '../../utils/jsonHandler';
 import { Input } from '@/components/ui/input';
+import SettingsDialog from './SettingsDialog';
 
 const jsonStructure = JSON.stringify(initialState, null, 2); // JSON structure for import/export
 
-export default function Header({ children: actionItems }) {
+export default function Header({ projectName }) {
   const dispatch = useDispatch();
   const project = useSelector(state => state.project);
   
@@ -30,8 +31,10 @@ export default function Header({ children: actionItems }) {
 
   return (
     <header className="flex items-center justify-between p-4 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full">
-      {actionItems}
-      <h1 className="text-xl font-thin">Projects quotator</h1>
+      <div className='flex items-center gap-4 '>
+        <img src="/pngs/DevKalk.png" alt="DevKalk" className="h-10" />
+        <h1 className="text-4xl font-thin">{projectName}</h1>
+      </div>
 
       <div className="flex items-center gap-2">
         <Input
@@ -84,19 +87,7 @@ export default function Header({ children: actionItems }) {
         </DropdownMenu>
 
         {/* settings */}
-        <Dialog>
-          <DialogTrigger asChild >
-            <Settings className='dark:bg-gray-950 bg-white p-2 rounded-full' size={24} />
-          </DialogTrigger>
-          <DialogContent aria-describedby="Settings">
-            <DialogTitle className='text-3xl'>Settings</DialogTitle>
-            <HourlyRateInput />
-            <HoursPerDayInput /> 
-            <DialogTrigger asChild className='w-14 ml-auto'>
-              <Button>Close</Button>
-            </DialogTrigger>
-          </DialogContent>
-        </Dialog>
+        <SettingsDialog />
 
         {/* theme icon */}
         <button

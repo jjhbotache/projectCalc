@@ -1,7 +1,7 @@
 import Task from './Task';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from '@/components/ui/table';
 import { useDispatch } from 'react-redux';
-import { updateFunctionalities } from '../slices/projectSlice';
+import { updateFunctionalities } from '../../slices/projectSlice';
 import { Button } from '@/components/ui/button';
 import { ClipboardPlus } from 'lucide-react';
 

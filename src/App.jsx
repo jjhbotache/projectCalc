@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Summary from './components/Summary';
-import Header from './components/Header';
-import HourlyRateInput from './components/HourlyRateInput';
-import Functionalities from './components/Functionalities';
-import { updateSettings, updateFunctionalities, loadAndSaveProjectFromLocalStorage } from './slices/projectSlice';
+import Summary from './components/main/Summary';
+import Header from './components/header/Header';
+import Functionalities from './components/main/Functionalities';
+import { updateFunctionalities, loadAndSaveProjectFromLocalStorage } from './slices/projectSlice';
 import { CirclePlus } from 'lucide-react';
 import { loadTheme } from './utils/toggleDarkMode';
 import { Button } from '@/components/ui/button';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import Navigation from './components/Navigation';
-import HelpContent from './components/HelpContent';
+import Navigation from './components/navigation/Navigation';
+import HelpContent from './components/navigation/HelpContent';
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();
@@ -50,13 +49,13 @@ export default function ProjectPlanner() {
 
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <div className="flex h-full w-full">
         {/* sidebar */}
         <Navigation functionalities={project.functionalities} onHelp={handleHelp} />
 
         <main className="flex-1 p-4 pb-0 bg-white dark:bg-slate-950 dark:text-white min-h-screen h-full flex flex-col items-center w-full gap-2 relative overflow-auto">
-          <Header hourlyRate={project.settings.hourlyRate} setHourlyRate={(rate) => dispatch(updateSettings({ hourlyRate: rate }))} />
+          <Header projectName="DevKalk"/>
           <Functionalities functionalities={project.functionalities} />
           <Button onClick={addFunctionality} className="bg-blue-700 text-white hover:bg-blue-600 mb-10 rounded-full " >
             <CirclePlus size={64} />
