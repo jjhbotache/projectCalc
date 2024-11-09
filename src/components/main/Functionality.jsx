@@ -78,7 +78,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
               <Trash size={12} />
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent aria-describedby="confirm">
             <AlertDialogHeader>
               <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
               <AlertDialogDescription>

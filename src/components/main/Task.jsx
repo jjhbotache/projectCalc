@@ -53,7 +53,7 @@ export default function Task({ task, sprintId, taskIndex }) {
                   <Trash size={24} />
                 </button>
               </AlertDialogTrigger>
-              <AlertDialogContent>
+              <AlertDialogContent aria-describedby="delete">
                 <AlertDialogHeader>
                   <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
                   <AlertDialogDescription>

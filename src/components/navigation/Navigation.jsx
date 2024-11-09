@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, Settings, Users, HelpCircle, Menu, Icon, House, Trash } from 'lucide-react';
+import {  HelpCircle,  Trash } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -9,12 +9,11 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarProvider,
   SidebarTrigger,
   SidebarGroup
 } from '@/components/ui/sidebar';
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { updateFunctionalities, updateSettings, deleteAll } from '../../slices/projectSlice';
+import { deleteAll } from '../../slices/projectSlice';
 import { useDispatch } from 'react-redux';
 
 export default function Navigation({ functionalities, onHelp }) {
@@ -67,7 +66,7 @@ export default function Navigation({ functionalities, onHelp }) {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 </AlertDialogTrigger>
-                <AlertDialogContent>
+                <AlertDialogContent aria-describedby="delete">
                   <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                     <AlertDialogDescription>

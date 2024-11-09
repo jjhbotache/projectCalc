@@ -74,9 +74,10 @@ export default function Header({ projectName }) {
                   JSON Structure
                 </DropdownMenuItem>
               </DialogTrigger>
-              <DialogContent className="bg-white dark:bg-gray-800 dark:text-white max-h-[98%] overflow-y-auto" aria-describedby="">
+              <DialogContent aria-describedby="json structure" className="bg-white dark:bg-gray-800 dark:text-white max-h-[98%] overflow-y-auto">
+              <DialogTitle>JSON Structure for Import/Export</DialogTitle>
                 <DialogHeader>
-                  <DialogTitle>JSON Structure for Import/Export</DialogTitle>
+                  
                   <DialogDescription>
                     Copy or view the JSON structure required for this component.
                   </DialogDescription>

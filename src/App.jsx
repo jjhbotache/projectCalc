@@ -8,14 +8,12 @@ import { loadTheme } from './utils/toggleDarkMode';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import Navigation from './components/navigation/Navigation';
 import HelpContent from './components/navigation/HelpContent';
-import useGemini from './hooks/useGemini';
+import { toast } from 'react-toastify';
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();
   const project = useSelector((state) => state.project);
   const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false);
-  const { generateProjectFromDescription } = useGemini();
-
 
   const handleHelp = () => {
     setIsHelpDialogOpen(true);

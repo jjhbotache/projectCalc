@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog'; // Nueva importación
 import { Textarea } from '@/components/ui/textarea'; // Nueva importación
 import useGemini from '../../hooks/useGemini';
+import { toast } from 'react-toastify'; // Nueva importación
 
 export default function Functionalities({ functionalities }) {
   const [expandedFunctionalityId, setExpandedFunctionalityId] = useState(null);
@@ -42,12 +43,19 @@ export default function Functionalities({ functionalities }) {
 
   const handleGenerate = () => {
     setIsAlertOpen(false);
-    generateProjectFromDescription(description).then((project) => {
-      console.log(project);
-      
-      dispatch(updateFunctionalities({ type: 'SET_ALL', payload: project.functionalities }));
-      dispatch(updateSettings({ projectDescription: project.settings.projectDescription }));
-    });
+    toast.promise(
+      generateProjectFromDescription(description).then((project) => {
+        console.log(project);
+        
+        dispatch(updateFunctionalities({ type: 'SET_ALL', payload: project.functionalities }));
+        dispatch(updateSettings({ projectDescription: project.settings.projectDescription }));
+      }),
+      {
+        pending: '✨Generating project...',
+        success: 'Project generated successfully 🚀',
+        error: 'An error occurred while generating the project 😢'
+      }
+    );
   };
 
   return (
