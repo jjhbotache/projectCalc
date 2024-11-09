@@ -39,7 +39,7 @@ export default function ProjectPlanner() {
         {/* sidebar */}
         <Navigation functionalities={project.functionalities} onHelp={handleHelp} />
 
-        <main className="flex-1 p-4 pb<-0 bg-white dark:bg-slate-950 dark:text-white min-h-screen h-full flex flex-col items-center w-full gap-2 relative overflow-auto">
+        <main className="flex-1 p-4 pb<-0 bg-white dark:bg-slate-950 dark:text-white min-h-screen h-full flex flex-col items-center w-full gap-2 relative">
           <Header projectName="DevKalk"/>
           <Functionalities functionalities={project.functionalities} />
           

@@ -43,6 +43,8 @@ export default function Functionalities({ functionalities }) {
   const handleGenerate = () => {
     setIsAlertOpen(false);
     generateProjectFromDescription(description).then((project) => {
+      console.log(project);
+      
       dispatch(updateFunctionalities({ type: 'SET_ALL', payload: project.functionalities }));
       dispatch(updateSettings({ projectDescription: project.settings.projectDescription }));
     });

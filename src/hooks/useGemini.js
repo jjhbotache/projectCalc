@@ -1,19 +1,22 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { initialState } from '../slices/projectSlice';
 
 export default function useGemini() {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
-    const generateTextContent = async (prompt) => {
-        try {
-            const result = await model.generateContent(prompt);
-            return result;
-        } catch (error) {
-            console.error('Error generating text content with Gemini API:', error);
-        }
+    const generateContent = async (inputText) => {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: inputText }]
+                }]
+            })
+        });
+        const data = await response.json();
+        return data;
     };
 
     const generateProjectFromDescription = async (description) => {
@@ -31,19 +34,18 @@ export default function useGemini() {
         `
 
         try {
-            const result = await model.generateContent(prompt);
-            const text = result.response.candidates[0].content.parts[0].text;
+            const result = await generateContent(prompt);
+            const text = result.candidates[0].content.parts[0].text;
             const parsedText = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
             
-            const project = JSON.parse( parsedText );
+            const project = JSON.parse(parsedText);
             console.log(project);
 
-            return project
+            return project;
         } catch (error) {
             console.error('Error generating project with Gemini API:', error);
         }
     };
 
-
-    return { generateTextContent, generateProjectFromDescription };
+    return { generateProjectFromDescription };
 };

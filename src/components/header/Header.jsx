@@ -11,6 +11,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { exportJSON, importJSON } from '../../utils/jsonHandler';
 import { Input } from '@/components/ui/input';
 import SettingsDialog from './SettingsDialog';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 
 const jsonStructure = JSON.stringify(initialState, null, 2); // JSON structure for import/export
 
@@ -23,6 +24,7 @@ export default function Header({ projectName }) {
   const [isDialogOpen, setDialogOpen] = useState(false); 
   const [copied, setCopied] = useState(false); 
   
+  
   const copyJsonStructure = () => {
     navigator.clipboard.writeText(jsonStructure);
     setCopied(true);
@@ -31,22 +33,28 @@ export default function Header({ projectName }) {
 
   return (
     <header className="flex items-center justify-between p-4 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2">
+      {/* logo */}
       <div className='flex items-center gap-4 '>
+        <SidebarTrigger className="block md:hidden"/> 
+        
         <img src="/pngs/DevKalk.png" alt="DevKalk" className="h-10" />
         <h1 className="text-4xl font-thin">{projectName}</h1>
       </div>
 
+      {/* actions */}
       <div className="flex items-center gap-2">
-        <Input
+        
+        
+
+        {/* Botones de importar y exportar JSON */}
+        <Input className="hidden"
               type="file"
               ref={fileInputRef}
-              className="hidden"
               onChange={(e) => {
                 importJSON(e, dispatch)
               }}
               accept=".json"
             />
-        {/* Botones de importar y exportar JSON */}
         <DropdownMenu>
           <DropdownMenuTrigger>
             <FileArchive className="dark:bg-gray-950 bg-white p-2 rounded-full" size={24} />

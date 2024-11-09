@@ -60,7 +60,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
 
   return (
     <div
-      className=" border p-4 rounded-md border-gray-300 bg-slate-100 dark:border-gray-600 dark:bg-slate-800 gap-2 flex flex-col align-center"
+      className=" border p-4 rounded-md border-gray-300 bg-slate-100 dark:border-gray-600 dark:bg-slate-800 gap-2 flex flex-col align-center "
       id={`functionality-${functionality.id}`}
     >
       {/* sticky header */}
