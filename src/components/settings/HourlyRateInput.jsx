@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSettings } from '../../slices/projectSlice';
 import { Input } from '@/components/ui/input'; // Added import
+import { Label } from '@/components/ui/label';
 
 export default function HourlyRateInput() {
   const hourlyRate = useSelector((state) => state.project.settings.hourlyRate);
@@ -12,8 +13,8 @@ export default function HourlyRateInput() {
   };
 
   return (
-    <div className="pb-4 ">
-      <label className="block mb-2">Hourly Rate (USD)</label>
+    <div className="">
+      <Label className="block mb-2">Hourly Rate (USD)</Label>
       <Input
         type="number"
         value={hourlyRate}

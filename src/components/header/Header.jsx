@@ -30,7 +30,7 @@ export default function Header({ projectName }) {
   };
 
   return (
-    <header className="flex items-center justify-between p-4 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full">
+    <header className="flex items-center justify-between p-4 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2">
       <div className='flex items-center gap-4 '>
         <img src="/pngs/DevKalk.png" alt="DevKalk" className="h-10" />
         <h1 className="text-4xl font-thin">{projectName}</h1>

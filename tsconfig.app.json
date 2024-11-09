@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
+    
+    "module": "esnext",
+
     "jsx": "react",
     "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "paths": {
+        "@/*": [ "./src/*" ]
     }
   },
   "include": [

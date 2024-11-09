@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSettings } from '../../slices/projectSlice';
 import { Input } from '@/components/ui/input'; // Added import
+import { Label } from '@/components/ui/label';
 
 export default function HoursPerDayInput() {
   const dispatch = useDispatch();
@@ -13,7 +14,7 @@ export default function HoursPerDayInput() {
 
   return (
     <div>
-      <label>Hours Per Day:</label>
+      <Label className="block mb-2">Hours Per Day:</Label>
       <Input 
         type="number" 
         value={hoursPerDay} 

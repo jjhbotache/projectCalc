@@ -35,7 +35,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
       : durationInDays - Math.floor(durationInDays) < 0.5
         ? `${Math.floor(durationInDays)}+`
         : `${Math.ceil(durationInDays)}-`
-    : 'No tasks';
+    : '0';
 
   const handleFieldChange = (field, value) => {
     dispatch(updateFunctionalities({
@@ -69,7 +69,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
         <Input
           value={functionality.name}
           onChange={(e) => handleFieldChange('name', e.target.value)}
-          className="text-xl font-bold w-full p-2 border rounded bg-white text-gray-900 dark:bg-gray-700 dark:text-white"
+          className="text-sm font-bold w-full p-2 border rounded bg-white text-gray-900 dark:bg-gray-700 dark:text-white"
         />
 
         <AlertDialog>
@@ -99,7 +99,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
       </div>
 
       {/* details */}
-      <div className="flex justify-between text-2xl">
+      <div className="flex justify-between text-xl">
 
         <span className="text-gray-500 flex items-center">
           <TimerReset size={24} />

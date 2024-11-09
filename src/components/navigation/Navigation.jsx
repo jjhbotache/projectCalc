@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, Settings, Users, HelpCircle, Menu, Icon, House } from 'lucide-react';
+import { Home, Settings, Users, HelpCircle, Menu, Icon, House, Trash } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -13,8 +13,19 @@ import {
   SidebarTrigger,
   SidebarGroup
 } from '@/components/ui/sidebar';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { updateFunctionalities, updateSettings, deleteAll } from '../../slices/projectSlice';
+import { useDispatch } from 'react-redux';
 
 export default function Navigation({ functionalities, onHelp }) {
+  const dispatch = useDispatch();
+
+
+  const onDeleteAllProject = () => {
+    dispatch(deleteAll());
+    localStorage.removeItem('project');
+    console.log("deleted");
+  };
 
   
   return (
@@ -42,6 +53,35 @@ export default function Navigation({ functionalities, onHelp }) {
 
       <SidebarFooter>
         <SidebarMenu>
+
+          
+              
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="#borrar-proyecto">
+                        <Trash className="h-5 w-5" />
+                        <span>Borrar proyecto</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete project.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={onDeleteAllProject}>Delete the whole project</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <a href="#ayuda" onClick={onHelp}>

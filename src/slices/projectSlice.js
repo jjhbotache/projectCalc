@@ -4,10 +4,11 @@ export const initialState = {
   settings: {
     hourlyRate: 10,
     hoursPerDay: 8,
+    projectDescription: '', // Added projectDescription
   },
   functionalities: [
     {
-      id: 1,
+      id: 0,
       name: 'Default Functionality',
       tasks: [
         {
@@ -32,7 +33,7 @@ const projectSlice = createSlice({
         ...state,
         settings: {
           ...state.settings,
-          ...action.payload, // Handles all settings fields
+          ...action.payload, // Handles all settings fields, including projectDescription
         },
       };
     },
@@ -101,9 +102,13 @@ const projectSlice = createSlice({
           console.error('Error saving project:', error);
         }
       }
-    }
+    },
+    deleteAll: (state) => {
+      state.settings = initialState.settings;
+      state.functionalities = initialState.functionalities;
+    },
   },
 });
 
-export const { updateSettings, updateFunctionalities, loadAndSaveProjectFromLocalStorage } = projectSlice.actions;
+export const { updateSettings, updateFunctionalities, loadAndSaveProjectFromLocalStorage, deleteAll } = projectSlice.actions;
 export default projectSlice.reducer;
