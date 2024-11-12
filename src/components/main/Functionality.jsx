@@ -27,8 +27,9 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
   
   const dispatch = useDispatch();
   const {settings} = useSelector((state) => state.project);
+  const config = useSelector((state) => state.config); // Access config state
 
-  const durationInDays = functionality.tasks.reduce((sum, task) => sum + task.hours, 0) / settings.hoursPerDay;
+  const durationInDays = functionality.tasks.reduce((sum, task) => sum + task.hours, 0) / config.hoursPerDay;
   const formattedDuration = durationInDays > 0
     ? Number.isInteger(durationInDays)
       ? `${durationInDays}`
@@ -54,7 +55,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
     }));
   };
 
-  const {totalPrice, laborCost} = calculateFunctionTotalPrices(functionality,settings.hourlyRate);
+  const {totalPrice, laborCost} = calculateFunctionTotalPrices(functionality, config.hourlyRate);
 
   
 
@@ -64,7 +65,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
       id={`functionality-${functionality.id}`}
     >
       {/* sticky header */}
-      <div className="flex  items-center sticky top-0 z-10 p-4 bg-white shadow-sm  dark:bg-gray-900 rounded-xl gap-2 dark:bg-opacity-55  bg-opacity-5">
+      <div className="flex  items-center sticky top-[4rem] z-10 p-4 bg-white shadow-sm  dark:bg-gray-900 rounded-xl gap-2 dark:bg-opacity-85  bg-opacity-bg-opacity-85">
         <Label className="block text-gray-800 dark:text-gray-200">#{functionality.id}</Label>
         <Input
           value={functionality.name}
@@ -78,7 +79,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
               <Trash size={12} />
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent aria-describedby="confirm">
+          <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
               <AlertDialogDescription>

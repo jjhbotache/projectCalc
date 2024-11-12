@@ -1,4 +1,4 @@
-import { updateSettings, updateFunctionalities } from '../slices/projectSlice';
+import { updateFunctionalities } from '../slices/projectSlice';
 
 export const importJSON = (event, dispatch) => {
   
@@ -26,6 +26,12 @@ export const importJSON = (event, dispatch) => {
       } else {
         console.error("functionalities not found or not an array in JSON");
       }
+
+      if (parsedContent.projectInfo) {
+        dispatch(updateProjectInfo(parsedContent.projectInfo));
+      } else {
+        console.error("projectInfo not found in JSON");
+      }
     } catch (error) {
       console.error("Error parsing JSON file:", error);
     }
@@ -39,7 +45,12 @@ export const importJSON = (event, dispatch) => {
 };
 
 export const exportJSON = (project) => {
-  const dataStr = JSON.stringify(project, null, 2);
+  const projectToSave = {
+    settings: project.settings,
+    functionalities: project.functionalities,
+    projectInfo: project.projectInfo,
+  };
+  const dataStr = JSON.stringify(projectToSave, null, 2);
   const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
   const exportFileDefaultName = 'project-plan.json';
 

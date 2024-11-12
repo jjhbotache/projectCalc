@@ -3,7 +3,7 @@ import Function from './Functionality';
 import { CirclePlus, Sparkle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDispatch } from 'react-redux';
-import { updateFunctionalities, updateSettings } from '../../slices/projectSlice';
+import { updateFunctionalities, updateProjectInfo } from '../../slices/projectSlice';
 import { useSelector } from 'react-redux';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog'; // Nueva importación
 import { Textarea } from '@/components/ui/textarea'; // Nueva importación
@@ -45,11 +45,13 @@ export default function Functionalities({ functionalities }) {
     setIsAlertOpen(false);
     toast.promise(
       generateProjectFromDescription(description).then((project) => {
-        console.log(project);
-        
         dispatch(updateFunctionalities({ type: 'SET_ALL', payload: project.functionalities }));
-        dispatch(updateSettings({ projectDescription: project.settings.projectDescription }));
-      }),
+        dispatch(updateProjectInfo(project.projectInfo));
+      })
+      .catch((error) => {
+        console.error('Error generating project:', error);
+      })
+      ,
       {
         pending: '✨Generating project...',
         success: 'Project generated successfully 🚀',
@@ -105,20 +107,23 @@ export default function Functionalities({ functionalities }) {
         <AlertDialogTrigger />
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Ingrese la descripción del proyecto</AlertDialogTitle>
+            <AlertDialogTitle>Project Description</AlertDialogTitle>
             <AlertDialogDescription>
-              <Textarea 
-                value={description} 
-                onChange={(e) => setDescription(e.target.value)} 
-                className="w-full p-2 border rounded"
-                placeholder="Descripción del proyecto..."
-                rows={7}
-              />
+              Please enter a detailed description of your project to generate the functionalities.
             </AlertDialogDescription>
           </AlertDialogHeader>
+          <div className="py-4">
+            <Textarea 
+              value={description} 
+              onChange={(e) => setDescription(e.target.value)} 
+              className="w-full p-2 border rounded"
+              placeholder="Describe your project..."
+              rows={7}
+            />
+          </div>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleGenerate}>Generar</AlertDialogAction>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleGenerate}>Generate</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

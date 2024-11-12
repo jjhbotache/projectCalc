@@ -13,9 +13,10 @@ export const calculateTotalMonthlyCost = (functionalities) => {
   return functionalities.reduce((total, functionality) => total + (functionality.monthlyCost || 0), 0);
 };
 
-export const calculateTotals = (project) => {
+export const calculateTotals = (project, settings) => {
   
-  const { functionalities, settings } = project;
+  const { functionalities } = project;
+
   
 
   let totalDays = 0;

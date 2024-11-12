@@ -10,6 +10,7 @@ import { calculateTotals } from '../../utils/calculate';
 export default function Summary() { // Removed props
   const dispatch = useDispatch();
   const project = useSelector(state => state.project); // Access redux state
+  const config = useSelector((state) => state.config);
   const [maintenanceCost, setMaintenanceCost] = useState(0);
   const [copied, setCopied] = useState(false);
   const [isDrawerOpen, setDrawerOpen] = useState(false); // State for Drawer
@@ -21,7 +22,7 @@ export default function Summary() { // Removed props
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const totals = calculateTotals(project); 
+  const totals = calculateTotals(project, config); 
   
   
   return (  
@@ -36,8 +37,11 @@ export default function Summary() { // Removed props
           </div>
         </DrawerTrigger>
 
-        <DrawerContent className="p-3">
+        <DrawerContent className="p-3 gap-2">
           <DialogTitle>Project Summary</DialogTitle>
+          <DialogDescription>
+            The project will cost {totals.projectCost.toFixed(2)} in total and will take {totals.days.toFixed(0)} days to complete.
+          </DialogDescription>
           <div className="flex flex-col gap-4 my-12">
             
             
@@ -55,6 +59,10 @@ export default function Summary() { // Removed props
             <div className="flex items-center">
               <CalendarRange />
               <p className="ml-2">Total Days: {totals.days.toFixed(1)}</p>
+            </div>
+            <div className="flex items-center">
+              <CalendarRange />
+              <p className="ml-2">Total Months: {(totals.days / 30).toFixed(1)}</p>
             </div>
             <div className="flex items-center">
               <Cpu />

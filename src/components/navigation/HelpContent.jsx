@@ -11,12 +11,12 @@ function HelpContent({ open, onOpenChange }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange} >
       <DialogContent aria-describedby="help">
-          <DialogTitle>Ayuda</DialogTitle>
+        <DialogTitle>Ayuda</DialogTitle>
         <DialogHeader>
+          <DialogDescription>
+            Esta es una calculadora para proyectos de programación, que calcula el tiempo y coste de desarrollo.
+          </DialogDescription>
         </DialogHeader>
-        <DialogDescription>
-          Esta es una calculadora para proyectos de programación, que calcula el tiempo y coste de desarrollo.
-        </DialogDescription>
         <DialogClose />
       </DialogContent>
     </Dialog>

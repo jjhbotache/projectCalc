@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from '@/components/ui/table';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { Trash } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox'; // Ensure you have a Checkbox component
 
 export default function Task({ task, sprintId, taskIndex }) {
   const dispatch = useDispatch();
@@ -44,6 +45,12 @@ export default function Task({ task, sprintId, taskIndex }) {
               value={task.hours}
               onChange={(e) => handleChange('hours', Number(e.target.value))}
               className="w-full p-1 border rounded bg-white dark:bg-gray-700 dark:text-white"
+            />
+          </TableCell>
+          <TableCell>
+            <Checkbox
+              checked={task.billed}
+              onCheckedChange={(value) => handleChange('billed', value)}
             />
           </TableCell>
           <TableCell>

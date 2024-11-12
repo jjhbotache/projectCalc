@@ -1,7 +1,8 @@
 import { initialState } from '../slices/projectSlice';
+import { useSelector } from 'react-redux';
 
 export default function useGemini() {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    const apiKey = useSelector((state) => state.config.geminiApiKey);
 
     const generateContent = async (inputText) => {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
@@ -39,7 +40,6 @@ export default function useGemini() {
             const parsedText = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
             
             const project = JSON.parse(parsedText);
-            console.log(project);
 
             return project;
         } catch (error) {

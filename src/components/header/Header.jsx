@@ -1,44 +1,49 @@
-import React, { useState, useRef } from 'react';
-import { Moon, Settings, Sun, Copy, Check, FileArchive } from 'lucide-react'; // Agrega Copy y Check
+import React, { useState, useRef, useEffect } from 'react';
+import { Moon, Settings, Sun, Copy, Check, FileArchive, Plus, ChevronDown, ChevronUp } from 'lucide-react'; // Agrega Copy y Check
 import toggleDarkMode from '../../utils/toggleDarkMode';
-import { Button } from '@/components/ui/button';
-import HourlyRateInput from '../settings/HourlyRateInput';
-import HoursPerDayInput from '../settings/HoursPerDayInput';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateSettings, updateFunctionalities, initialState } from '../../slices/projectSlice';
+import { initialState, updateProjectInfo } from '../../slices/projectSlice';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '../ui/dropdown-menu'; // Añadir import de DropdownMenu
 import { exportJSON, importJSON } from '../../utils/jsonHandler';
 import { Input } from '@/components/ui/input';
-import SettingsDialog from './SettingsDialog';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import ProjectInfo from './ProjectInfo';
 
 const jsonStructure = JSON.stringify(initialState, null, 2); // JSON structure for import/export
 
-export default function Header({ projectName }) {
+export default function Header() {
   const dispatch = useDispatch();
-  const project = useSelector(state => state.project);
+  const projectName = useSelector(state => state.project.projectInfo.projectName);
   
   const fileInputRef = useRef();
   
   const [isDialogOpen, setDialogOpen] = useState(false); 
   const [copied, setCopied] = useState(false); 
-  
-  
+
+  const handleProjectNameChange = (e) => {
+    dispatch(updateProjectInfo({ projectName: e.target.value }));
+  };
+
   const copyJsonStructure = () => {
     navigator.clipboard.writeText(jsonStructure);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
+  
   return (
-    <header className="flex items-center justify-between p-4 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2">
+    <header className="flex items-center justify-between p-4 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 sticky top-0 z-20 ">
       {/* logo */}
       <div className='flex items-center gap-4 '>
-        <SidebarTrigger className="block md:hidden"/> 
+        <SidebarTrigger className="block"/> 
         
         <img src="/pngs/DevKalk.png" alt="DevKalk" className="h-10" />
-        <h1 className="text-4xl font-thin">{projectName}</h1>
+        {projectName}
       </div>
 
       {/* actions */}
@@ -74,10 +79,9 @@ export default function Header({ projectName }) {
                   JSON Structure
                 </DropdownMenuItem>
               </DialogTrigger>
-              <DialogContent aria-describedby="json structure" className="bg-white dark:bg-gray-800 dark:text-white max-h-[98%] overflow-y-auto">
-              <DialogTitle>JSON Structure for Import/Export</DialogTitle>
+              <DialogContent aria-describedby="import and export json" className="bg-white dark:bg-gray-800 dark:text-white max-h-[98%] overflow-y-auto">
+                <DialogTitle>JSON Structure for Import/Export</DialogTitle>
                 <DialogHeader>
-                  
                   <DialogDescription>
                     Copy or view the JSON structure required for this component.
                   </DialogDescription>
@@ -95,8 +99,6 @@ export default function Header({ projectName }) {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* settings */}
-        <SettingsDialog />
 
         {/* theme icon */}
         <button
@@ -107,6 +109,8 @@ export default function Header({ projectName }) {
           <Sun size={24} className="hidden dark:block" />
         </button>
       </div>
+
+      <ProjectInfo />
     </header>
   );
 }

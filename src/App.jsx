@@ -1,51 +1,67 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { loadAndSaveProjectFromLocalStorage } from './slices/projectSlice';
+import { loadAndSaveConfigFromLocalStorage } from './slices/configSlice'; // Import the action
+import Navigation from './components/navigation/Navigation';
+import AppConfigs from './components/navigation/AppConfigs';
 import Summary from './components/main/Summary';
 import Header from './components/header/Header';
 import Functionalities from './components/main/Functionalities';
-import { updateFunctionalities, loadAndSaveProjectFromLocalStorage } from './slices/projectSlice';
-import { loadTheme } from './utils/toggleDarkMode';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import Navigation from './components/navigation/Navigation';
-import HelpContent from './components/navigation/HelpContent';
 import { toast } from 'react-toastify';
+import { loadTheme } from './utils/toggleDarkMode';
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();
   const project = useSelector((state) => state.project);
+  const config = useSelector((state) => state.config);
   const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false);
+  const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
 
   const handleHelp = () => {
     setIsHelpDialogOpen(true);
   };
 
+  const handleConfig = () => {
+    setIsAppConfigsDialogOpen(true);
+  };
+
   useEffect(() => {
     loadTheme();
-    dispatch(loadAndSaveProjectFromLocalStorage({type: 'import'}));
-  }, [dispatch]); // Run once on mount
+
+  },[]);
 
   useEffect(() => {
-    dispatch(loadAndSaveProjectFromLocalStorage({type: 'save'}));
-  }, [project]); // Save when project changes
+    dispatch(loadAndSaveProjectFromLocalStorage({ type: 'import' }));
+    dispatch(loadAndSaveConfigFromLocalStorage({ type: 'import' }));
+    // You may need to dispatch an action to set configurations in the global state here
+  }, [dispatch]);
 
-  
+  useEffect(() => {
+    dispatch(loadAndSaveProjectFromLocalStorage({ type: 'save' }));
+  }, [project]);
 
+  useEffect(() => {
+    dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' })); // Save configurations
+  }, [config]);
 
   return (
-    <SidebarProvider defaultOpen={true}>
-      <div className="flex h-full w-full">
-        {/* sidebar */}
-        <Navigation functionalities={project.functionalities} onHelp={handleHelp} />
-
-        <main className="flex-1 p-4 pb<-0 bg-white dark:bg-slate-950 dark:text-white min-h-screen h-full flex flex-col items-center w-full gap-2 relative">
-          <Header projectName="DevKalk"/>
-          <Functionalities functionalities={project.functionalities} />
-          
-          
-          <Summary />
-          <HelpContent open={isHelpDialogOpen} onOpenChange={setIsHelpDialogOpen} />
-        </main>
-      </div>
-    </SidebarProvider>
+    <>
+      <SidebarProvider defaultOpen={true}>
+        <div className="flex h-full w-full">
+          <Navigation
+            functionalities={project.functionalities}
+            onHelp={handleHelp}
+            onConfig={handleConfig} // Pass handleConfig to Navigation
+          />
+          <main className="flex-1 p-4 pb-0 bg-white dark:bg-slate-950 dark:text-white min-h-screen flex flex-col items-center w-full gap-2 relative">
+            <Header projectName="DevKalk" />
+            <Functionalities functionalities={project.functionalities} />
+            <Summary />
+          </main>
+        </div>
+      </SidebarProvider>
+      <AppConfigs open={isAppConfigsDialogOpen} onOpenChange={setIsAppConfigsDialogOpen} />
+    </>
   );
 }

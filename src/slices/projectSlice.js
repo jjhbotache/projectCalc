@@ -1,11 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
-  settings: {
-    hourlyRate: 10,
-    hoursPerDay: 8,
-    projectDescription: '', // Added projectDescription
-  },
   functionalities: [
     {
       id: 0,
@@ -14,6 +9,7 @@ export const initialState = {
         {
           name: 'Default Task',
           hours: 0,
+          billed: true,
         },
       ],
       techCost: 0,
@@ -22,21 +18,20 @@ export const initialState = {
       monthlyCost: 0,
     },
   ],
+  projectInfo:{
+    projectName: 'My Project',
+    projectDescription: '',
+    technologiesUsed: [
+      //"python",
+      //"javascript",
+    ],
+  }
 };
 
 const projectSlice = createSlice({
   name: 'project',
   initialState,
   reducers: {
-    updateSettings: (state, action) => {
-      return {
-        ...state,
-        settings: {
-          ...state.settings,
-          ...action.payload, // Handles all settings fields, including projectDescription
-        },
-      };
-    },
     updateFunctionalities: (state, action) => {
       const { type, payload } = action.payload;
 
@@ -65,7 +60,10 @@ const projectSlice = createSlice({
         case 'ADD_TASK':
           const funcToAddTask = state.functionalities.find(f => f.id === payload.functionalityId);
           if (funcToAddTask) {
-            funcToAddTask.tasks.push(payload.task);
+            funcToAddTask.tasks.push({
+              ...payload.task,
+              billed: true, // Ensure billed defaults to false
+            });
           }
           break;
         case 'REMOVE_TASK':
@@ -85,17 +83,17 @@ const projectSlice = createSlice({
         const savedProject = JSON.parse(localStorage.getItem('project'));
         if (savedProject) {
           try {
-            Object.assign(state.settings, savedProject.settings);
-            state.functionalities = savedProject.functionalities;
+        state.functionalities = savedProject.functionalities;
+        state.projectInfo = savedProject.projectInfo;
           } catch (error) {
-            console.error('Error loading saved project:', error);
+        console.error('Error loading saved project:', error);
           }
         }
       } else if (type === 'save') {
         try {
           const projectToSave = {
-            settings: state.settings,
             functionalities: state.functionalities,
+            projectInfo: state.projectInfo,
           };
           localStorage.setItem('project', JSON.stringify(projectToSave));
         } catch (error) {
@@ -104,11 +102,22 @@ const projectSlice = createSlice({
       }
     },
     deleteAll: (state) => {
-      state.settings = initialState.settings;
       state.functionalities = initialState.functionalities;
+    },
+    updateProjectInfo: (state, action) => {
+      const { projectName, projectDescription, technologiesUsed } = action.payload;
+      if (projectName !== undefined) {
+        state.projectInfo.projectName = projectName;
+      }
+      if (projectDescription !== undefined) {
+        state.projectInfo.projectDescription = projectDescription;
+      }
+      if (technologiesUsed !== undefined) {
+        state.projectInfo.technologiesUsed = technologiesUsed;
+      }
     },
   },
 });
 
-export const { updateSettings, updateFunctionalities, loadAndSaveProjectFromLocalStorage, deleteAll } = projectSlice.actions;
+export const { updateFunctionalities, loadAndSaveProjectFromLocalStorage, deleteAll, updateProjectInfo } = projectSlice.actions;
 export default projectSlice.reducer;
