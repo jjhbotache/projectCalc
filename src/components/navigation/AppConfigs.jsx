@@ -35,6 +35,8 @@ export default function AppConfigs({ open, onOpenChange }) {
   const [technologiesKnown, setTechnologiesKnown] = useState(config.technologiesKnown);
   const [newTechName, setNewTechName] = useState('');
   const [newTechExpertise, setNewTechExpertise] = useState('beginner');
+  const [isGeminiDialogOpen, setIsGeminiDialogOpen] = useState(false);
+  const [newGeminiApiKey, setNewGeminiApiKey] = useState('');
 
   useEffect(() => {
     setHoursPerDay(config.hoursPerDay);
@@ -74,111 +76,143 @@ export default function AppConfigs({ open, onOpenChange }) {
     toast.success('Settings saved successfully');
   };
 
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange} >
-      <DialogContent aria-describedby="settings" className="h-[90%] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Configurations</DialogTitle>
-          <DialogDescription>
-            Configure your project settings
-          </DialogDescription>
-        </DialogHeader>
-        <div className="space-y-4">
-          <div>
-            <Label>Hourly Rate</Label>
-            <Input
-              type="number"
-              value={hourlyRate}
-              onChange={(e) => setHourlyRate(Number(e.target.value))}
-              min={0}
-            />
-          </div>
-          <div>
-            <Label>Hours per Day</Label>
-            <Input
-              type="number"
-              value={hoursPerDay}
-              onChange={(e) => setHoursPerDay(Number(e.target.value))}
-              min={1}
-              max={24}
-            />
-          </div>
-          <div>
-            <Label>Working Days per Week</Label>
-            <Input
-              type="number"
-              value={workingDaysPerWeek}
-              onChange={(e) => setWorkingDaysPerWeek(Number(e.target.value))}
-              min={1}
-              max={7}
-            />
-          </div>
-          <div>
-            <Label>Gemini API Key</Label>
-            <Input
-              type="password"
-              value={geminiApiKey}
-              onChange={(e) => setGeminiApiKey(e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Technologies</Label>
-            <div className="flex space-x-2">
-              <Input
-                placeholder="Technology name"
-                value={newTechName}
-                onChange={(e) => setNewTechName(e.target.value)}
-              />
-              <Select value={newTechExpertise} onValueChange={setNewTechExpertise}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Expertise level" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="beginner">Beginner</SelectItem>
-                  <SelectItem value="intermediate">Intermediate</SelectItem>
-                  <SelectItem value="advanced">Advanced</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button onClick={handleAddTechnology}>Add</Button>
-            </div>
+  const handleSaveGeminiApiKey = () => {
+    dispatch(updateConfig({ geminiApiKey: newGeminiApiKey }));
+    dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' }));
+    setIsGeminiDialogOpen(false);
+    toast.success('Gemini API Key updated successfully');
+  };
 
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Technology</TableHead>
-                  <TableHead>Expertise</TableHead>
-                  <TableHead>Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {technologiesKnown.map((tech, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{tech.name}</TableCell>
-                    <TableCell className="capitalize">{tech.expertise}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleRemoveTechnology(index)}
-                      >
-                        Remove
-                      </Button>
-                    </TableCell>
+  return (
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange} >
+        <DialogContent aria-describedby="settings" className="h-[90%] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Configurations</DialogTitle>
+            <DialogDescription>
+              Configure your project settings
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Hourly Rate</Label>
+              <Input
+                type="number"
+                value={hourlyRate}
+                onChange={(e) => setHourlyRate(Number(e.target.value))}
+                min={0}
+              />
+            </div>
+            <div>
+              <Label>Hours per Day</Label>
+              <Input
+                type="number"
+                value={hoursPerDay}
+                onChange={(e) => setHoursPerDay(Number(e.target.value))}
+                min={1}
+                max={24}
+              />
+            </div>
+            <div>
+              <Label>Working Days per Week</Label>
+              <Input
+                type="number"
+                value={workingDaysPerWeek}
+                onChange={(e) => setWorkingDaysPerWeek(Number(e.target.value))}
+                min={1}
+                max={7}
+              />
+            </div>
+            <div className='flex flex-col gap-2'>
+              <Label>Gemini API Key</Label>
+              <span>
+                ***********{geminiApiKey.slice(-4)}
+              </span>
+              <Button onClick={() => setIsGeminiDialogOpen(true)}>Update Gemini API Key</Button>
+            </div>
+            <div className="space-y-2">
+              <Label>Technologies</Label>
+              <div className="flex space-x-2">
+                <Input
+                  placeholder="Technology name"
+                  value={newTechName}
+                  onChange={(e) => setNewTechName(e.target.value)}
+                />
+                <Select value={newTechExpertise} onValueChange={setNewTechExpertise}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Expertise level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="beginner">Beginner</SelectItem>
+                    <SelectItem value="intermediate">Intermediate</SelectItem>
+                    <SelectItem value="advanced">Advanced</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button onClick={handleAddTechnology}>Add</Button>
+              </div>
+
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Technology</TableHead>
+                    <TableHead>Expertise</TableHead>
+                    <TableHead>Action</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {technologiesKnown.map((tech, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{tech.name}</TableCell>
+                      <TableCell className="capitalize">{tech.expertise}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => handleRemoveTechnology(index)}
+                        >
+                          Remove
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
-        </div>
-        <div className="mt-4 flex justify-end space-x-2">
-          <Button variant="secondary" onClick={() => onOpenChange(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave}>Save</Button>
-        </div>
-        <DialogClose />
-      </DialogContent>
-    </Dialog>
+          <div className="mt-4 flex justify-end space-x-2">
+            <Button variant="secondary" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSave}>Save</Button>
+          </div>
+          <DialogClose />
+        </DialogContent>
+      </Dialog>
+      
+
+      
+      <Dialog open={isGeminiDialogOpen} onOpenChange={setIsGeminiDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Update Gemini API Key</DialogTitle>
+          </DialogHeader>
+          <DialogDescription>
+            Enter your new Gemini API Key below.
+          </DialogDescription>
+          <Input
+            type="text"
+            value={newGeminiApiKey}
+            onChange={(e) => setNewGeminiApiKey(e.target.value)}
+          />
+          <div className="mt-4 flex justify-end space-x-2">
+            <Button variant="secondary" onClick={() => setIsGeminiDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveGeminiApiKey}>Save</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 

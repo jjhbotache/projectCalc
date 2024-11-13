@@ -15,7 +15,6 @@ import {
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { deleteAll } from '../../slices/projectSlice';
 import { useDispatch } from 'react-redux';
-import { DialogTitle } from '@/components/ui/dialog';
 import HelpContent from './HelpContent';
 import AppConfigs from './AppConfigs';
 import { useState } from 'react';
