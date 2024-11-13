@@ -1,4 +1,4 @@
-import { updateFunctionalities } from '../slices/projectSlice';
+import { updateFunctionalities, updateProjectInfo } from '../slices/projectSlice';
 
 export const importJSON = (event, dispatch) => {
   
@@ -14,12 +14,6 @@ export const importJSON = (event, dispatch) => {
       const content = e.target.result;
       const parsedContent = JSON.parse(content);
       console.log("Imported JSON file:", parsedContent);
-
-      if (parsedContent.settings) {
-        dispatch(updateSettings(parsedContent.settings));
-      } else {
-        console.error("settings not found in JSON");
-      }
 
       if (parsedContent.functionalities && Array.isArray(parsedContent.functionalities)) {
         dispatch(updateFunctionalities({ type: 'SET_ALL', payload: parsedContent.functionalities }));
@@ -46,7 +40,6 @@ export const importJSON = (event, dispatch) => {
 
 export const exportJSON = (project) => {
   const projectToSave = {
-    settings: project.settings,
     functionalities: project.functionalities,
     projectInfo: project.projectInfo,
   };

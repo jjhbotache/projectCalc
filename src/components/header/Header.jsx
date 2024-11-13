@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Moon, Settings, Sun, Copy, Check, FileArchive, Plus, ChevronDown, ChevronUp } from 'lucide-react'; // Agrega Copy y Check
+import { Moon, Settings, Sun, Copy, Check, FileArchive, Plus, ChevronDown, ChevronUp, Sparkles } from 'lucide-react'; // Agrega Copy y Check
 import toggleDarkMode from '../../utils/toggleDarkMode';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../ui/dialog';
 import { useDispatch, useSelector } from 'react-redux';
-import { initialState, updateProjectInfo } from '../../slices/projectSlice';
+import { initialState, updateProjectInfo, updateFunctionalities } from '../../slices/projectSlice';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '../ui/dropdown-menu'; // Añadir import de DropdownMenu
 import { exportJSON, importJSON } from '../../utils/jsonHandler';
 import { Input } from '@/components/ui/input';
@@ -13,20 +13,68 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import ProjectInfo from './ProjectInfo';
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog';
+import { toast } from 'react-toastify';
+import useGemini from '../../hooks/useGemini';
 
 const jsonStructure = JSON.stringify(initialState, null, 2); // JSON structure for import/export
 
 export default function Header() {
   const dispatch = useDispatch();
-  const projectName = useSelector(state => state.project.projectInfo.projectName);
-  
+  const project = useSelector(state => state.project);
+  const {projectName} = project.projectInfo
+
   const fileInputRef = useRef();
   
   const [isDialogOpen, setDialogOpen] = useState(false); 
   const [copied, setCopied] = useState(false); 
 
-  const handleProjectNameChange = (e) => {
-    dispatch(updateProjectInfo({ projectName: e.target.value }));
+  const { editProject, calculateProjectDifferences, calculateConfigurationDifferences } = useGemini();
+
+  const [inputText, setInputText] = useState('');
+  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+  const [updatedProject, setUpdatedProject] = useState(null);
+  const [projectDifferences, setProjectDifferences] = useState([]);
+  const [configDifferences, setConfigDifferences] = useState([]);
+
+  useEffect(() => {
+    if (isUpdateDialogOpen && updatedProject) {
+        const projectDiffs = calculateProjectDifferences(project, updatedProject);
+        const configDiffs = calculateConfigurationDifferences(project.projectInfo, updatedProject.projectInfo);
+        setProjectDifferences(projectDiffs);
+        setConfigDifferences(configDiffs);
+    }
+  }, [isUpdateDialogOpen, updatedProject]);
+
+  const handleEditProject = () => {
+    toast.promise(
+      editProject(inputText, project)
+        .then((newProject) => {
+          console.log('sugerencia:', newProject);
+          
+          setUpdatedProject(newProject);
+          setIsUpdateDialogOpen(true);
+          setDialogOpen(false);
+          
+          
+        })
+        .catch((error) => {
+          console.error('Error al actualizar el proyecto:', error);
+        }),
+      {
+        pending: '✨ Generando cambios en el proyecto...',
+        success: 'Proyecto actualizado con éxito 🚀',
+        error: 'Ocurrió un error al actualizar el proyecto 😢',
+      }
+    );
+  };
+
+  const handleConfirmUpdate = () => {
+    if (updatedProject) {
+      dispatch(updateProjectInfo(updatedProject.projectInfo));
+      dispatch(updateFunctionalities({ type: 'SET_ALL', payload: updatedProject.functionalities }));
+      setIsUpdateDialogOpen(false);
+    }
   };
 
   const copyJsonStructure = () => {
@@ -99,6 +147,103 @@ export default function Header() {
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {/* Botón IA*/}
+        <Button onClick={() => setDialogOpen(true)} className="p-2">
+          <Sparkles size={24} />
+        </Button>
+
+        {/* Diálogo para editar el proyecto */}
+        <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Editar Proyecto</DialogTitle>
+              <DialogDescription>
+                ¿Qué deseas que la IA modifique del proyecto?
+              </DialogDescription>
+            </DialogHeader>
+            <Textarea
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              placeholder="Ingresa la descripción..."
+            />
+            <DialogFooter>
+              <Button variant="secondary" onClick={() => setDialogOpen(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={handleEditProject}>
+                Enviar
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Diálogo de confirmación para actualizar el proyecto */}
+        <AlertDialog open={isUpdateDialogOpen} onOpenChange={setIsUpdateDialogOpen}>
+          <AlertDialogContent className="h-[90%] overflow-y-auto">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirmar Actualización</AlertDialogTitle>
+              <AlertDialogDescription>
+                Revisa los cambios y decide si deseas actualizar el proyecto.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            
+            {/* Tabla que muestra los cambios de funcionalidades */}
+            <div className="flex flex-col mb-4">
+              <div className="flex font-bold border-b">
+                <div className="w-1/3 p-2">Type</div>
+                <div className="w-2/3 p-2">Details</div>
+              </div>
+              {projectDifferences.map((diff, index) => (
+                <div
+                  key={index}
+                  className={`flex border-l-4 p-2 ${
+                    diff.type === 'added'
+                      ? 'border-green-500'
+                      : diff.type === 'removed'
+                      ? 'border-red-500'
+                      : 'border-yellow-500'
+                  }`}
+                >
+                  <div className="w-1/3 capitalize">{diff.type}</div>
+                  <div className="w-2/3">
+                    {diff.functionality
+                      ? `Functionality: ${diff.functionality.name}`
+                      : `Configuration: ${diff.key}`}
+                    {diff.oldValue !== undefined && ` (from: ${diff.oldValue})`}
+                    {diff.newValue !== undefined && ` (to: ${diff.newValue})`}
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            {/* Nueva tabla para cambios de configuraciones */}
+            <div className="flex flex-col">
+              <div className="flex font-bold border-b">
+                <div className="w-1/2 p-2">Configuration Name</div>
+                <div className="w-1/2 p-2">New Value</div>
+              </div>
+              {configDifferences.map((diff, index) => (
+                <div
+                  key={index}
+                  className={`flex border-l-4 p-2 ${
+                    diff.type === 'added' || diff.type === 'edited'
+                        ? 'border-blue-500'
+                        : 'border-red-500'
+                  }`}
+                >
+                  <div className="w-1/2">{diff.key}</div>
+                  <div className="w-1/2">
+                    {diff.newValue !== undefined ? diff.newValue.toString() : 'N/A'}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setIsUpdateDialogOpen(false)}>Cancelar</AlertDialogCancel>
+              <AlertDialogAction onClick={handleConfirmUpdate}>Actualizar</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         {/* theme icon */}
         <button

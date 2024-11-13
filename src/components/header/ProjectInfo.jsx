@@ -11,7 +11,6 @@ import { Plus, ChevronUp, ChevronDown } from 'lucide-react';
 export default function ProjectInfo() {
   const dispatch = useDispatch();
   const projectInfo = useSelector(state => state.project.projectInfo);
-  console.log(projectInfo);
   
   const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false);
 

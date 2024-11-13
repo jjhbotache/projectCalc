@@ -1,22 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
+
+export const initialFunctionality = {
+  id: 0,
+  name: 'Default Functionality',
+  tasks: [
+    {
+      name: 'Default Task',
+      hours: 0,
+      billed: true,
+    },
+  ],
+  techCost: 0,
+  laborCost: 0,
+  duration: 0,
+  monthlyCost: 0,
+};
 
 export const initialState = {
   functionalities: [
-    {
-      id: 0,
-      name: 'Default Functionality',
-      tasks: [
-        {
-          name: 'Default Task',
-          hours: 0,
-          billed: true,
-        },
-      ],
-      techCost: 0,
-      laborCost: 0,
-      duration: 0,
-      monthlyCost: 0,
-    },
+    initialFunctionality,    
   ],
   projectInfo:{
     projectName: 'My Project',
@@ -54,16 +57,28 @@ const projectSlice = createSlice({
         case 'UPDATE_TASK':
           const funcToUpdate = state.functionalities.find(f => f.id === payload.functionalityId);
           if (funcToUpdate && funcToUpdate.tasks[payload.taskIndex]) {
-            Object.assign(funcToUpdate.tasks[payload.taskIndex], payload.updates);
+            const taskNames = funcToUpdate.tasks.map(task => task.name);
+            if (!taskNames.includes(payload.updates.name) || funcToUpdate.tasks[payload.taskIndex].name === payload.updates.name) {
+              Object.assign(funcToUpdate.tasks[payload.taskIndex], payload.updates);
+            } else {
+              console.error('Task with the same name already exists.');
+              toast.error('Task with the same name already exists.');
+            }
           }
           break;
         case 'ADD_TASK':
           const funcToAddTask = state.functionalities.find(f => f.id === payload.functionalityId);
           if (funcToAddTask) {
-            funcToAddTask.tasks.push({
-              ...payload.task,
-              billed: true, // Ensure billed defaults to false
-            });
+            const taskNames = funcToAddTask.tasks.map(task => task.name);
+            if (!taskNames.includes(payload.task.name)) {
+              funcToAddTask.tasks.push({
+                ...payload.task,
+                billed: true, // Ensure billed defaults to true
+              });
+            } else {
+              console.error('Task with the same name already exists.');
+              toast.error('Task with the same name already exists.');
+            }
           }
           break;
         case 'REMOVE_TASK':

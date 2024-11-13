@@ -1,6 +1,3 @@
 # Todo
-- tener en cuenta las tareas que se cobran o no para calcular el precio
-- Agregar un collapsable al final del header donde se muestre la descripcion del projecto y que se puede editar y una lista CRUD de tecnologias editables (el collapsable es un nuevo componente, crealo)
-- quita de las configuraciones generales, el project description
-- agregar editor de funcionalidad con ia
+- agregar chat con ia sobre el proyecto
 

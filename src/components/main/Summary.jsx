@@ -8,19 +8,10 @@ import { calculateTotals } from '../../utils/calculate';
 
 
 export default function Summary() { // Removed props
-  const dispatch = useDispatch();
   const project = useSelector(state => state.project); // Access redux state
   const config = useSelector((state) => state.config);
-  const [maintenanceCost, setMaintenanceCost] = useState(0);
-  const [copied, setCopied] = useState(false);
   const [isDrawerOpen, setDrawerOpen] = useState(false); // State for Drawer
-  const [isDialogOpen, setDialogOpen] = useState(false); // State for Dialog
 
-  const copyJsonStructure = () => {
-    navigator.clipboard.writeText(jsonStructure);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   const totals = calculateTotals(project, config); 
   
@@ -40,7 +31,7 @@ export default function Summary() { // Removed props
         <DrawerContent className="p-3 gap-2">
           <DialogTitle>Project Summary</DialogTitle>
           <DialogDescription>
-            The project will cost {totals.projectCost.toFixed(2)} in total and will take {totals.days.toFixed(0)} days to complete.
+            The project will cost ${totals.projectCost.toFixed(0)} in total and will take {totals.days.toFixed(0)} days to complete.
           </DialogDescription>
           <div className="flex flex-col gap-4 my-12">
             
