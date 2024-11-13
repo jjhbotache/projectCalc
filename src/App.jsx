@@ -14,16 +14,9 @@ export default function ProjectPlanner() {
   const dispatch = useDispatch();
   const project = useSelector((state) => state.project);
   const config = useSelector((state) => state.config);
-  const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false);
   const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
 
-  const handleHelp = () => {
-    setIsHelpDialogOpen(true);
-  };
 
-  const handleConfig = () => {
-    setIsAppConfigsDialogOpen(true);
-  };
 
   useEffect(() => {
     loadTheme();
@@ -49,9 +42,6 @@ export default function ProjectPlanner() {
       <SidebarProvider defaultOpen={true}>
         <div className="flex h-full w-full">
           <Navigation
-            functionalities={project.functionalities}
-            onHelp={handleHelp}
-            onConfig={handleConfig} // Pass handleConfig to Navigation
           />
           <main className="flex-1 p-4 pb-0 bg-white dark:bg-slate-950 dark:text-white min-h-screen flex flex-col items-center w-full gap-2 relative">
             <Header projectName="DevKalk" />

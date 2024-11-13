@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import Function from './Functionality';
+import ReorderFunctionalityItem from './ReorderFunctionalityItem'; // Importar el nuevo componente
 import { CirclePlus, Sparkle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDispatch } from 'react-redux';
 import { updateFunctionalities, updateProjectInfo } from '@/slices/projectSlice';
 import { useSelector } from 'react-redux';
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog'; // Nueva importación
-import { Textarea } from '@/components/ui/textarea'; // Nueva importación
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog';
+import { Textarea } from '@/components/ui/textarea';
 import useGemini from '@/hooks/useGemini';
-import { toast } from 'react-toastify'; // Nueva importación
+import { toast } from 'react-toastify';
+import { Reorder } from 'framer-motion'; // Eliminar useDragControls de aquí
 
 export default function Functionalities({ functionalities }) {
   const [expandedFunctionalityId, setExpandedFunctionalityId] = useState(null);
@@ -40,6 +41,9 @@ export default function Functionalities({ functionalities }) {
     }));
   };
 
+  const handleReorder = (newOrder) => {
+    dispatch(updateFunctionalities({ type: 'SET_ALL', payload: newOrder }));
+  };
 
   const handleGenerate = () => {
     setIsAlertOpen(false);
@@ -61,19 +65,26 @@ export default function Functionalities({ functionalities }) {
   };
 
   return (
-    <div className='flex flex-col gap-8 w-full my-4'>
-      {functionalities.map((functionality) => (
-        <Function
-          key={functionality.id}
-          functionality={functionality}
-          isCollapsed={expandedFunctionalityId !== functionality.id}
-          onToggle={() => {
-            setExpandedFunctionalityId(
-              expandedFunctionalityId === functionality.id ? null : functionality.id
-            );
-          }}
-        />
-      ))}
+    <>
+      <Reorder.Group
+        axis="y"
+        values={functionalities}
+        onReorder={handleReorder}
+        className='flex flex-col gap-8 w-full my-4'
+      >
+        {functionalities.map((functionality) => (
+          <ReorderFunctionalityItem
+            key={functionality.id}
+            functionality={functionality}
+            isCollapsed={expandedFunctionalityId !== functionality.id}
+            onToggle={() => {
+              setExpandedFunctionalityId(
+                expandedFunctionalityId === functionality.id ? null : functionality.id
+              );
+            }}
+          />
+        ))}
+      </Reorder.Group>
       
       {
         (functionalities.length===0 || inInitialState) && (
@@ -97,7 +108,6 @@ export default function Functionalities({ functionalities }) {
           </div>
         )
       }
-
 
       <Button onClick={addFunctionality} className="bg-blue-700 text-white hover:bg-blue-600 mb-10 rounded-full self-center p-2" >
         <CirclePlus size={18} />
@@ -127,6 +137,6 @@ export default function Functionalities({ functionalities }) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </>
   );
 }

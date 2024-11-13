@@ -80,9 +80,9 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between p-4 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 sticky top-0 z-20 ">
       {/* sidebar  btn & logo */}
-      <div className='flex items-center gap-4 '>
+      <div className='flex items-center gap-4 text-4xl'>
         <SidebarTrigger className="block" />
-        <img src="/pngs/DevKalk.png" alt="DevKalk" className="h-10" />
+        
         {projectName}
       </div>
 

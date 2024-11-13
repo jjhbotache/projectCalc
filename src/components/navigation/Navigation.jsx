@@ -11,16 +11,20 @@ import {
   SidebarMenuButton,
   SidebarTrigger,
   SidebarGroup,
+  SidebarGroupLabel,
+  SidebarRail,
 } from '@/components/ui/sidebar';
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { deleteAll } from '../../slices/projectSlice';
-import { useDispatch } from 'react-redux';
+import { deleteAll } from '@/slices/projectSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import HelpContent from './HelpContent';
 import AppConfigs from './AppConfigs';
 import { useState } from 'react';
+import { CubeIcon } from '@radix-ui/react-icons';
 
-export default function Navigation({ functionalities}) {
+export default function Navigation() {
   const dispatch = useDispatch();
+  const functionalities = useSelector((state) => state.project.functionalities);
   const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false);
   const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
 
@@ -34,27 +38,43 @@ export default function Navigation({ functionalities}) {
   const onConfig = () => { setIsAppConfigsDialogOpen(true); };
   
   return <>
-    <Sidebar aria-describedby="sidebar">
+    <Sidebar collapsible="icon">
 
       <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <a href="#" className='flex w-full'>
+                <img src="/pngs/DevKalk.png" alt="DevKalk" className="h-4" />
+                <h1 className="text-2xl font-bold text-white">DevKalk</h1>
+              </a>
+            </SidebarMenuButton>
+
+          </SidebarMenuItem>
+        </SidebarMenu>
         <SidebarTrigger className="block md:hidden"/>
       </SidebarHeader>
 
       <SidebarContent>
+
         <SidebarGroup>
-          {functionalities.map((functionality) => (
-            <SidebarMenuItem key={functionality.id} className="list-none">
-              <SidebarMenuButton asChild>
-                <a href={`#functionality-${functionality.id}`}>
-                  <span className="h-5 w-5" >
-                    {functionality.id.toString().substring(0, 2)}
-                  </span>
-                  <span>{functionality.name}</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+        <SidebarGroupLabel>Functionalities</SidebarGroupLabel>
+          <SidebarMenu>
+            {functionalities.map((functionality) => (
+              <SidebarMenuItem key={functionality.id} className="list-none">
+                <SidebarMenuButton asChild>
+                  <a href={`#functionality-${functionality.id}`}>
+                    <span className="h-4 w-4" >
+                      {functionality.id.toString().substring(0, 2)}
+                    </span>
+                    <span>{functionality.name}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
         </SidebarGroup>
+
       </SidebarContent>
 
       <SidebarFooter>
@@ -108,6 +128,8 @@ export default function Navigation({ functionalities}) {
 
         </SidebarMenu>
       </SidebarFooter>
+      
+      <SidebarRail />
     </Sidebar>
     {/* modals */}
     <HelpContent open={isHelpDialogOpen} onOpenChange={setIsHelpDialogOpen} />
