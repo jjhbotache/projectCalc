@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadAndSaveProjectFromLocalStorage } from './slices/projectSlice';
-import { loadAndSaveConfigFromLocalStorage } from './slices/configSlice'; // Import the action
-import Navigation from './components/navigation/Navigation';
-import AppConfigs from './components/navigation/AppConfigs';
-import Summary from './components/main/Summary';
-import Header from './components/header/Header';
-import Functionalities from './components/main/Functionalities';
+import { loadAndSaveProjectFromLocalStorage } from '@/slices/projectSlice';
+import { loadAndSaveConfigFromLocalStorage } from '@/slices/configSlice'; // Import the action
+import Navigation from '@/components/navigation/Navigation';
+import AppConfigs from '@/components/navigation/AppConfigs';
+import Summary from '@/components/main/Summary';
+import Header from '@/components/header/Header';
+import Functionalities from './components/main/functionalities/Functionalities';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { toast } from 'react-toastify';
-import { loadTheme } from './utils/toggleDarkMode';
+import { loadTheme } from '@/utils/toggleDarkMode';
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();

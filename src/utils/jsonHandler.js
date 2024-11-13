@@ -39,16 +39,16 @@ export const importJSON = (event, dispatch) => {
 };
 
 export const exportJSON = (project) => {
-  const projectToSave = {
-    functionalities: project.functionalities,
-    projectInfo: project.projectInfo,
-  };
-  const dataStr = JSON.stringify(projectToSave, null, 2);
+  const dataStr = JSON.stringify(project, null, 2);
   const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-  const exportFileDefaultName = 'project-plan.json';
+  const exportFileDefaultName = `${sanitizeFileName(project.projectInfo.projectName)}.json`;
 
   const linkElement = document.createElement('a');
   linkElement.setAttribute('href', dataUri);
   linkElement.setAttribute('download', exportFileDefaultName);
   linkElement.click();
+};
+
+const sanitizeFileName = (fileName) => {
+  return fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
 };

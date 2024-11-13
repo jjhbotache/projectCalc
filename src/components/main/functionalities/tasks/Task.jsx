@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { updateFunctionalities } from '../../slices/projectSlice';
+import { updateFunctionalities } from '@/slices/projectSlice';
 import { Input } from '@/components/ui/input';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { Receipt, Trash } from 'lucide-react';

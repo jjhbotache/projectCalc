@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { formatCurrency } from '../../utils/format';
-import { updateFunctionalities } from '../../slices/projectSlice';
+import { formatCurrency } from '@/utils/format';
+import { updateFunctionalities } from '@/slices/projectSlice';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,25 +16,22 @@ import {
   AlertDialogAction, 
 } from '@/components/ui/alert-dialog';
 import { ArrowDownFromLine, ArrowUpFromLine,  Sparkles, TimerReset, Trash } from 'lucide-react';
-import { calculateFunctionTotalPrices } from '../../utils/calculateTotalPrices';
-import TaskList from './TaskList';
-import useGemini from '../../hooks/useGemini';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
+import { calculateFunctionTotalPrices } from '@/utils/calculateTotalPrices';
+import TaskList from './tasks/TaskList';
 import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify'; // Import toast
+import EditFunctionalityDialog from './EditFunctionalityDialog'; // Import new component
+import ConfirmUpdateDialog from './ConfirmUpdateDialog'; // Import new component
+import useGemini from '../../../hooks/useGemini';
 
 export default function Functionality({ functionality, isCollapsed, onToggle }) {
   if (!functionality) return null;
   
   const dispatch = useDispatch();
   const config = useSelector((state) => state.config); 
-  const { editFunctionality, calculateTaskDifferences } = useGemini();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [inputText, setInputText] = useState('');
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [updatedFunctionality, setUpdatedFunctionality] = useState(null);
   const [taskDifferences, setTaskDifferences] = useState([]);
+  const calculateTaskDifferences = useGemini();
 
   useEffect(() => {
     if (isUpdateDialogOpen && updatedFunctionality) {
@@ -69,26 +66,6 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
     }));
   };
 
-  const handleEditFunctionality = () => {
-    toast.promise(
-      editFunctionality(inputText, functionality)
-        .then((newFunctionality) => {
-          setUpdatedFunctionality(newFunctionality);
-          setIsUpdateDialogOpen(true);
-          setIsDialogOpen(false);
-          setInputText('');
-        })
-        .catch((error) => {
-          console.error('Error al actualizar la funcionalidad:', error);
-        }),
-      {
-        pending: '✨ Generating functionality...',
-        success: 'Functionality generated successfully 🚀',
-        error: 'An error occurred while generating the functionality 😢',
-      }
-    );
-  };
-
   const handleConfirmUpdate = () => {
     dispatch(updateFunctionalities({
       type: 'UPDATE_ONE',
@@ -101,8 +78,6 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
   };
 
   const {totalPrice, laborCost} = calculateFunctionTotalPrices(functionality, config.hourlyRate);
-
-  
 
   return (
     <div
@@ -144,32 +119,11 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
         </AlertDialog>
 
         {/* edit with AI */}
-        <Button onClick={() => setIsDialogOpen(true)} className="p-2">
-          <Sparkles size={12} />
-        </Button>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen} >
-          <DialogContent >
-            <DialogHeader>
-              <DialogTitle>Editar Funcionalidad</DialogTitle>
-              <DialogDescription>
-                Que quieres que la IA edite?
-              </DialogDescription>
-            </DialogHeader>
-            <Textarea
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              placeholder="Ingresa la descripción..."
-            />
-            <DialogFooter>
-              <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>
-                Cancelar
-              </Button>
-              <Button onClick={handleEditFunctionality}>
-                Enviar
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <EditFunctionalityDialog
+          functionality={functionality}
+          setUpdatedFunctionality={setUpdatedFunctionality}
+          setIsUpdateDialogOpen={setIsUpdateDialogOpen}
+        />
         
         {/* expand */}
         <Button
@@ -239,43 +193,12 @@ export default function Functionality({ functionality, isCollapsed, onToggle }) 
       )}
       
       {/* AlertDialog for comparing functionalities */}
-      <AlertDialog open={isUpdateDialogOpen} onOpenChange={setIsUpdateDialogOpen}>
-        <AlertDialogContent className="h-[90%] overflow-y-auto">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirm Update</AlertDialogTitle>
-            <AlertDialogDescription>
-              Review the changes in tasks and decide whether to update.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="flex flex-col">
-            <div className="flex font-bold border-b">
-              <div className="w-1/2 p-2">Task</div>
-              <div className="w-1/2 p-2">Hours</div>
-            </div>
-            {taskDifferences.map((task) => (
-              <div
-                key={task.id || task.name}
-                className={`flex border-l-4 p-2 ${
-                  task.status === 'added'
-                    ? 'border-green-500'
-                    : task.status === 'removed'
-                    ? 'border-red-500'
-                    : task.status === 'edited'
-                    ? 'border-yellow-500'
-                    : 'border-white'
-                }`}
-              >
-                <div className="w-1/2">{task.name}</div>
-                <div className="w-1/2">{task.hours}</div>
-              </div>
-            ))}
-          </div>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setIsUpdateDialogOpen(false)}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmUpdate}>Update</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmUpdateDialog
+        isOpen={isUpdateDialogOpen}
+        setIsOpen={setIsUpdateDialogOpen}
+        taskDifferences={taskDifferences}
+        handleConfirmUpdate={handleConfirmUpdate}
+      />
     </div>
   );
 }

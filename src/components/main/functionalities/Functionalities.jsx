@@ -3,11 +3,11 @@ import Function from './Functionality';
 import { CirclePlus, Sparkle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDispatch } from 'react-redux';
-import { updateFunctionalities, updateProjectInfo } from '../../slices/projectSlice';
+import { updateFunctionalities, updateProjectInfo } from '@/slices/projectSlice';
 import { useSelector } from 'react-redux';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog'; // Nueva importación
 import { Textarea } from '@/components/ui/textarea'; // Nueva importación
-import useGemini from '../../hooks/useGemini';
+import useGemini from '@/hooks/useGemini';
 import { toast } from 'react-toastify'; // Nueva importación
 
 export default function Functionalities({ functionalities }) {

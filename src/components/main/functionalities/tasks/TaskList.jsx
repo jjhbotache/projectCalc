@@ -1,6 +1,6 @@
 import Task from './Task';
 import { useDispatch } from 'react-redux';
-import { updateFunctionalities } from '../../slices/projectSlice';
+import { updateFunctionalities } from '@/slices/projectSlice';
 import { Button } from '@/components/ui/button';
 import { ClipboardPlus } from 'lucide-react';
 

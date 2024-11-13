@@ -25,8 +25,7 @@ export const initialState = {
     projectName: 'My Project',
     projectDescription: '',
     technologiesUsed: [
-      //"python",
-      //"javascript",
+      "example technology 1",
     ],
   }
 };

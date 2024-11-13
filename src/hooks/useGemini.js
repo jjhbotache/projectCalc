@@ -104,6 +104,8 @@ export default function useGemini() {
         }
     };
 
+
+
     const calculateTaskDifferences = (currentTasks, updatedTasks) => {
         const allTasks = [...currentTasks, ...updatedTasks];
 
@@ -116,10 +118,16 @@ export default function useGemini() {
             } else if (!updatedTasks.find((t) => t.name === task.name)) {
                 status = 'removed';
             } else {
-                status = 'edited';
                 const currentTask = currentTasks.find((t) => t.name === task.name);
                 const updatedTask = updatedTasks.find((t) => t.name === task.name);
-                hours = updatedTask.hours - currentTask.hours;
+                const hourDifference = updatedTask.hours - currentTask.hours;
+
+                if (hourDifference === 0) {
+                    status = 'not modified';
+                } else {
+                    status = 'edited';
+                    hours = hourDifference;
+                }
             }
 
             return { ...task, status, hours };
@@ -133,6 +141,8 @@ export default function useGemini() {
         const newFunctionalities = newProject.functionalities;
 
         let differences = [];
+
+        
 
         newFunctionalities.forEach((func) => {
             if (!currentFunctionalities.find((f) => f.id === func.id)) {
@@ -148,8 +158,20 @@ export default function useGemini() {
 
         newFunctionalities.forEach((func) => {
             const currentFunc = currentFunctionalities.find((f) => f.id === func.id);
-            if (currentFunc && JSON.stringify(currentFunc) !== JSON.stringify(func)) {
-                differences.push({ type: 'edited', functionality: func });
+            if (currentFunc) {
+                if (JSON.stringify(currentFunc) !== JSON.stringify(func)) {
+                    
+                    const taskDifferences = calculateTaskDifferences(currentFunc.tasks, func.tasks);
+                    console.log(currentFunc.tasks, func.tasks);
+                    console.log(taskDifferences);
+                    
+                    
+                    differences.push({
+                        type: 'edited',
+                        functionality: func,
+                        taskDifferences: taskDifferences,
+                    });
+                }
             }
         });
 
@@ -187,6 +209,8 @@ export default function useGemini() {
         });
 
         differences = differences.sort((a, b) => a.functionality?.id - b.functionality?.id || 0);
+        console.log(differences);
+        
         return differences;
     };
 
@@ -221,7 +245,6 @@ export default function useGemini() {
                 });
             }
         });
-        console.log("differences",differences);
         
         return differences;
     };
