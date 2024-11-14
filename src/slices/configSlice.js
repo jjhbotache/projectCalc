@@ -4,7 +4,6 @@ export const initialState = {
   hourlyRate: 10,
   hoursPerDay: 8,
   workingDaysPerWeek: 5,
-  projectDescription: '',
   technologiesKnown: [], // Array of { name: string, expertise: "beginner" | "intermediate" | "advanced" }
   geminiApiKey: '', // Add Gemini API key to initial state
 };

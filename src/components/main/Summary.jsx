@@ -53,7 +53,7 @@ export default function Summary() { // Removed props
             </div>
             <div className="flex items-center">
               <CalendarRange />
-              <p className="ml-2">Total Months: {(totals.days / 30).toFixed(1)}</p>
+              <p className="ml-2">Total Months: {totals.months.toFixed(1)}</p>
             </div>
             <div className="flex items-center">
               <Cpu />

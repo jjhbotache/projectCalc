@@ -16,7 +16,7 @@ import {
   AlertDialogAction, 
 } from '@/components/ui/alert-dialog';
 import { ArrowDownFromLine, ArrowUpFromLine,  Sparkles, TimerReset, Trash, GripVertical } from 'lucide-react';
-import { calculateFunctionTotalPrices } from '@/utils/calculateTotalPrices';
+import { calculateFunctionTotalPrices } from '@/utils/calculate';
 import TaskList from './tasks/TaskList';
 import { useState, useEffect } from 'react';
 import EditFunctionalityDialog from './EditFunctionalityDialog'; // Import new component

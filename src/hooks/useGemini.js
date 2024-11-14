@@ -1,10 +1,13 @@
 import { initialFunctionality, initialState } from '../slices/projectSlice';
-import { useSelector } from 'react-redux';
+import { addMessage } from '../slices/chatSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function useGemini() {
     const config = useSelector((state) => state.config);
-    const { geminiApiKey:apiKey,  } = config;
-    
+    const project = useSelector((state) => state.project); // Include project data
+    const { geminiApiKey: apiKey } = config;
+    const chatHistory = useSelector((state) => state.chat.history);
+    const dispatch = useDispatch();
 
     const generateContent = async (inputText) => {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
@@ -14,6 +17,10 @@ export default function useGemini() {
             },
             body: JSON.stringify({
                 contents: [{
+                    role: 'model',
+                    parts: [{ text: `Project Info: ${JSON.stringify(project.projectInfo)}\nConfigurations: ${JSON.stringify(config)}` }]
+                }, {
+                    role: 'user',
                     parts: [{ text: inputText }]
                 }]
             })
@@ -24,11 +31,15 @@ export default function useGemini() {
 
     const generateProjectFromDescription = async (description) => {
         // from a project description, generate a project in the form of a JSON object
-        
+
         const projectJsonFormat = JSON.stringify(initialState);
         const prompt = `
             Generate a project from the following description:
             ${description}
+
+            ---
+            Take into account the expertise and techs of the programmer:
+            ${JSON.stringify(config.technologiesKnown)}
             ---
             The project must be given in the following JSON format:
             ${projectJsonFormat}
@@ -40,7 +51,7 @@ export default function useGemini() {
             const result = await generateContent(prompt);
             const text = result.candidates[0].content.parts[0].text;
             const parsedText = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
-            
+
             const project = JSON.parse(parsedText);
 
             return project;
@@ -49,7 +60,7 @@ export default function useGemini() {
         }
     };
 
-    const editFunctionality = async (inputText,functionality) => {
+    const editFunctionality = async (inputText, functionality) => {
         const initialFunctionalityJson = JSON.stringify(initialFunctionality);
         const functionalityJson = JSON.stringify(functionality);
         const prompt = `
@@ -57,7 +68,9 @@ export default function useGemini() {
             ${functionalityJson}
             according to the following description:
             ${inputText}
-
+            ---
+            Take into account the expertise and techs of the programmer:
+            ${JSON.stringify(config.technologiesKnown)}
             ---
             The functionality must be given in the following JSON format:
             ${initialFunctionalityJson}
@@ -67,14 +80,14 @@ export default function useGemini() {
             const result = await generateContent(prompt);
             const text = result.candidates[0].content.parts[0].text;
             const parsedText = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
-            
+
             const updatedFunctionality = JSON.parse(parsedText);
 
             return updatedFunctionality;
         } catch (error) {
             console.error('Error generating project with Gemini API:', error);
         }
-        
+
     };
 
     const editProject = async (inputText, project) => {
@@ -85,7 +98,9 @@ export default function useGemini() {
             ${projectJson}
             according to the following description:
             ${inputText}
-
+            ---
+            Take into account the expertise and techs of the programmer:
+            ${JSON.stringify(config.technologiesKnown)}
             ---
             The project must be given in the following JSON format:
             ${initialProjectJson}
@@ -95,7 +110,7 @@ export default function useGemini() {
             const result = await generateContent(prompt);
             const text = result.candidates[0].content.parts[0].text;
             const parsedText = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
-            
+
             const updatedProject = JSON.parse(parsedText);
 
             return updatedProject;
@@ -104,6 +119,68 @@ export default function useGemini() {
         }
     };
 
+    const sendMessage = async (message) => {
+        dispatch(addMessage({ role: 'user', text: message }));
+
+        // Assemble the prompt with project and config data
+        const filteredConfig = { ...config };
+        delete filteredConfig.geminiApiKey;
+
+        const context = {
+            role: 'user',
+            parts: [{
+                text: `
+                    This is the context:
+                    Project Info: ${JSON.stringify(project.projectInfo)}\nProgramer data: ${JSON.stringify(filteredConfig)}
+                    ---
+                    now, let's talk about the project
+                    ---
+                    ` }]
+        };
+        
+        const prompt = {
+            contents: [
+                context,
+                ...chatHistory.map(msg => ({
+                    role: msg.role,
+                    parts: [{ text: msg.text }]
+                })),
+                { role: 'user', parts: [{ text: message }] }
+            ]
+        };
+        
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(prompt)
+            });
+            console.log("prompt", prompt);
+            
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Gemini API Error:', errorData);
+                dispatch(addMessage({ role: 'model', text: 'Sorry, something went wrong. Please try again later.' }));
+                return;
+            }
+
+            const data = await response.json();
+
+            if (data.candidates && data.candidates.length > 0 && data.candidates[0].content.parts.length > 0) {
+                const reply = data.candidates[0].content.parts[0].text;
+                dispatch(addMessage({ role: 'model', text: reply }));
+            } else {
+                console.error('Unexpected Gemini API response structure:', data);
+                dispatch(addMessage({ role: 'model', text: 'Sorry, I couldn\'t process that. Please try again.' }));
+            }
+        } catch (error) {
+            console.error('Error communicating with Gemini API:', error);
+            dispatch(addMessage({ role: 'model', text: 'Sorry, an error occurred. Please try again later.' }));
+        }
+    };
 
 
     const calculateTaskDifferences = (currentTasks, updatedTasks) => {
@@ -142,8 +219,6 @@ export default function useGemini() {
 
         let differences = [];
 
-        
-
         newFunctionalities.forEach((func) => {
             if (!currentFunctionalities.find((f) => f.id === func.id)) {
                 differences.push({ type: 'added', functionality: func });
@@ -160,12 +235,11 @@ export default function useGemini() {
             const currentFunc = currentFunctionalities.find((f) => f.id === func.id);
             if (currentFunc) {
                 if (JSON.stringify(currentFunc) !== JSON.stringify(func)) {
-                    
+
                     const taskDifferences = calculateTaskDifferences(currentFunc.tasks, func.tasks);
                     console.log(currentFunc.tasks, func.tasks);
                     console.log(taskDifferences);
-                    
-                    
+
                     differences.push({
                         type: 'edited',
                         functionality: func,
@@ -210,7 +284,7 @@ export default function useGemini() {
 
         differences = differences.sort((a, b) => a.functionality?.id - b.functionality?.id || 0);
         console.log(differences);
-        
+
         return differences;
     };
 
@@ -245,9 +319,9 @@ export default function useGemini() {
                 });
             }
         });
-        
+
         return differences;
     };
 
-    return { generateProjectFromDescription, editFunctionality, editProject, calculateTaskDifferences, calculateProjectDifferences, calculateConfigurationDifferences };
+    return { generateProjectFromDescription, editFunctionality, editProject, calculateTaskDifferences, calculateProjectDifferences, calculateConfigurationDifferences, sendMessage };
 };

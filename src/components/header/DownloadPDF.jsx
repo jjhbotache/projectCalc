@@ -1,9 +1,7 @@
 import { PDFDownloadLink, Document, Page, Text, StyleSheet, View } from '@react-pdf/renderer';
 import { useSelector } from 'react-redux';
-import { selectConfig } from '../../slices/configSlice';
-import { calculateFunctionalityDuration, calculateTotals } from '../../utils/calculate';
-import { calculateFunctionTotalPrices } from '../../utils/calculateTotalPrices';
-import { Loader } from 'lucide-react';
+import { selectConfig } from '@/slices/configSlice';
+import { calculateFunctionalityDuration, calculateTotals, calculateFunctionTotalPrices } from '@/utils/calculate';
 
 // Define base styles outside StyleSheet.create
 const tableColBase = {
@@ -94,11 +92,6 @@ const styles = StyleSheet.create({
 const ProjectPDF = ({ project, config }) => {
   const { hourlyRate, hoursPerDay, workingDaysPerWeek} = config; // Extraer parámetros necesarios
   const totals = calculateTotals(project, config); // Calcular totales
-  const totalDurationOfProject = project.functionalities.reduce((acc, func) => acc + calculateFunctionalityDuration(func.tasks), 0);
-  const totalDurationOfProjectInDays = totalDurationOfProject / config.hoursPerDay
-  const daysPerMonth = workingDaysPerWeek * 4
-  const totalDurationOfProjectInMonths = (totalDurationOfProjectInDays / daysPerMonth).toFixed(1)
-
   
   return (
     <Document>
@@ -158,7 +151,7 @@ const ProjectPDF = ({ project, config }) => {
       <Page style={styles.page}>
         <Text style={styles.h2}>Costo Total del Proyecto: ${totals.projectCost.toFixed(2)}</Text>
         <Text style={styles.h2}>Costo Mensual: ${totals.monthlyCost.toFixed(2)}</Text>
-        <Text style={styles.h2}>Duración Total: {totalDurationOfProjectInMonths} Months</Text>
+        <Text style={styles.h2}>Duración Total: {totals.months.toFixed(1)} Months</Text>
       </Page>
     </Document>
   );
