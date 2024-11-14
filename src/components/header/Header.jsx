@@ -97,6 +97,9 @@ export default function Header() {
         {projectName}
       </div>
 
+      {/* project data */}
+      <ProjectInfo />
+
       {/* btns */}
       <div className="flex items-center gap-2">
         {/* Download PDF */}
@@ -122,7 +125,7 @@ export default function Header() {
         
       </div>
 
-      <ProjectInfo />
+      
 
 
 

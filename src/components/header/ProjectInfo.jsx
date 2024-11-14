@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateProjectInfo } from '../../slices/projectSlice';
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, ChevronUp, ChevronDown } from 'lucide-react';
+import { Plus, Wrench } from 'lucide-react';
 
 export default function ProjectInfo() {
   const dispatch = useDispatch();
   const projectInfo = useSelector(state => state.project.projectInfo);
   
-  const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleChange = (field, value) => {
     dispatch(updateProjectInfo({ [field]: value }));
@@ -36,61 +36,66 @@ export default function ProjectInfo() {
   };
 
   return (
-    <div className="w-full rounded-md dark:bg-slate-900 text-center ">
-      <Collapsible open={isCollapsibleOpen} onOpenChange={setIsCollapsibleOpen}>
-        <CollapsibleTrigger asChild>
-          <Button variant="ghost" size="sm" className="my-1 border border-white">
-            {isCollapsibleOpen ? <ChevronUp /> : <ChevronDown />} Project Info
-          </Button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="mt-4 px-2 py-4">
-          <hr className="border-white" />
-          <div className="space-y-4 py-2">
-            {/* Project Name */}
-            <div>
-              <Label>Project Name</Label>
-              <Input
-                className="mt-2 border-white"
-                value={projectInfo.projectName}
-                onChange={(e) => handleChange('projectName', e.target.value)}
-                placeholder="Enter your project name..."
-              />
-            </div>
-            {/* Project Description */}
-            <div>
-              <Label>Project Description</Label>
-              <Textarea
-                className="mt-2 border-white"
-                value={projectInfo.projectDescription}
-                rows={4}
-                onChange={(e) => handleChange('projectDescription', e.target.value)}
-                placeholder="Describe your project here..."
-              />
-            </div>
-
-            {/* Technologies Used */}
-            <div>
-              <Label>Technologies Used</Label>
-              {projectInfo.technologiesUsed.map((tech, index) => (
-                <div key={index} className="flex items-center space-x-2 mt-2">
-                  <Input
-                    type="text"
-                    placeholder="Technology eg: React"
-                    value={tech}
-                    onChange={(e) => updateTechnology(index, e.target.value)}
-                  />
-                  <Button variant="destructive" onClick={() => removeTechnology(index)}>
-                    Remove
-                  </Button>
-                </div>
-              ))}
-              <Button onClick={addTechnology} className="mt-2 ms-4 text-xs">
-                <Plus size={14} /> Add Technology
-              </Button>
-            </div>
+    <div className="rounded-md text-center ">
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogTrigger asChild>
+          <div>
+            <Button variant="outline" size="sm" >
+              <Wrench size={16}/>
+              Project Info
+            </Button>
           </div>
-        </CollapsibleContent>
-      </Collapsible>
+        </DialogTrigger>
+        <DialogContent className="mt-4 px-2 py-4">
+          <DialogTitle>Project Info</DialogTitle>
+          <DialogDescription asChild>
+            <div className="space-y-4 py-2">
+              {/* Project Name */}
+              <div>
+                <Label>Project Name</Label>
+                <Input
+                  className="mt-2 border-white"
+                  value={projectInfo.projectName}
+                  onChange={(e) => handleChange('projectName', e.target.value)}
+                  placeholder="Enter your project name..."
+                />
+              </div>
+              {/* Project Description */}
+              <div>
+                <Label>Project Description</Label>
+                <Textarea
+                  className="mt-2 border-white"
+                  value={projectInfo.projectDescription}
+                  rows={4}
+                  onChange={(e) => handleChange('projectDescription', e.target.value)}
+                  placeholder="Describe your project here..."
+                />
+              </div>
+
+              {/* Technologies Used */}
+              <div>
+                <Label>Technologies Used</Label>
+                {projectInfo.technologiesUsed.map((tech, index) => (
+                  <div key={index} className="flex items-center space-x-2 mt-2">
+                    <Input
+                      type="text"
+                      placeholder="Technology eg: React"
+                      value={tech}
+                      onChange={(e) => updateTechnology(index, e.target.value)}
+                    />
+                    <Button variant="destructive" onClick={() => removeTechnology(index)}>
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <Button onClick={addTechnology} className="mt-2 ms-4 text-xs">
+                  <Plus size={14} /> Add Technology
+                </Button>
+              </div>
+            </div>
+          </DialogDescription>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

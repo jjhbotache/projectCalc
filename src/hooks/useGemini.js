@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 export default function useGemini() {
     const config = useSelector((state) => state.config);
-    const { geminiApiKey:apiKey } = config;
+    const { geminiApiKey:apiKey,  } = config;
     
 
     const generateContent = async (inputText) => {

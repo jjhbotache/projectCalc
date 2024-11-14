@@ -6,7 +6,7 @@ export const calculateLaborCost = (tasks, hourlyRate) => {
 };
 
 export const calculateFunctionalityDuration = (tasks) => {
-  return tasks.reduce((sum, task) => sum + task.time, 0); // Sum of all task times
+  return tasks.reduce((sum, task) => sum + task.hours, 0); // Sum of all task times
 };
 
 export const calculateTotalMonthlyCost = (functionalities) => {

@@ -144,8 +144,6 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
         className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 grid place-items-center"
       >{isCollapsed ? <ArrowDownFromLine size={12} /> : <ArrowUpFromLine size={12} />}</Button>
 
-        {/* Download PDF */}
-        {/* {generatePDFDownload(functionality)} */}
       </div>
 
       {/* details */}
@@ -154,7 +152,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
         <span className="text-gray-500 flex items-center">
           <TimerReset size={24} />
           <span>{formattedDuration}</span>
-          <small className='self-end text-xs ml-1'>days</small> 
+          <small className='self-end text-xs ml-1'>hrs</small> 
         </span>
 
         <span className="text-gray-500">
