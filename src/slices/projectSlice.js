@@ -97,10 +97,10 @@ const projectSlice = createSlice({
         const savedProject = JSON.parse(localStorage.getItem('project'));
         if (savedProject) {
           try {
-        state.functionalities = savedProject.functionalities;
-        state.projectInfo = savedProject.projectInfo;
+            state.functionalities = savedProject.functionalities;
+            state.projectInfo = savedProject.projectInfo;
           } catch (error) {
-        console.error('Error loading saved project:', error);
+            console.error('Error loading saved project:', error);
           }
         }
       } else if (type === 'save') {

@@ -34,4 +34,8 @@ const configSlice = createSlice({
 });
 
 export const { updateConfig, loadAndSaveConfigFromLocalStorage } = configSlice.actions;
+
+// Add and export selector
+export const selectConfig = (state) => state.config;
+
 export default configSlice.reducer;

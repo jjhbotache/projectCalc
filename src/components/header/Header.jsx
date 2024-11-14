@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Moon, Sun, Sparkles } from 'lucide-react';
+import { Moon, Sun, Sparkles, ReceiptText } from 'lucide-react';
 import toggleDarkMode from '../../utils/toggleDarkMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { initialState, updateProjectInfo, updateFunctionalities } from '../../slices/projectSlice';
@@ -13,6 +13,7 @@ import JsonMenu from './JsonMenu';
 import EditProjectDialog from './EditProjectDialog';
 import UpdateProjectDialog from './UpdateProjectDialog';
 import JsonStructureDialog from './JsonStructureDialog';
+import DownloadPDF from './DownloadPDF'; // Import the updated component
 
 const jsonStructure = JSON.stringify(initialState, null, 2);
 
@@ -77,6 +78,16 @@ export default function Header() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleExportQuotation = () => {
+    const data = JSON.stringify(project, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${projectName}.json`;
+    a.click();
+  };
+
   return (
     <header className="flex items-center justify-between p-4 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 sticky top-0 z-20 ">
       {/* sidebar  btn & logo */}
@@ -88,6 +99,15 @@ export default function Header() {
 
       {/* btns */}
       <div className="flex items-center gap-2">
+        {/* Download PDF */}
+        <DownloadPDF project={project}>
+          <Button onClick={handleExportQuotation} className="p-2 rounded-full" title="Export quotation">
+            <ReceiptText size={20} />
+          </Button>
+        </DownloadPDF>
+
+        
+
         <JsonMenu
           project={project}
           setJsonStructureOpen={setJsonStructureOpen}
@@ -96,9 +116,10 @@ export default function Header() {
           <Sparkles size={20} />
         </Button>
         <Button onClick={toggleDarkMode} className="p-2 rounded-full bg-gray-800 text-yellow-400 dark:bg-yellow-400 dark:text-gray-800" >
-          <Moon size={24} className="dark:hidden" />
-          <Sun size={24} className="hidden dark:block" />
+          <Moon size={20} className="dark:hidden" />
+          <Sun size={20} className="hidden dark:block" />
         </Button>
+        
       </div>
 
       <ProjectInfo />

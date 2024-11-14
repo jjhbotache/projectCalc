@@ -21,8 +21,7 @@ import TaskList from './tasks/TaskList';
 import { useState, useEffect } from 'react';
 import EditFunctionalityDialog from './EditFunctionalityDialog'; // Import new component
 import ConfirmUpdateDialog from './ConfirmUpdateDialog'; // Import new component
-import useGemini from '../../../hooks/useGemini';
-import { useDragControls } from 'framer-motion'; // Import useDragControls
+import useGemini from '@/hooks/useGemini';
 import { motion, AnimatePresence } from 'framer-motion'; // Import motion and AnimatePresence
 
 export default function Functionality({ functionality, isCollapsed, onToggle, dragControls }) {
@@ -144,6 +143,9 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
         onClick={onToggle}
         className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 grid place-items-center"
       >{isCollapsed ? <ArrowDownFromLine size={12} /> : <ArrowUpFromLine size={12} />}</Button>
+
+        {/* Download PDF */}
+        {/* {generatePDFDownload(functionality)} */}
       </div>
 
       {/* details */}

@@ -17,7 +17,7 @@ export const calculateTotals = (project, settings) => {
   
   const { functionalities } = project;
 
-  
+
 
   let totalDays = 0;
   let totalTechCost = 0;
@@ -40,7 +40,7 @@ export const calculateTotals = (project, settings) => {
   
   const totalProjectCost = totalTechCost + totalLaborCost;
 
-  
+
   return {
     hours: totalHours,
     days: totalDays,

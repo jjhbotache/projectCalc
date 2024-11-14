@@ -1,4 +1,4 @@
-export function calculateFunctionTotalPrices(functionality,pricePerHour) {
+export function calculateFunctionTotalPrices(functionality, pricePerHour) {
   /*
   {
       id: 0,
