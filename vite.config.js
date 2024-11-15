@@ -10,9 +10,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'My PWA App',
-        short_name: 'MyPWA',
-        description: 'My awesome Progressive Web App!',
+        name: 'DevKalk',
+        short_name: 'DevKalk',
+        description: 'Calculadora de desarrollo para proyectos de software',
         theme_color: '#ffffff',
         icons: [
           {
