@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Moon, Sun, Sparkles, ReceiptText } from 'lucide-react';
+import { Moon, Sun, Sparkles, ReceiptText, MessageCircle, X } from 'lucide-react';
 import toggleDarkMode from '../../utils/toggleDarkMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { initialState, updateProjectInfo, updateFunctionalities } from '../../slices/projectSlice';
-import { Input } from '@/components/ui/input';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import ProjectInfo from './ProjectInfo';
@@ -35,6 +34,7 @@ export default function Header() {
   const [configDifferences, setConfigDifferences] = useState([]);
   const [jsonStructureOpen, setJsonStructureOpen] = useState(false);
   const [isChatDialogOpen, setIsChatDialogOpen] = useState(false); // State for ChatDialog
+  const [isChatInHeader, setIsChatInHeader] = useState(false); // Estado para controlar la posición del botón de Chat
 
   useEffect(() => {
     if (isUpdateDialogOpen && updatedProject) {
@@ -124,15 +124,20 @@ export default function Header() {
           <Moon size={20} className="dark:hidden" />
           <Sun size={20} className="hidden dark:block" />
         </Button>
-        <Button onClick={() => setIsChatDialogOpen(true)} className="p-2 rounded-full">
-          Chat
-        </Button>
+        {/* Botón de Chat en el header */}
+        {isChatInHeader && ( <MessageCircle className=" p-3 bg-blue-500 text-white rounded-full shadow-lg" size={20} onClick={() => setIsChatDialogOpen(true)}/> )}
+
         
       </div>
 
-      
-
-
+      {/* Botón de Chat Flotante */}
+      {/* onClick={() => setIsChatInHeader(!isChatInHeader)} */}
+      {!isChatInHeader && (
+        <div className='fixed bottom-4 right-4'>
+          <X className='absolute -top-1 -right-1 bg-red-500 text-white rounded-full shadow-lg' size={14} onClick={() => setIsChatInHeader(!isChatInHeader)} />
+          <MessageCircle className=" p-3 bg-blue-500 text-white rounded-full shadow-lg" size={20} onClick={() => setIsChatDialogOpen(true)}/>
+        </div>
+      )}
 
       {/* dialogs */}
       <EditProjectDialog

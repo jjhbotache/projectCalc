@@ -1,6 +1,7 @@
 import { initialFunctionality, initialState } from '../slices/projectSlice';
 import { addMessage } from '../slices/chatSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { calculateTotals } from '../utils/calculate';
 
 export default function useGemini() {
     const config = useSelector((state) => state.config);
@@ -131,14 +132,16 @@ export default function useGemini() {
             parts: [{
                 text: `
                     This is the context:
-                    Project Info: ${JSON.stringify(project.projectInfo)}\nProgramer data: ${JSON.stringify(filteredConfig)}
+                    Project Info: ${JSON.stringify(project.projectInfo)}
+                    Programer data: ${JSON.stringify(filteredConfig)}
+                    Totals: ${JSON.stringify(calculateTotals(project, config))}
                     ---
-                    now, let's talk about the project
+                    We are here to talk about the proyect
                     ---
                     ` }]
         };
-        
-        const prompt = {
+
+        const body = {
             contents: [
                 context,
                 ...chatHistory.map(msg => ({
@@ -146,7 +149,10 @@ export default function useGemini() {
                     parts: [{ text: msg.text }]
                 })),
                 { role: 'user', parts: [{ text: message }] }
-            ]
+            ],
+            generationConfig: {
+                "temperature": .3,
+            }   
         };
         
         try {
@@ -155,7 +161,7 @@ export default function useGemini() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(prompt)
+                body: JSON.stringify(body)
             });
             console.log("prompt", prompt);
             

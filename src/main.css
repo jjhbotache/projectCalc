@@ -107,3 +107,19 @@ svg{
 .spin{
   animation: spin 1s linear infinite;
 }
+
+/* Make scrollbar background transparent */
+::-webkit-scrollbar {
+  background-color: transparent;
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border: 1px solid #8790b1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
