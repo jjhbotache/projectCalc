@@ -152,7 +152,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
         <span className="text-gray-500 flex items-center">
           <TimerReset size={24} />
           <span>{formattedDuration}</span>
-          <small className='self-end text-xs ml-1'>hrs</small> 
+          <small className='self-end text-xs ml-1'>days</small> 
         </span>
 
         <span className="text-gray-500">
