@@ -46,7 +46,7 @@ export default function ProjectInfo() {
             </Button>
           </div>
         </DialogTrigger>
-        <DialogContent className="mt-4 px-2 py-4">
+        <DialogContent className=" px-2 py-4 max-h-[95%] overflow-y-auto">
           <DialogTitle>Project Info</DialogTitle>
           <DialogDescription asChild>
             <div className="space-y-4 py-2">

@@ -20,7 +20,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import HelpContent from './HelpContent';
 import AppConfigs from './AppConfigs';
 import { useState } from 'react';
-import { CubeIcon } from '@radix-ui/react-icons';
 
 export default function Navigation() {
   const dispatch = useDispatch();
@@ -41,6 +40,7 @@ export default function Navigation() {
     <Sidebar collapsible="icon">
 
       <SidebarHeader>
+      <SidebarTrigger className="block md:hidden"/>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
@@ -52,7 +52,7 @@ export default function Navigation() {
 
           </SidebarMenuItem>
         </SidebarMenu>
-        <SidebarTrigger className="block md:hidden"/>
+        
       </SidebarHeader>
 
       <SidebarContent>

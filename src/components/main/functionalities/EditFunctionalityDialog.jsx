@@ -10,6 +10,7 @@ export default function EditFunctionalityDialog({ functionality, setUpdatedFunct
   const { editFunctionality } = useGemini();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [inputText, setInputText] = useState('');
+  const [errorToShow, setErrorToShow] = useState("");
 
   const handleEditFunctionality = () => {
     toast.promise(
@@ -21,12 +22,15 @@ export default function EditFunctionalityDialog({ functionality, setUpdatedFunct
           setInputText('');
         })
         .catch((error) => {
-          console.error('Error al actualizar la funcionalidad:', error);
+          setErrorToShow(error);
+          console.log(error);
+          throw new Error(error);
+          
         }),
       {
         pending: '✨ Generating functionality...',
         success: 'Functionality generated successfully 🚀',
-        error: 'An error occurred while generating the functionality 😢',
+        error: `${errorToShow}`,
       }
     );
   };

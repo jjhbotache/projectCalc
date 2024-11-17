@@ -29,10 +29,25 @@ const configSlice = createSlice({
         localStorage.setItem('config', JSON.stringify(state));
       }
     },
+    importConfig: (state, action) => {
+      return {
+        ...state,
+        ...action.payload,
+      };
+    },
+    exportConfig: (state) => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+      const downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", "config.json");
+      document.body.appendChild(downloadAnchorNode);
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+    },
   },
 });
 
-export const { updateConfig, loadAndSaveConfigFromLocalStorage } = configSlice.actions;
+export const { updateConfig, loadAndSaveConfigFromLocalStorage, importConfig, exportConfig } = configSlice.actions;
 
 // Add and export selector
 export const selectConfig = (state) => state.config;

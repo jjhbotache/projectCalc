@@ -60,23 +60,6 @@ export const calculateTotals = (project, settings) => {
 // ---------------------
 
 export function calculateFunctionTotalPrices(functionality, pricePerHour) {
-  /*
-  {
-      id: 0,
-      name: 'Default Functionality',
-      tasks: [
-        {
-          name: 'Default Task',
-          hours: 0,
-          billed: true,
-        },
-      ],
-      techCost: 0,
-      laborCost: 0,
-      duration: 0,
-      monthlyCost: 0,
-    },
-   */
   const laborCost = functionality.tasks
     .filter(task => task.billed)
     .reduce((acc, task) => acc + task.hours, 0) * pricePerHour;
@@ -89,3 +72,143 @@ export function calculateFunctionTotalPrices(functionality, pricePerHour) {
   }
 }
 
+
+export const calculateTaskDifferences = (currentTasks, updatedTasks) => {
+  const allTasks = [...currentTasks, ...updatedTasks];
+
+  const diffs = allTasks.map((task) => {
+      let status = '';
+      let hours = task.hours;
+
+      if (!currentTasks.find((t) => t.name === task.name)) {
+          status = 'added';
+      } else if (!updatedTasks.find((t) => t.name === task.name)) {
+          status = 'removed';
+      } else {
+          const currentTask = currentTasks.find((t) => t.name === task.name);
+          const updatedTask = updatedTasks.find((t) => t.name === task.name);
+          const hourDifference = updatedTask.hours - currentTask.hours;
+
+          if (hourDifference === 0) {
+              status = 'not modified';
+          } else {
+              status = 'edited';
+              hours = hourDifference;
+          }
+      }
+
+      return { ...task, status, hours };
+  });
+
+  return diffs.filter((task, index) => index === diffs.findIndex((t) => t.name === task.name));
+};
+
+export const calculateProjectDifferences = (currentProject, newProject) => {
+  const currentFunctionalities = currentProject.functionalities;
+  const newFunctionalities = newProject.functionalities;
+
+  let differences = [];
+
+  newFunctionalities.forEach((func) => {
+      if (!currentFunctionalities.find((f) => f.id === func.id)) {
+          differences.push({ type: 'added', functionality: func });
+      }
+  });
+
+  currentFunctionalities.forEach((func) => {
+      if (!newFunctionalities.find((f) => f.id === func.id)) {
+          differences.push({ type: 'removed', functionality: func });
+      }
+  });
+
+  newFunctionalities.forEach((func) => {
+      const currentFunc = currentFunctionalities.find((f) => f.id === func.id);
+      if (currentFunc) {
+          if (JSON.stringify(currentFunc) !== JSON.stringify(func)) {
+
+              const taskDifferences = calculateTaskDifferences(currentFunc.tasks, func.tasks);
+              console.log(currentFunc.tasks, func.tasks);
+              console.log(taskDifferences);
+
+              differences.push({
+                  type: 'edited',
+                  functionality: func,
+                  taskDifferences: taskDifferences,
+              });
+          }
+      }
+  });
+
+  // Calculate configuration differences
+  const currentConfig = currentProject.config || {};
+  const newConfig = newProject.config || {};
+
+  // Check for added configurations
+  Object.keys(newConfig).forEach((key) => {
+      if (!currentConfig.hasOwnProperty(key)) {
+          differences.push({ type: 'added', key, value: newConfig[key] });
+      }
+  });
+
+  // Check for removed configurations
+  Object.keys(currentConfig).forEach((key) => {
+      if (!newConfig.hasOwnProperty(key)) {
+          differences.push({ type: 'removed', key, value: currentConfig[key] });
+      }
+  });
+
+  // Check for edited configurations
+  Object.keys(newConfig).forEach((key) => {
+      if (
+          currentConfig.hasOwnProperty(key) &&
+          currentConfig[key] !== newConfig[key]
+      ) {
+          differences.push({
+              type: 'edited',
+              key,
+              oldValue: currentConfig[key],
+              newValue: newConfig[key],
+          });
+      }
+  });
+
+  differences = differences.sort((a, b) => a.functionality?.id - b.functionality?.id || 0);
+  console.log(differences);
+
+  return differences;
+};
+
+export const calculateConfigurationDifferences = (currentConfig = {}, newConfig = {}) => {
+  let differences = [];
+
+  // Check for added configurations
+  Object.keys(newConfig).forEach((key) => {
+      if (!currentConfig.hasOwnProperty(key)) {
+          differences.push({ type: 'added', key, value: newConfig[key] });
+      }
+  });
+
+  // Check for removed configurations
+  Object.keys(currentConfig).forEach((key) => {
+      if (!newConfig.hasOwnProperty(key)) {
+          differences.push({ type: 'removed', key, value: currentConfig[key] });
+      }
+  });
+
+  // Check for edited configurations
+  Object.keys(newConfig).forEach((key) => {
+      if (
+          currentConfig.hasOwnProperty(key) &&
+          currentConfig[key] !== newConfig[key]
+      ) {
+          differences.push({
+              type: 'edited',
+              key,
+              oldValue: currentConfig[key],
+              newValue: newConfig[key],
+          });
+      }
+  });
+
+  return differences;
+};

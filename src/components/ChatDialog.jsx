@@ -62,7 +62,7 @@ const ChatDialog = ({ open, onClose }) => {
             }`}
             >
               <ReactMarkdown
-              className={`text-sm p-2 rounded-lg  ${msg.role === 'user' 
+              className={`text-sm p-2 rounded-lg break-words ${msg.role === 'user' 
                 ? 'bg-zinc-200 dark:bg-zinc-700 '
                 : 'bg-gray-200  dark:bg-gray-700'}`} 
               >{msg.text}</ReactMarkdown> {/* Replaced <p> with ReactMarkdown */}

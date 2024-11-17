@@ -14,6 +14,8 @@ import UpdateProjectDialog from './UpdateProjectDialog';
 import JsonStructureDialog from './JsonStructureDialog';
 import DownloadPDF from './DownloadPDF'; // Import the updated component
 import ChatDialog from '../ChatDialog'; // Import the ChatDialog component
+import { calculateProjectDifferences } from '@/utils/calculate';
+import { calculateConfigurationDifferences } from '@/utils/calculate';
 
 const jsonStructure = JSON.stringify(initialState, null, 2);
 
@@ -25,7 +27,8 @@ export default function Header() {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const { editProject, calculateProjectDifferences, calculateConfigurationDifferences } = useGemini();
+  const { editProject } = useGemini();
+  const [errorToShow, setErrorToShow] = useState("");
 
   const [inputText, setInputText] = useState('');
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
@@ -48,19 +51,21 @@ export default function Header() {
 
   const handleEditProject = () => {
     toast.promise(
-      editProject(inputText, project)
+      editProject(inputText)
         .then((newProject) => {
           setUpdatedProject(newProject);
           setIsUpdateDialogOpen(true);
           setDialogOpen(false);
         })
         .catch((error) => {
-          console.error('Error al actualizar el proyecto:', error);
+          setErrorToShow(error);
+          console.log(error);
+          throw new Error(error)
         }),
       {
         pending: '✨ Generando cambios en el proyecto...',
         success: 'Sugerencias generadas con éxito 🎉',
-        error: 'Ocurrió un error al actualizar el proyecto 😢',
+        error: `${errorToShow}`,
       }
     );
   };

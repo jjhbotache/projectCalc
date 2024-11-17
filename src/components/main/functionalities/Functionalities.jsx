@@ -18,6 +18,7 @@ export default function Functionalities({ functionalities }) {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [description, setDescription] = useState('');
   const { generateProjectFromDescription } = useGemini();
+  const [errorToShow, setErrorToShow] = useState("");
 
   const inInitialState = project.functionalities.length === 1 && project.functionalities[0].name === 'Default Functionality';
 
@@ -48,18 +49,21 @@ export default function Functionalities({ functionalities }) {
   const handleGenerate = () => {
     setIsAlertOpen(false);
     toast.promise(
-      generateProjectFromDescription(description).then((project) => {
+      generateProjectFromDescription(description)
+      .then((project) => {
         dispatch(updateFunctionalities({ type: 'SET_ALL', payload: project.functionalities }));
         dispatch(updateProjectInfo(project.projectInfo));
       })
       .catch((error) => {
-        console.error('Error generating project:', error);
+        setErrorToShow(error);
+        console.log(error);
+        throw new Error(error)
       })
       ,
       {
         pending: '✨Generating project...',
         success: 'Project generated successfully 🚀',
-        error: 'An error occurred while generating the project 😢'
+        error: `${errorToShow}`,
       }
     );
   };

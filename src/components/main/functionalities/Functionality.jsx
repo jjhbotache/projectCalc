@@ -21,8 +21,8 @@ import TaskList from './tasks/TaskList';
 import { useState, useEffect } from 'react';
 import EditFunctionalityDialog from './EditFunctionalityDialog'; // Import new component
 import ConfirmUpdateDialog from './ConfirmUpdateDialog'; // Import new component
-import useGemini from '@/hooks/useGemini';
 import { motion, AnimatePresence } from 'framer-motion'; // Import motion and AnimatePresence
+import { calculateTaskDifferences } from '@/utils/calculate';
 
 export default function Functionality({ functionality, isCollapsed, onToggle, dragControls }) {
   if (!functionality) return null;
@@ -32,7 +32,6 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [updatedFunctionality, setUpdatedFunctionality] = useState(null);
   const [taskDifferences, setTaskDifferences] = useState([]);
-  const calculateTaskDifferences = useGemini();
 
   useEffect(() => {
     if (isUpdateDialogOpen && updatedFunctionality) {

@@ -116,7 +116,8 @@ const projectSlice = createSlice({
       }
     },
     deleteAll: (state) => {
-      state.functionalities = initialState.functionalities;
+      state = initialState;
+      return state;
     },
     updateProjectInfo: (state, action) => {
       const { projectName, projectDescription, technologiesUsed } = action.payload;

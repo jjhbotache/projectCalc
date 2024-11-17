@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -6,7 +7,7 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadAndSaveConfigFromLocalStorage, updateConfig } from '../../slices/configSlice';
+import { loadAndSaveConfigFromLocalStorage, updateConfig, importConfig, exportConfig } from '@/slices/configSlice';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,7 @@ import {
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { DialogDescription } from '@radix-ui/react-dialog';
 import { toast } from 'react-toastify';
+import { Import, SquareArrowUpRight } from 'lucide-react';
 
 export default function AppConfigs({ open, onOpenChange }) {
   const config = useSelector((state) => state.config);
@@ -37,6 +39,7 @@ export default function AppConfigs({ open, onOpenChange }) {
   const [newTechExpertise, setNewTechExpertise] = useState('beginner');
   const [isGeminiDialogOpen, setIsGeminiDialogOpen] = useState(false);
   const [newGeminiApiKey, setNewGeminiApiKey] = useState('');
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     setHoursPerDay(config.hoursPerDay);
@@ -83,6 +86,29 @@ export default function AppConfigs({ open, onOpenChange }) {
     toast.success('Gemini API Key updated successfully');
   };
 
+  const handleImportConfig = (event) => {
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      const importedConfig = JSON.parse(e.target.result);
+      dispatch(importConfig(importedConfig));
+      dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' }));
+      toast.success('Configuration imported successfully');
+      event.target.value = null;
+    };
+    fileReader.readAsText(event.target.files[0]);
+  };
+
+  const handleExportConfig = () => {
+    dispatch(exportConfig());
+    toast.success('Configuration exported successfully');
+    // si la config tiene la geminiApiKey, se advierte al usuario que tenga cuidado con la API Key
+    config.geminiApiKey && toast.warning('Remember to keep your Gemini API Key safe',{ autoClose: 10000, });
+  };
+
+  const handleImportButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange} >
@@ -92,6 +118,24 @@ export default function AppConfigs({ open, onOpenChange }) {
             <DialogDescription>
               Configure your project settings
             </DialogDescription>
+            <div className="flex justify-end gap-1 items-center">
+              <span>Import/Export Config</span>
+
+              <Button className="p-1 h-7" onClick={handleExportConfig}>
+                <SquareArrowUpRight size={16} />
+              </Button>
+
+              <input
+                type="file"
+                accept=".json"
+                onChange={handleImportConfig}
+                className='hidden'
+                ref={fileInputRef}
+              />
+              <Button className="p-1 h-7" onClick={handleImportButtonClick}>
+                <Import size={16} />
+              </Button>
+            </div>
           </DialogHeader>
           <div className="space-y-4">
             <div>
@@ -178,6 +222,7 @@ export default function AppConfigs({ open, onOpenChange }) {
                 </TableBody>
               </Table>
             </div>
+            
           </div>
           <div className="mt-4 flex justify-end space-x-2">
             <Button variant="secondary" onClick={() => onOpenChange(false)}>
