@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'; // Added useRef
 import { useSelector, useDispatch } from 'react-redux'; // Ensure useDispatch is imported
-import useGemini from '../hooks/useGemini';
+import useGemini from '../../hooks/useGemini';
 import ReactMarkdown from 'react-markdown'; // Added import
 import {
   Dialog,
@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button'; // Import shadcn Button component
 import { Input } from '@/components/ui/input'; // Import shadcn Input component
 import { DialogDescription } from '@radix-ui/react-dialog';
-import { resetChat } from '../slices/chatSlice'; // Import resetChat
+import { resetChat } from '../../slices/chatSlice'; // Import resetChat
 import { LoaderCircle, RotateCcw } from 'lucide-react';
 
 const ChatDialog = ({ open, onClose }) => {

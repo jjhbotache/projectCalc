@@ -46,7 +46,7 @@ export default function ProjectPlanner() {
           <Navigation
           />
           <main className="flex-1 p-4 pb-0 bg-white dark:bg-slate-950 dark:text-white min-h-screen flex flex-col items-center w-full gap-2 relative">
-            <Header projectName="DevKalk" />
+            <Header />
             <Functionalities functionalities={project.functionalities} />
             <Summary />
           </main>

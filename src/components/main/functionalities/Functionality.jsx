@@ -81,7 +81,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
 
   return (
     <motion.div
-      className=" border p-4 rounded-md border-gray-300 bg-slate-100 dark:border-gray-600 dark:bg-slate-800 gap-2 flex flex-col align-center "
+      className=" border px-1 sm:px-4  py-4 rounded-md border-gray-300 bg-slate-100 dark:border-gray-600 dark:bg-slate-800 gap-2 flex flex-col align-center "
       id={`functionality-${functionality.id}`}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -164,7 +164,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
       <AnimatePresence>
         {!isCollapsed && (
           <motion.div
-            className='bg-gray-950 bg-opacity-20 rounded-xl p-2'
+            className='bg-gray-950 bg-opacity-20 md:rounded-xl md:p-2'
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -175,7 +175,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
               sprintId={functionality.id}
             />
 
-            <hr className="m-4 border-white" />
+            <hr className="w-11/12 mx-auto my-4 border-white" />
 
             {/* functionality summary */}
             <div className="grid grid-cols-2 gap-4">

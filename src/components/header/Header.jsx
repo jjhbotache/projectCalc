@@ -12,8 +12,8 @@ import JsonMenu from './JsonMenu';
 import EditProjectDialog from './EditProjectDialog';
 import UpdateProjectDialog from './UpdateProjectDialog';
 import JsonStructureDialog from './JsonStructureDialog';
-import DownloadPDF from './DownloadPDF'; // Import the updated component
-import ChatDialog from '../ChatDialog'; // Import the ChatDialog component
+import DownloadPDF from './DownloadPDF'; 
+import ChatDialog from './ChatDialog'; 
 import { calculateProjectDifferences } from '@/utils/calculate';
 import { calculateConfigurationDifferences } from '@/utils/calculate';
 
@@ -98,10 +98,9 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between p-4 py-2 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 sticky top-0 z-20 ">
       {/* sidebar  btn & logo */}
-      <div className='flex items-center gap-4 text-4xl'>
+      <div className='flex items-center gap-4 text-4xl w-full'>
         <SidebarTrigger className="block" />
-        
-        {projectName}
+        <p className='truncate w-full block'>{projectName}</p>
       </div>
 
       {/* project data */}

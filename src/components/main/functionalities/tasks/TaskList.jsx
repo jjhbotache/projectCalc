@@ -2,7 +2,7 @@ import Task from './Task';
 import { useDispatch } from 'react-redux';
 import { updateFunctionalities } from '@/slices/projectSlice';
 import { Button } from '@/components/ui/button';
-import { ClipboardPlus } from 'lucide-react';
+import { CircleDollarSign, ClipboardPlus, TimerReset } from 'lucide-react';
 
 export default function TaskList({ tasks, sprintId }) {
   const dispatch = useDispatch();
@@ -19,11 +19,19 @@ export default function TaskList({ tasks, sprintId }) {
 
   return (
     <div className="w-full">
-      <div className="flex w-full mb-2 px-4 py-2 bg-muted font-medium text-sm">
-        <div className="flex-1">Task</div>
-        <div className="w-16 text-center">Hours</div>
-        <div className="w-24 text-center">Billed</div>
-        <div className="w-10 text-center">Actions</div>
+      <div className="flex w-full mb-2 md:px-4 py-2 bg-muted font-medium text-sm">
+        <div className="w-9/12 text-center flex justify-center items-center">Task</div>
+        <div className="w-2/12 text-center flex justify-center items-center">
+          <TimerReset/>
+          <span className='hidden lg:block'>Hours</span>
+        </div>
+        <div className="w-1/12 text-center flex justify-center items-center">
+          <CircleDollarSign/>
+          <span className='hidden lg:block'>Billed</span>
+        </div>
+        <div className="w-1/12 text-center flex justify-center items-center">
+          <span className='hidden lg:block'>Actions</span>
+        </div>
       </div>
       <div className="flex flex-col gap-2">
         {tasks.map((task, index) => (

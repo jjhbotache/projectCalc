@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { Receipt, Trash } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
+import ExpandibleInput from '@/components/global/ExpandibleInput';
 
 export default function Task({ task, sprintId, taskIndex }) {
   const dispatch = useDispatch();
@@ -30,30 +31,29 @@ export default function Task({ task, sprintId, taskIndex }) {
   };
 
   return (
-    <div className="flex items-center w-full px-4 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-      <div className="flex-1" title={task.name}>
-        <Input
+    <div className="flex items-center w-full md:px-4 py-2 bg-white dark:bg-gray-800 md:rounded-lg shadow-sm">
+      <div className="w-9/12" title={task.name}>
+        <ExpandibleInput
           value={task.name}
           onChange={(e) => handleChange('name', e.target.value)}
-          className="w-full p-1 border rounded bg-white dark:bg-gray-700 dark:text-white text-xs"
         />
       </div>
-      <div className="w-16 px-2">
+      <div className="w-2/12">
         <Input
           type="number"
           value={task.hours}
           onChange={(e) => handleChange('hours', Number(e.target.value))}
-          className="w-full p-1 border rounded bg-white dark:bg-gray-700 dark:text-white"
+          className="w-full p-1 border md:rounded bg-white dark:bg-gray-700 dark:text-white"
         />
       </div>
-      <div className="w-24 flex items-center justify-center gap-2">
-        <Receipt size={24} opacity={task.billed ? 1 : 0.2} />
+      <div className="w-1/12 flex items-center justify-center gap-1">
+        <Receipt size={24} opacity={task.billed ? 1 : 0.2} className='hidden lg:block'/>
         <Checkbox
           checked={task.billed}
           onCheckedChange={(value) => handleChange('billed', value)}
         />
       </div>
-      <div className="w-10 flex justify-center">
+      <div className="w-1/12 flex justify-center">
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <button className="text-red-600 hover:text-red-800">
