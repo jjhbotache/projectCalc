@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'; // Import shadcn Button compone
 import { Input } from '@/components/ui/input'; // Import shadcn Input component
 import { DialogDescription } from '@radix-ui/react-dialog';
 import { resetChat } from '../../slices/chatSlice'; // Import resetChat
-import { LoaderCircle, RotateCcw } from 'lucide-react';
+import { LoaderCircle, RotateCcw, Send } from 'lucide-react';
 
 const ChatDialog = ({ open, onClose }) => {
   const { sendMessage } = useGemini();
@@ -65,24 +65,36 @@ const ChatDialog = ({ open, onClose }) => {
               className={`text-sm p-2 rounded-lg break-words ${msg.role === 'user' 
                 ? 'bg-zinc-200 dark:bg-zinc-700 '
                 : 'bg-gray-200  dark:bg-gray-700'}`} 
-              >{msg.text}</ReactMarkdown> {/* Replaced <p> with ReactMarkdown */}
+              >{msg.text}</ReactMarkdown> 
             </div>
           ))}
-          <div ref={messagesEndRef} /> {/* Added div for scrolling */}
+          <div ref={messagesEndRef} />
         </div>
         <DialogFooter>
-          <Input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message..."
-            className="mr-2"
-          />
-          {isLoading 
-          ?<LoaderCircle size={16} className="spin" /> 
-          :<Button onClick={handleSend}>Send</Button>}
-          <Button onClick={() => dispatch(resetChat())} className="ml-2 p-1">
-            <RotateCcw size={16} className="" />
-          </Button>
+          <div className='w-full flex'>
+            <Input
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+              placeholder="Type your message..."
+              className="w-10/12"
+            />
+            {
+            isLoading 
+              ?<LoaderCircle size={16} className="spin w-1/12" /> 
+              :<Button onClick={handleSend} className="p-0 w-1/12">
+                <Send size={16} className="" />
+              </Button>
+            }
+            <Button onClick={() => dispatch(resetChat())} className="p-0 w-1/12">
+              <RotateCcw size={16} className="" />
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

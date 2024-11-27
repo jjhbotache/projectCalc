@@ -27,7 +27,6 @@ export default function Navigation() {
   const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false);
   const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
 
-
   const onDeleteAllProject = () => {
     dispatch(deleteAll());
     localStorage.removeItem('project');
@@ -38,9 +37,8 @@ export default function Navigation() {
   
   return <>
     <Sidebar collapsible="icon">
-
       <SidebarHeader>
-      <SidebarTrigger className="block md:hidden"/>
+        <SidebarTrigger className="block md:hidden"/>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
@@ -49,16 +47,13 @@ export default function Navigation() {
                 <h1 className="text-2xl font-bold text-white">DevKalk</h1>
               </a>
             </SidebarMenuButton>
-
           </SidebarMenuItem>
         </SidebarMenu>
-        
       </SidebarHeader>
 
       <SidebarContent>
-
         <SidebarGroup>
-        <SidebarGroupLabel>Functionalities</SidebarGroupLabel>
+          <SidebarGroupLabel>Functionalities</SidebarGroupLabel>
           <SidebarMenu>
             {functionalities.map((functionality) => (
               <SidebarMenuItem key={functionality.id} className="list-none">
@@ -74,40 +69,35 @@ export default function Navigation() {
             ))}
           </SidebarMenu>
         </SidebarGroup>
-
       </SidebarContent>
 
       <SidebarFooter>
         <SidebarMenu>
-
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <a href="#configuraciones" onClick={onConfig}>
+              <a href="#settings" onClick={onConfig}>
                 <Bolt className="h-5 w-5" />
-                <span>Configuraciones</span>
+                <span>Settings</span>
               </a>
             </SidebarMenuButton>
-
           </SidebarMenuItem>
 
           <AlertDialog>
             <AlertDialogTrigger>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="#borrar-proyecto">
+                  <a href="#delete-project">
                     <Trash className="h-5 w-5" />
-                    <span>Borrar proyecto</span>
+                    <span>Delete project</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </AlertDialogTrigger>
-            <AlertDialogContent >
-
+            <AlertDialogContent>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
                 This action cannot be undone. This will permanently delete project.
               </AlertDialogDescription>
-
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction onClick={onDeleteAllProject}>Delete the whole project</AlertDialogAction>
@@ -115,17 +105,14 @@ export default function Navigation() {
             </AlertDialogContent>
           </AlertDialog>
 
-
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <a href="#ayuda" onClick={onHelp}>
+              <a href="#help" onClick={onHelp}>
                 <HelpCircle className="h-5 w-5" />
-                <span>Ayuda</span>
+                <span>Help</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
-
-
         </SidebarMenu>
       </SidebarFooter>
       

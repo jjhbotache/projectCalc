@@ -1,18 +1,18 @@
-import React, { useRef, useState } from 'react';
-import { FileArchive } from 'lucide-react';
+import React, { useRef } from 'react';
+import {  FileJson } from 'lucide-react';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '../ui/dropdown-menu';
 import { exportJSON, importJSON } from '../../utils/jsonHandler';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, } from 'react-redux';
 
-export default function JsonMenu({ project, setJsonStructureOpen }) {
+export default function JsonMenu({ project, setJsonStructureOpen,displayData }) {
   const dispatch = useDispatch();
   const fileInputRef = useRef();
 
-
+  
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <FileArchive className="dark:bg-gray-950 bg-white p-2 rounded-full" size={24} />
+    <DropdownMenu >
+      <DropdownMenuTrigger className={`dark:bg-gray-950 bg-white h-${displayData.btnsHeight} aspect-square p-0 rounded-full grid place-items-center`} title="JSON options">
+        <FileJson className=" dark:text-white text-gray-950" size={displayData.iconsSize} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem onClick={() => exportJSON(project)}>

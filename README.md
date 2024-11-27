@@ -15,13 +15,16 @@
 - ~~solve tasks name unvisible~~
 - ~~name of the project dynamic (one line max)~~
 - todo a ingls
-  - sidebar
-  - config
-  - help option
-  - main
-- add context to btns
-- create a help description
-- allow re arrange for the tasks
+  - ~~chat~~
+  - ~~settings~~
+  - ~~help option~~
+  - ~~sidebar~~
+  - ~~main~~
+  - ~summary~
+  - ~~pdf~~
+- ~~create a help description~~
+- ~~add context to btns~~
+- ~~allow re arrange for the tasks~~
 - history saver save steps in LS
 - add tabs for multi quotations
 - support quotation api

@@ -43,8 +43,7 @@ export default function ProjectPlanner() {
     <>
       <SidebarProvider defaultOpen={true}>
         <div className="flex h-full w-full">
-          <Navigation
-          />
+          <Navigation />
           <main className="flex-1 p-4 pb-0 bg-white dark:bg-slate-950 dark:text-white min-h-screen flex flex-col items-center w-full gap-2 relative">
             <Header />
             <Functionalities functionalities={project.functionalities} />

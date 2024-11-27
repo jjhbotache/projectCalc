@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Moon, Sun, Sparkles, ReceiptText, MessageCircle, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Moon, Sun, Sparkles, MessageCircle, X, File } from 'lucide-react';
 import toggleDarkMode from '../../utils/toggleDarkMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { initialState, updateProjectInfo, updateFunctionalities } from '../../slices/projectSlice';
@@ -18,6 +18,8 @@ import { calculateProjectDifferences } from '@/utils/calculate';
 import { calculateConfigurationDifferences } from '@/utils/calculate';
 
 const jsonStructure = JSON.stringify(initialState, null, 2);
+const iconsSize = 22;
+const btnsHeight = 10;
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -100,7 +102,7 @@ export default function Header() {
       {/* sidebar  btn & logo */}
       <div className='flex items-center gap-4 text-4xl w-full'>
         <SidebarTrigger className="block" />
-        <p className='truncate w-full block'>{projectName}</p>
+        <p className='truncate w-full block mb-2'>{projectName}</p>
       </div>
 
       {/* project data */}
@@ -110,8 +112,8 @@ export default function Header() {
       <div className="flex items-center gap-2">
         {/* Download PDF */}
         <DownloadPDF project={project}>
-          <Button onClick={handleExportQuotation} className="p-2 rounded-full" title="Export quotation">
-            <ReceiptText size={20} />
+          <Button onClick={handleExportQuotation} className={`h-${btnsHeight} aspect-square p-0 rounded-full`} title="Export quotation">
+            <File size={iconsSize} />
           </Button>
         </DownloadPDF>
 
@@ -120,22 +122,30 @@ export default function Header() {
         <JsonMenu
           project={project}
           setJsonStructureOpen={setJsonStructureOpen}
+          displayData={{
+            btnsHeight,
+            iconsSize,
+          }}
+          
         />
-        <Button onClick={() => setDialogOpen(true)} className="p-2 rounded-full">
-          <Sparkles size={20} />
-        </Button>
-        <Button onClick={toggleDarkMode} className="p-2 rounded-full bg-gray-800 text-yellow-400 dark:bg-yellow-400 dark:text-gray-800" >
-          <Moon size={20} className="dark:hidden" />
-          <Sun size={20} className="hidden dark:block" />
+
+        <Button onClick={() => setDialogOpen(true)} className={`h-${btnsHeight} aspect-square p-0 rounded-full`} title="Edit project with AI"> <Sparkles size={iconsSize} /> </Button>
+
+        <Button onClick={toggleDarkMode} className={`h-${btnsHeight} aspect-square p-0 rounded-full bg-gray-800 text-yellow-400 dark:bg-yellow-400 dark:text-gray-800`} title="Toggle theme">
+          <Moon size={iconsSize} className="dark:hidden" />
+          <Sun size={iconsSize} className="hidden dark:block" />
         </Button>
         {/* Botón de Chat en el header */}
-        {isChatInHeader && ( <MessageCircle className=" p-3 bg-blue-500 text-white rounded-full shadow-lg" size={20} onClick={() => setIsChatDialogOpen(true)}/> )}
+        {isChatInHeader && ( 
+          <Button onClick={() => setIsChatDialogOpen(true)} className={`h-${btnsHeight} aspect-square p-0 rounded-full`} title="Chat about the project">
+            <MessageCircle size={iconsSize} /> 
+          </Button>
+         )}
 
         
       </div>
 
       {/* Botón de Chat Flotante */}
-      {/* onClick={() => setIsChatInHeader(!isChatInHeader)} */}
       {!isChatInHeader && (
         <div className='fixed bottom-4 right-4'>
           <X className='absolute -top-1 -right-1 bg-red-500 text-white rounded-full shadow-lg' size={14} onClick={() => setIsChatInHeader(!isChatInHeader)} />

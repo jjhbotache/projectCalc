@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { updateFunctionalities } from '@/slices/projectSlice';
 import { Button } from '@/components/ui/button';
 import { CircleDollarSign, ClipboardPlus, TimerReset } from 'lucide-react';
+import { Reorder } from 'framer-motion';
 
 export default function TaskList({ tasks, sprintId }) {
   const dispatch = useDispatch();
@@ -13,6 +14,16 @@ export default function TaskList({ tasks, sprintId }) {
       payload: {
         functionalityId: sprintId,
         task: { name: 'New Task', hours: 0 },
+      },
+    }));
+  };
+
+  const handleReorder = (newOrder) => {
+    dispatch(updateFunctionalities({
+      type: 'SET_TASKS_ORDER',
+      payload: {
+        functionalityId: sprintId,
+        newTasks: newOrder,
       },
     }));
   };
@@ -33,16 +44,22 @@ export default function TaskList({ tasks, sprintId }) {
           <span className='hidden lg:block'>Actions</span>
         </div>
       </div>
-      <div className="flex flex-col gap-2">
+      <Reorder.Group
+        axis="y"
+        values={tasks}
+        onReorder={handleReorder}
+        className="flex flex-col gap-2"
+      >
         {tasks.map((task, index) => (
-          <Task
-            key={index}
-            task={task}
-            sprintId={sprintId}
-            taskIndex={index}
-          />
+          <Reorder.Item key={task.name} value={task}>
+            <Task
+              task={task}
+              sprintId={sprintId}
+              taskIndex={index}
+            />
+          </Reorder.Item>
         ))}
-      </div>
+      </Reorder.Group>
       <Button
         onClick={addTask}
         className="ml-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-4 mt-4 dark:bg-green-600 dark:hover:bg-green-700"

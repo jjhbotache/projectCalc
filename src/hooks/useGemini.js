@@ -6,7 +6,7 @@ import exhaustedGeminiResponse from '../mocks/exhaustedGeminiResponse.json'; // 
 
 export default function useGemini() {
     const config = useSelector((state) => state.config);
-    const project = useSelector((state) => state.project); // Include project data
+    const project = useSelector((state) => state.project);
     const { geminiApiKey: apiKey } = config;
     const chatHistory = useSelector((state) => state.chat.history);
     const dispatch = useDispatch();
@@ -149,7 +149,7 @@ export default function useGemini() {
                 { role: 'user', parts: [{ text: message }] }
             ],
             generationConfig: {
-                "temperature": .3,
+                "temperature": .15,
             }   
         };
         

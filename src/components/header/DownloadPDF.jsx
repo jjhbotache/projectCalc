@@ -90,8 +90,8 @@ const styles = StyleSheet.create({
 
 // Create PDF Document Component
 const ProjectPDF = ({ project, config }) => {
-  const { hourlyRate, hoursPerDay, workingDaysPerWeek} = config; // Extraer parámetros necesarios
-  const totals = calculateTotals(project, config); // Calcular totales
+  const { hourlyRate } = config; // Extract necessary parameters
+  const totals = calculateTotals(project, config); // Calculate totals
   
   return (
     <Document>
@@ -100,12 +100,12 @@ const ProjectPDF = ({ project, config }) => {
         <Text style={styles.h3}>{project.projectInfo.projectDescription}</Text>
 
         <View style={styles.containerLeft}>
-          <Text style={[styles.h3, { textAlign: 'left' }]}>Tecnologías Utilizadas:</Text>
+          <Text style={[styles.h3, { textAlign: 'left' }]}>Technologies Used:</Text>
           {project.projectInfo.technologiesUsed.map((tech, index) => (
             <Text key={index} style={[styles.h3, { textAlign: 'left' }]}>• {tech}</Text>
           ))}
         </View>
-        <Text style={styles.h3}>Precio Total: ${totals.projectCost}</Text>
+        <Text style={styles.h3}>Total Price: ${totals.projectCost}</Text>
         <View style={styles.divider} />
       </Page>
       
@@ -113,23 +113,22 @@ const ProjectPDF = ({ project, config }) => {
       {project.functionalities.map(func => {
         const prices = calculateFunctionTotalPrices(func, hourlyRate);
         
-        const duration = calculateFunctionalityDuration(func.tasks); // Calcular duración
+        const duration = calculateFunctionalityDuration(func.tasks); // Calculate duration
         
         return (
           <Page key={func.id} style={styles.page}>
-            <Text style={styles.h3}>{func.id}){func.name} - Total: ${prices.totalPrice}</Text>
-            <Text style={styles.h3}>Duración: {duration} hrs</Text>
-            <Text style={styles.h3}>Costo de Mano de Obra: ${prices.laborCost.toFixed(2)}</Text>
-            <Text style={styles.h3}>Costo de Tecnología: ${prices.techCost.toFixed(2)}</Text>
-            <Text style={styles.h3}>Costo Mensual: ${prices.monthlyCost.toFixed(2)}</Text>
-
+            <Text style={styles.h3}>{func.id}) {func.name} - Total: ${prices.totalPrice}</Text>
+            <Text style={styles.h3}>Duration: {duration} hrs</Text>
+            <Text style={styles.h3}>Labor Cost: ${prices.laborCost.toFixed(2)}</Text>
+            <Text style={styles.h3}>Technology Cost: ${prices.techCost.toFixed(2)}</Text>
+            <Text style={styles.h3}>Monthly Cost: ${prices.monthlyCost.toFixed(2)}</Text>
 
             {/* Tasks Table */}
             <View style={styles.table}>
               <View style={styles.tableRow}>
-                <Text style={styles.tableColHeaderMain}>Tarea</Text>
-                <Text style={styles.tableColHeader}>Horas</Text>
-                <Text style={styles.tableColHeader}>Precio</Text>
+                <Text style={styles.tableColHeaderMain}>Task</Text>
+                <Text style={styles.tableColHeader}>Hours</Text>
+                <Text style={styles.tableColHeader}>Price</Text>
               </View>
               {func.tasks.map((task, index) => {
                 const taskPrice = task.hours * hourlyRate;
@@ -149,9 +148,9 @@ const ProjectPDF = ({ project, config }) => {
       
       {/* Summary */}
       <Page style={styles.page}>
-        <Text style={styles.h2}>Costo Total del Proyecto: ${totals.projectCost.toFixed(2)}</Text>
-        <Text style={styles.h2}>Costo Mensual: ${totals.monthlyCost.toFixed(2)}</Text>
-        <Text style={styles.h2}>Duración Total: {totals.months.toFixed(1)} Months</Text>
+        <Text style={styles.h2}>Total Project Cost: ${totals.projectCost.toFixed(2)}</Text>
+        <Text style={styles.h2}>Monthly Cost: ${totals.monthlyCost.toFixed(2)}</Text>
+        <Text style={styles.h2}>Total Duration: {totals.months.toFixed(1)} Months</Text>
       </Page>
     </Document>
   );
@@ -166,7 +165,6 @@ const DownloadPDF = ({ project, children }) => {
       document={<ProjectPDF project={project} config={config} />}
       fileName={`${project.projectInfo.projectName}.pdf`}
     >
-      {/* {({ loading }) => (loading ?  <Loader className='spin'/> : children)} */}
       {children}
     
     </PDFDownloadLink>

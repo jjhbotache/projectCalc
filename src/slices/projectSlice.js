@@ -86,6 +86,12 @@ const projectSlice = createSlice({
             funcToRemoveTask.tasks.splice(payload.taskIndex, 1);
           }
           break;
+        case 'SET_TASKS_ORDER':
+          const func = state.functionalities.find(f => f.id === payload.functionalityId);
+          if (func) {
+            func.tasks = payload.newTasks;
+          }
+          break;
         default:
           break;
       }
