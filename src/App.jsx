@@ -37,7 +37,6 @@ export default function ProjectPlanner() {
     dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' })); // Save configurations
   }, [config]);
 
-  console.log('project:', project);
   
 
   return (

@@ -10,4 +10,17 @@
 - ~~resolver bugs de crear~~
 - ~~añadir export de configs ~~
 - ~~solve proyect info modal bug~~
+
+
+- solve tasks name unvisible
+- name of the project dynamic (one line max)
 - todo a ingls
+  - sidebar
+  - config
+  - help option
+  - main
+- add context to btns
+- create a help description
+- history saver save steps in LS
+- add tabs for multi quotations
+- support quotation api
