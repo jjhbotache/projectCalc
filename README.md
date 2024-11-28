@@ -14,7 +14,7 @@
 
 - ~~solve tasks name unvisible~~
 - ~~name of the project dynamic (one line max)~~
-- todo a ingls
+- ~~todo a ingls~~
   - ~~chat~~
   - ~~settings~~
   - ~~help option~~
