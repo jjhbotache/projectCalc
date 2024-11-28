@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Moon, Sun, Sparkles, MessageCircle, X, File } from 'lucide-react';
+import { Moon, Sun, Sparkles, MessageCircle, X, File, Undo, Redo } from 'lucide-react';
 import toggleDarkMode from '../../utils/toggleDarkMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { initialState, updateProjectInfo, updateFunctionalities } from '../../slices/projectSlice';
@@ -98,7 +98,7 @@ export default function Header() {
   };
 
   return (
-    <header className="flex items-center justify-between p-4 py-2 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 sticky top-0 z-20 ">
+    <header className="flex  items-center justify-between p-4 py-2 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 sticky top-0 z-20 pb-5">
       {/* sidebar  btn & logo */}
       <div className='flex items-center gap-4 text-4xl w-full'>
         <SidebarTrigger className="block" />
@@ -126,7 +126,6 @@ export default function Header() {
             btnsHeight,
             iconsSize,
           }}
-          
         />
 
         <Button onClick={() => setDialogOpen(true)} className={`h-${btnsHeight} aspect-square p-0 rounded-full`} title="Edit project with AI"> <Sparkles size={iconsSize} /> </Button>
@@ -144,6 +143,16 @@ export default function Header() {
 
         
       </div>
+
+      
+      <div className="absolute bottom-0 left-0 transform translate-y-1/2 flex gap-1">
+        <Button className="p-0 h-6 shadow-lg" variant="outline" title="Undo"> <Undo/> </Button>
+        <Button className="p-0 h-6 shadow-lg" variant="outline" title="Redo"> <Redo/> </Button>
+      </div>
+
+
+
+      
 
       {/* Botón de Chat Flotante */}
       {!isChatInHeader && (
