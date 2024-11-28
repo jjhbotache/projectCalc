@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import Task from './Task';
 import { useDispatch } from 'react-redux';
 import { updateFunctionalities } from '@/slices/projectSlice';
 import { Button } from '@/components/ui/button';
-import { CircleDollarSign, ClipboardPlus, TimerReset } from 'lucide-react';
+import { ArrowDownUp, Check, CircleDollarSign, ClipboardPlus, GripVertical, Move, TimerReset } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 
 export default function TaskList({ tasks, sprintId }) {
   const dispatch = useDispatch();
+  const [reorderingMode, setReorderingMode] = useState(false); // Add reordering mode state
 
   const addTask = () => {
     dispatch(updateFunctionalities({
@@ -30,7 +32,19 @@ export default function TaskList({ tasks, sprintId }) {
 
   return (
     <div className="w-full">
-      <div className="flex w-full mb-2 md:px-4 py-2 bg-muted font-medium text-sm">
+      <div className="flex w-full mb-2 md:px-4 py-2 bg-muted font-medium text-sm relative">
+
+        <div className="absolute left-0 top-0 h-full flex items-center transform -translate-x-1/2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setReorderingMode(!reorderingMode)}            
+            className="aspect-square shadow-2xl p-1"
+          >
+            {reorderingMode ? <Check size={18}/> : <ArrowDownUp size={18}/>}
+          </Button>
+        </div>
+
         <div className="w-9/12 text-center flex justify-center items-center">Task</div>
         <div className="w-2/12 text-center flex justify-center items-center">
           <TimerReset/>
@@ -44,25 +58,46 @@ export default function TaskList({ tasks, sprintId }) {
           <span className='hidden lg:block'>Actions</span>
         </div>
       </div>
-      <Reorder.Group
-        axis="y"
-        values={tasks}
-        onReorder={handleReorder}
-        className="flex flex-col gap-2"
-      >
-        {tasks.map((task, index) => (
-          <Reorder.Item key={task.name} value={task}>
+
+      {/* Conditionally render tasks */}
+      {reorderingMode ? (
+        <Reorder.Group
+          axis="y"
+          values={tasks}
+          onReorder={handleReorder}
+          className="flex flex-col gap-2"
+        >
+          {tasks.map((task, index) => (
+            <Reorder.Item
+              key={task.name}
+              value={task}
+            >
+              <Task
+                task={task}
+                sprintId={sprintId}
+                taskIndex={index}
+                reorderingMode={reorderingMode}
+              />
+            </Reorder.Item>
+          ))}
+        </Reorder.Group>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {tasks.map((task, index) => (
             <Task
+              key={task.name}
               task={task}
               sprintId={sprintId}
               taskIndex={index}
+              reorderingMode={reorderingMode}
             />
-          </Reorder.Item>
-        ))}
-      </Reorder.Group>
+          ))}
+        </div>
+      )}
+
       <Button
         onClick={addTask}
-        className="ml-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-4 mt-4 dark:bg-green-600 dark:hover:bg-green-700"
+        className="ml-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-4 mt-4"
       >
         <ClipboardPlus className="mr-2" /> Add Task
       </Button>
