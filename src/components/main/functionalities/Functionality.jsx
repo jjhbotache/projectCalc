@@ -23,6 +23,7 @@ import EditFunctionalityDialog from './EditFunctionalityDialog'; // Import new c
 import ConfirmUpdateDialog from './ConfirmUpdateDialog'; // Import new component
 import { motion, AnimatePresence } from 'framer-motion'; // Import motion and AnimatePresence
 import { calculateTaskDifferences } from '@/utils/calculate';
+import ExpandibleInput from '../../global/ExpandibleInput';
 
 export default function Functionality({ functionality, isCollapsed, onToggle, dragControls }) {
   if (!functionality) return null;
@@ -100,10 +101,9 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
 
         {/* functionality name */}
         <Label className="block text-gray-800 dark:text-gray-200">{functionality.id})</Label>
-        <Input
+        <ExpandibleInput
           value={functionality.name}
           onChange={(e) => handleFieldChange('name', e.target.value)}
-          className="text-sm font-bold w-full p-2 border rounded bg-white text-gray-900 dark:bg-gray-700 dark:text-white"
         />
 
         {/* delete */}

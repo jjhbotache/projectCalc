@@ -145,9 +145,9 @@ export default function Header() {
       </div>
 
       
-      <div className="absolute bottom-0 left-0 transform translate-y-1/2 flex gap-1">
-        <Button className="p-0 h-6 shadow-lg" variant="outline" title="Undo"> <Undo/> </Button>
-        <Button className="p-0 h-6 shadow-lg" variant="outline" title="Redo"> <Redo/> </Button>
+      <div className="absolute bottom-0 -left-2 transform translate-y-1/2 flex gap-1">
+        <Button className="p-0 h-6 shadow-2xl" variant="outline" title="Undo"> <Undo/> </Button>
+        <Button className="p-0 h-6 shadow-2xl" variant="outline" title="Redo"> <Redo/> </Button>
       </div>
 
 

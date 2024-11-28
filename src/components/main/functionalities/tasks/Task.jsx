@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { Trash, GripVertical } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
+import ExpandibleInput from '../../../global/ExpandibleInput';
 
 export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
   const dispatch = useDispatch();
@@ -37,11 +38,10 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
         </div>
       )}
       <div className="w-9/12" title={task.name}>
-        <Input
+        <ExpandibleInput
           type="text"
           value={task.name}
           onChange={(e) => handleChange('name', e.target.value)}
-          className="w-full p-1 border md:rounded bg-white dark:bg-gray-700 dark:text-white"
           disabled={reorderingMode} // Disable when reordering
         />
       </div>
@@ -61,30 +61,28 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
           disabled={reorderingMode} // Disable when reordering
         />
       </div>
-      {!reorderingMode && (
-        <div className="w-1/12 flex justify-center">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <button className="text-red-600 hover:text-red-800">
-                <Trash size={24} />
-              </button>
-            </AlertDialogTrigger>
+      <div className="w-1/12 flex justify-center">
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button className="text-red-600 hover:text-red-800">
+              <Trash size={24} />
+            </button>
+          </AlertDialogTrigger>
 
-            <AlertDialogContent >
-              <AlertDialogHeader>
-                <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to delete this task? This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      )}
+          <AlertDialogContent >
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete this task? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
     </div>
   );
 }
