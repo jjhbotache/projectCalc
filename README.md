@@ -25,11 +25,12 @@
 - ~~create a help description~~
 - ~~add context to btns~~
 - ~~allow re arrange for the tasks~~
-- history saver save steps in LS
+- ~~history saver save steps in LS~~
 - add tabs for multi quotations
 - support quotation api
 
+
+## bugs
 - fix bug when reorder functionality in mobile
 - fix bug enhanced input functionality
-
-git restore README.md
+- fix dialogs wrong done
