@@ -139,8 +139,11 @@ const projectSlice = createSlice({
         state.projectInfo.technologiesUsed = technologiesUsed;
       }
     },
+    setProjectState: (state, action) => {
+      return action.payload;
+    },
   },
 });
 
-export const { updateFunctionalities, loadAndSaveProjectFromLocalStorage, deleteAll, updateProjectInfo } = projectSlice.actions;
+export const { updateFunctionalities, loadAndSaveProjectFromLocalStorage, deleteAll, updateProjectInfo, setProjectState } = projectSlice.actions;
 export default projectSlice.reducer;

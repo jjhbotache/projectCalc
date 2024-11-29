@@ -16,12 +16,18 @@ import DownloadPDF from './DownloadPDF';
 import ChatDialog from './ChatDialog'; 
 import { calculateProjectDifferences } from '@/utils/calculate';
 import { calculateConfigurationDifferences } from '@/utils/calculate';
+import useHistory from '@/hooks/useHistory';
 
 const jsonStructure = JSON.stringify(initialState, null, 2);
 const iconsSize = 22;
 const btnsHeight = 10;
 
-export default function Header() {
+export default function Header({
+  undo,
+  redo,
+  canUndo,
+  canRedo,
+}) {
   const dispatch = useDispatch();
   const project = useSelector(state => state.project);
   const { projectName } = project.projectInfo;
@@ -38,8 +44,10 @@ export default function Header() {
   const [projectDifferences, setProjectDifferences] = useState([]);
   const [configDifferences, setConfigDifferences] = useState([]);
   const [jsonStructureOpen, setJsonStructureOpen] = useState(false);
-  const [isChatDialogOpen, setIsChatDialogOpen] = useState(false); // State for ChatDialog
-  const [isChatInHeader, setIsChatInHeader] = useState(false); // Estado para controlar la posición del botón de Chat
+  const [isChatDialogOpen, setIsChatDialogOpen] = useState(false); 
+  const [isChatInHeader, setIsChatInHeader] = useState(false);
+
+  
 
   useEffect(() => {
     if (isUpdateDialogOpen && updatedProject) {
@@ -146,8 +154,12 @@ export default function Header() {
 
       
       <div className="absolute bottom-0 -left-2 transform translate-y-1/2 flex gap-1">
-        <Button className="p-0 h-6 shadow-2xl" variant="outline" title="Undo"> <Undo/> </Button>
-        <Button className="p-0 h-6 shadow-2xl" variant="outline" title="Redo"> <Redo/> </Button>
+        <Button onClick={undo} disabled={!canUndo} className="p-0 h-6 shadow-2xl" variant="outline" title="Undo">
+          <Undo />
+        </Button>
+        <Button onClick={redo} disabled={!canRedo} className="p-0 h-6 shadow-2xl" variant="outline" title="Redo">
+          <Redo />
+        </Button>
       </div>
 
 
