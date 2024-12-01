@@ -8,22 +8,22 @@ export default function EditProjectDialog({ isDialogOpen, setDialogOpen, inputTe
     <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Editar Proyecto</DialogTitle>
+          <DialogTitle>Edit Project</DialogTitle>
           <DialogDescription>
-            ¿Qué deseas que la IA modifique del proyecto?
+            What do you want the AI to modify in the project?
           </DialogDescription>
         </DialogHeader>
         <Textarea
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          placeholder="Ingresa la descripción..."
+          placeholder="Enter the description..."
         />
         <DialogFooter>
           <Button variant="secondary" onClick={() => setDialogOpen(false)}>
-            Cancelar
+            Cancel
           </Button>
           <Button onClick={handleEditProject}>
-            Enviar
+            Submit
           </Button>
         </DialogFooter>
       </DialogContent>

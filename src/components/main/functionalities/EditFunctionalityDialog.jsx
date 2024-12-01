@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dialog,  DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { toast } from 'react-toastify';
@@ -43,22 +43,22 @@ export default function EditFunctionalityDialog({ functionality, setUpdatedFunct
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Editar Funcionalidad</DialogTitle>
+            <DialogTitle>Edit Functionality</DialogTitle>
             <DialogDescription>
-              Que quieres que la IA edite?
+              What do you want the AI to edit?
             </DialogDescription>
           </DialogHeader>
           <Textarea
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Ingresa la descripción..."
+            placeholder="Enter the description..."
           />
-          <DialogFooter>
-            <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>
-              Cancelar
-            </Button>
+          <DialogFooter className="gap-2">
             <Button onClick={handleEditFunctionality}>
-              Enviar
+              Submit
+            </Button>
+            <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>
+              Cancel
             </Button>
           </DialogFooter>
         </DialogContent>

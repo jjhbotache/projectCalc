@@ -21,10 +21,7 @@ export default function Functionalities({ functionalities }) {
   const { generateProjectFromDescription } = useGemini();
   const [errorToShow, setErrorToShow] = useState("");
   const inInitialState = project.functionalities.length === 1 && project.functionalities[0].name === 'Default Functionality';
-  const isMobile = useIsMobile();
 
-  console.log("Functionalities component rendered");
-  console.log("isMobile: ", isMobile);
   
   
   const addFunctionality = () => {  
@@ -38,7 +35,7 @@ export default function Functionalities({ functionalities }) {
           ? Math.max(...project.functionalities.map(f => f.id)) + 1 
           : 1),
         name: 'New Functionality', 
-        tasks: [], // Initialize tasks array
+        tasks: [], 
         techCost: 0, 
         laborCost: 0, 
         duration: 0, 
