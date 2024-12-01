@@ -11,6 +11,7 @@ export default function ReorderFunctionalityItem({ functionality, isCollapsed, o
       value={functionality}
       dragListener={false}
       dragControls={controls}
+      style={{ touchAction: "none" }}
     >
       <Functionality
         functionality={functionality}

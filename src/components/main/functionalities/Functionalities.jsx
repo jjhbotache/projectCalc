@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import useGemini from '@/hooks/useGemini';
 import { toast } from 'react-toastify';
 import { Reorder } from 'framer-motion'; // Eliminar useDragControls de aquí
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export default function Functionalities({ functionalities }) {
   const [expandedFunctionalityId, setExpandedFunctionalityId] = useState(null);
@@ -19,9 +20,13 @@ export default function Functionalities({ functionalities }) {
   const [description, setDescription] = useState('');
   const { generateProjectFromDescription } = useGemini();
   const [errorToShow, setErrorToShow] = useState("");
-
   const inInitialState = project.functionalities.length === 1 && project.functionalities[0].name === 'Default Functionality';
+  const isMobile = useIsMobile();
 
+  console.log("Functionalities component rendered");
+  console.log("isMobile: ", isMobile);
+  
+  
   const addFunctionality = () => {  
     console.log('Adding functionality');
     

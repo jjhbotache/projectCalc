@@ -31,6 +31,6 @@
 
 
 ## bugs
-- fix bug when reorder functionality in mobile
+- ~~fix bug when reorder functionality in mobile~~
 - fix bug enhanced input functionality
 - fix dialogs wrong done
