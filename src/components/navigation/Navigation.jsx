@@ -1,6 +1,6 @@
 'use client'
 
-import {  Bolt, HelpCircle,  Trash } from 'lucide-react';
+import {  Bolt, HeartHandshake, HelpCircle,  Trash } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -19,13 +19,18 @@ import { deleteAll } from '@/slices/projectSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import HelpContent from './HelpContent';
 import AppConfigs from './AppConfigs';
+import SupportDialog from './SupportDialog';
 import { useState } from 'react';
+import ConfettiExplosion from 'react-confetti-explosion';
+import { createPortal } from 'react-dom';
 
 export default function Navigation() {
   const dispatch = useDispatch();
   const functionalities = useSelector((state) => state.project.functionalities);
   const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false);
   const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
+  const [isSupportDialogOpen, setIsSupportDialogOpen] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const onDeleteAllProject = () => {
     dispatch(deleteAll());
@@ -34,6 +39,10 @@ export default function Navigation() {
 
   const onHelp = () => { setIsHelpDialogOpen(true); };
   const onConfig = () => { setIsAppConfigsDialogOpen(true); };
+  const onSupport = () => { 
+    setIsSupportDialogOpen(true);
+    setShowConfetti(true);
+  };
   
   return <>
     <Sidebar collapsible="icon">
@@ -113,13 +122,32 @@ export default function Navigation() {
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
+
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <a href="#support" onClick={onSupport}>
+                <HeartHandshake className="h-5 w-5" />
+                <span>Support me!</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
       
       <SidebarRail />
     </Sidebar>
+    {showConfetti && createPortal(
+      <ConfettiExplosion 
+        zIndex={999999}
+        className='*:z-[999999] fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/3'
+        onComplete={() => setShowConfetti(false)} 
+        duration={5000}
+      />,
+      document.body
+    )}
     {/* modals */}
     <HelpContent open={isHelpDialogOpen} onOpenChange={setIsHelpDialogOpen} />
     <AppConfigs open={isAppConfigsDialogOpen} onOpenChange={setIsAppConfigsDialogOpen} />
+    <SupportDialog open={isSupportDialogOpen} onOpenChange={setIsSupportDialogOpen} />
   </>
 }
