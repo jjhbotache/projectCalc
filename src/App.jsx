@@ -10,6 +10,10 @@ import Functionalities from '@/components/main/functionalities/Functionalities';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { loadTheme } from '@/utils/toggleDarkMode';
 import useHistory from '@/hooks/useHistory';
+import ConfettiExplosion from 'react-confetti-explosion';
+import { createPortal } from 'react-dom';
+import ThanksModal from '@/components/modals/ThanksModal';
+import CancelModal from '@/components/modals/CancelModal';
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();
@@ -17,6 +21,9 @@ export default function ProjectPlanner() {
   const config = useSelector((state) => state.config);
   const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
   const { undo, redo, canUndo, canRedo } = useHistory();
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [isThanksModalOpen, setIsThanksModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   useEffect(() => {
     loadTheme();
@@ -36,7 +43,16 @@ export default function ProjectPlanner() {
     dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' })); 
   }, [config]);
 
-  
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('thanks')) {
+      setShowConfetti(true);
+      setIsThanksModalOpen(true);
+    }
+    if (params.get('cancel')) {
+      setIsCancelModalOpen(true);
+    }
+  }, []);
 
   return (
     <>
@@ -55,6 +71,18 @@ export default function ProjectPlanner() {
         </div>
       </SidebarProvider>
       <AppConfigs open={isAppConfigsDialogOpen} onOpenChange={setIsAppConfigsDialogOpen} />
+      {showConfetti && createPortal(
+        <ConfettiExplosion 
+          zIndex={999999}
+          className='*:z-[999999] fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/3'
+          onComplete={() => setShowConfetti(false)} 
+          duration={5000}
+        />,
+        document.body
+      )}
+      
+      <ThanksModal open={isThanksModalOpen} onClose={() => setIsThanksModalOpen(false)} />
+      <CancelModal open={isCancelModalOpen} onClose={() => setIsCancelModalOpen(false)} />
     </>
   );
 }
