@@ -137,3 +137,8 @@ input[type="number"] {
   -moz-appearance: textfield;
   
 }
+
+i,i::before,i::after{
+  display: inline-grid;
+  place-items: center;
+}

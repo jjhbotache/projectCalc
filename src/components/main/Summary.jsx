@@ -17,7 +17,7 @@ export default function Summary() { // Removed props
   
   
   return (  
-    <div className="fixed mt-auto z-10 bottom-0 h-auto w-full flex justify-center shadow-lg">
+    <div className="absolute bottom-0 z-20">
 
       <Drawer open={isDrawerOpen} onOpenChange={setDrawerOpen}>
 

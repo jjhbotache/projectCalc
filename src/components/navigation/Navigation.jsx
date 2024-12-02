@@ -1,6 +1,6 @@
 'use client'
 
-import {  Bolt, HeartHandshake, HelpCircle,  Trash } from 'lucide-react';
+import {  Bolt, GithubIcon, HeartHandshake, HelpCircle,  Trash } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -23,6 +23,9 @@ import SupportDialog from './SupportDialog';
 import { useState } from 'react';
 import ConfettiExplosion from 'react-confetti-explosion';
 import { createPortal } from 'react-dom';
+import { useSidebar } from "@/components/ui/sidebar"
+import { AnimatePresence, motion } from 'framer-motion'
+
 
 export default function Navigation() {
   const dispatch = useDispatch();
@@ -31,6 +34,8 @@ export default function Navigation() {
   const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
   const [isSupportDialogOpen, setIsSupportDialogOpen] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const { open } = useSidebar();
+  
 
   const onDeleteAllProject = () => {
     dispatch(deleteAll());
@@ -131,11 +136,40 @@ export default function Navigation() {
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
+
+          {/* New menu item for creator text */}
+
+            
+          <AnimatePresence>
+          {
+            open &&
+            <SidebarMenuItem className="mt-auto">
+              <motion.p
+                className="text-xs text-gray-400 pl-3 pt-3 w-full "
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <span className="text-gray-500 mb-1 block">Created by:</span>
+                <a className='underline hover:cursor-pointer' target="_blank" href="https://juanjosehuertas.vercel.app" >Juan Jose Huertas Botache</a>
+                <a href="https://github.com/jjhbotache" target="_blank" className=" ml-1 inline-grid place-items-end
+                hover:cursor-pointer hover:text-gray-500
+                ">
+                  <i class="fi fi-brands-github"></i>
+                </a>
+              </motion.p>
+            </SidebarMenuItem>
+          }
+          </AnimatePresence>
+            
         </SidebarMenu>
       </SidebarFooter>
       
       <SidebarRail />
     </Sidebar>
+
+
     {showConfetti && createPortal(
       <ConfettiExplosion 
         zIndex={999999}
