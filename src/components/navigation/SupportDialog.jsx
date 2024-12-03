@@ -1,31 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { useEffect } from 'react';
+import PaypalDonateButton from './PaypalDonateButton';
 
 export default function SupportDialog({ open, onOpenChange }) {
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = "https://www.paypalobjects.com/donate/sdk/donate-sdk.js";
-    script.charset = "UTF-8";
-    script.async = true;
-    document.body.appendChild(script);
-
-    script.onload = () => {
-      PayPal.Donation.Button({
-        env: 'production',
-        hosted_button_id: 'CC2RQ3PW3K8UN',
-        image: {
-          src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',
-          alt: 'Donate with PayPal button',
-          title: 'PayPal - The safer, easier way to pay online!',
-        }
-      }).render('#donate-button');
-    };
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -43,7 +19,7 @@ export default function SupportDialog({ open, onOpenChange }) {
 
         {/* PayPal Donate Button */}
         <div id="donate-button-container">
-          <div id="donate-button"></div>
+          <PaypalDonateButton />
         </div>
 
         <DialogFooter>

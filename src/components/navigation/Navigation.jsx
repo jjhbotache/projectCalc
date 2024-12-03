@@ -156,7 +156,7 @@ export default function Navigation() {
                 <a href="https://github.com/jjhbotache" target="_blank" className=" ml-1 inline-grid place-items-end
                 hover:cursor-pointer hover:text-gray-500
                 ">
-                  <i class="fi fi-brands-github"></i>
+                  <i className="fi fi-brands-github"></i>
                 </a>
               </motion.p>
             </SidebarMenuItem>

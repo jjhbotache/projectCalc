@@ -5,13 +5,13 @@ export default function CancelModal({ open, onClose }) {
     <AlertDialog open={open} onOpenChange={onClose}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>¡Oh, no! :C</AlertDialogTitle>
+          <AlertDialogTitle>Oh, no! :C</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogDescription>
-          Has cancelado la acción.
+          You have canceled the action.
         </AlertDialogDescription>
         <AlertDialogFooter>
-          <AlertDialogAction onClick={onClose}>Cerrar</AlertDialogAction>
+          <AlertDialogAction onClick={onClose}>Close</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
