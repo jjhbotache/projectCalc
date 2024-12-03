@@ -6,7 +6,7 @@ const PaypalDonateButton = () => {
     script.src = 'https://www.paypalobjects.com/donate/sdk/donate-sdk.js';
     script.charset = 'UTF-8';
     script.onload = () => {
-      if (window.PayPal) {
+      if (window.PayPal && document.querySelectorAll('#donate-button').length<=1) {
         window.PayPal.Donation.Button({
           env: 'production',
           hosted_button_id: 'CC2RQ3PW3K8UN',
@@ -27,7 +27,7 @@ const PaypalDonateButton = () => {
     };
   }, []);
 
-  return <div id="donate-button" />;
+  return <div id="donate-button" className='flex justify-center p-2' />;
 };
 
 export default PaypalDonateButton;

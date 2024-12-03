@@ -132,7 +132,7 @@ export default function Navigation() {
             <SidebarMenuButton asChild>
               <a href="#support" onClick={onSupport}>
                 <HeartHandshake className="h-5 w-5" />
-                <span>Support me!</span>
+                <span>Thank me!</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

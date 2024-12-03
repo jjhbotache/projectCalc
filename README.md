@@ -28,12 +28,13 @@
 - ~~history saver save steps in LS~~
 - add tabs for multi quotations
 - support quotation api
-- add a buy me a coffe
+- ~~add a buy me a coffe~~
+- ~~add a donate with paypal~~
 - add a rate me on github
-- add a donate with paypal
-- add donate with nequi
+- add donate with nequi 
 - add like it? pop up
 - add send comments
+- add rate with stars
 
 
 
