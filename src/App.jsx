@@ -81,8 +81,14 @@ export default function ProjectPlanner() {
         document.body
       )}
       
-      <ThanksModal open={isThanksModalOpen} onClose={() => setIsThanksModalOpen(false)} />
-      <CancelModal open={isCancelModalOpen} onClose={() => setIsCancelModalOpen(false)} />
+      <ThanksModal open={isThanksModalOpen} onClose={() => {
+        window.history.replaceState({}, document.title, window.location.pathname);
+        setIsThanksModalOpen(false)
+      }} />
+      <CancelModal open={isCancelModalOpen} onClose={() => {
+        window.history.replaceState({}, document.title, window.location.pathname);
+        setIsCancelModalOpen(false)
+      }} />
     </>
   );
 }
