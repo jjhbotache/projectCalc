@@ -14,6 +14,7 @@ import ConfettiExplosion from 'react-confetti-explosion';
 import { createPortal } from 'react-dom';
 import ThanksModal from '@/components/modals/ThanksModal';
 import CancelModal from '@/components/modals/CancelModal';
+import ProductRatingDialog from '@/components/modals/ProductRatingDialog'; // Import the new dialog
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();
@@ -71,6 +72,7 @@ export default function ProjectPlanner() {
         </div>
       </SidebarProvider>
       <AppConfigs open={isAppConfigsDialogOpen} onOpenChange={setIsAppConfigsDialogOpen} />
+      {/* <ProductRatingDialog /> */}
       {showConfetti && createPortal(
         <ConfettiExplosion 
           zIndex={999999}
