@@ -95,15 +95,6 @@ export default function Header({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleExportQuotation = () => {
-    const data = JSON.stringify(project, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${projectName}.json`;
-    a.click();
-  };
 
   return (
     <header className="flex  items-center justify-between p-4 py-2 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 sticky top-0 z-20 pb-5">
@@ -120,7 +111,7 @@ export default function Header({
       <div className="flex items-center gap-2">
         {/* Download PDF */}
         <DownloadPDF project={project}>
-          <Button onClick={handleExportQuotation} className={`h-${btnsHeight} aspect-square p-0 rounded-full`} title="Export quotation">
+          <Button  className={`h-${btnsHeight} aspect-square p-0 rounded-full`} title="Export quotation">
             <File size={iconsSize} />
           </Button>
         </DownloadPDF>

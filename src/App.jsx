@@ -71,8 +71,6 @@ export default function ProjectPlanner() {
           </main>
         </div>
       </SidebarProvider>
-      <AppConfigs open={isAppConfigsDialogOpen} onOpenChange={setIsAppConfigsDialogOpen} />
-      {/* <ProductRatingDialog /> */}
       {showConfetti && createPortal(
         <ConfettiExplosion 
           zIndex={999999}
@@ -82,7 +80,10 @@ export default function ProjectPlanner() {
         />,
         document.body
       )}
+
+
       
+      <AppConfigs open={isAppConfigsDialogOpen} onOpenChange={setIsAppConfigsDialogOpen} />
       <ThanksModal open={isThanksModalOpen} onClose={() => {
         window.history.replaceState({}, document.title, window.location.pathname);
         setIsThanksModalOpen(false)

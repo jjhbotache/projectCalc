@@ -38,7 +38,7 @@
 - _add send comments_
 - _add rate with stars_
 
-- add list of Deliverables
+- ~~add list of Deliverables~~
 - add analitycs
 
 

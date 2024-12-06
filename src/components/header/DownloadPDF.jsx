@@ -1,4 +1,4 @@
-import { PDFDownloadLink, Document, Page, Text, StyleSheet, View } from '@react-pdf/renderer';
+import { PDFDownloadLink, Document, Page, Text, StyleSheet, View, } from '@react-pdf/renderer';
 import { useSelector } from 'react-redux';
 import { selectConfig } from '@/slices/configSlice';
 import { calculateFunctionalityDuration, calculateTotals, calculateFunctionTotalPrices } from '@/utils/calculate';
@@ -86,6 +86,18 @@ const styles = StyleSheet.create({
   opaqueText: {
     opacity: 0.3,
   },
+  bodyText: {
+    fontSize: 12,
+    marginBottom: 5,
+  },
+  centeredText: {
+    fontSize: 12,
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+  dividerSpace: {
+    marginTop: 10, // Adjusted spacing
+  },
 });
 
 // Create PDF Document Component
@@ -99,12 +111,23 @@ const ProjectPDF = ({ project, config }) => {
         <Text style={styles.h1}>{project.projectInfo.projectName}</Text>
         <Text style={styles.h3}>{project.projectInfo.projectDescription}</Text>
 
+        <View style={styles.dividerSpace} />
+
+        {/* Deliverables */}
+        <Text style={styles.h3}>Deliverables:</Text>
+        {project.projectInfo.deliverables.map((item, index) => (
+          <Text key={index} style={styles.summary}>• {item}</Text>
+        ))}
+
+        <View style={styles.dividerSpace} />
         <View style={styles.containerLeft}>
           <Text style={[styles.h3, { textAlign: 'left' }]}>Technologies Used:</Text>
           {project.projectInfo.technologiesUsed.map((tech, index) => (
-            <Text key={index} style={[styles.h3, { textAlign: 'left' }]}>• {tech}</Text>
+            <Text key={index} style={[styles.summary, { textAlign: 'left' }]}>• {tech}</Text>
           ))}
         </View>
+        <View style={styles.dividerSpace} />
+        <View style={styles.dividerSpace} />
         <Text style={styles.h3}>Total Price: ${totals.projectCost}</Text>
         <View style={styles.divider} />
       </Page>
@@ -148,6 +171,14 @@ const ProjectPDF = ({ project, config }) => {
       
       {/* Summary */}
       <Page style={styles.page}>
+        {/* Deliverables */}
+        <Text style={styles.h2}>Deliverables:</Text>
+        {project.projectInfo.deliverables.map((item, index) => (
+          <Text key={index} style={styles.centeredText}>{item}</Text>
+        ))}
+
+        <View style={styles.divider} />
+
         <Text style={styles.h2}>Total Project Cost: ${totals.projectCost.toFixed(2)}</Text>
         <Text style={styles.h2}>Monthly Cost: ${totals.monthlyCost.toFixed(2)}</Text>
         <Text style={styles.h2}>Total Duration: {totals.months.toFixed(1)} Months</Text>

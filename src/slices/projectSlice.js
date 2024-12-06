@@ -27,6 +27,9 @@ export const initialState = {
     technologiesUsed: [
       "example technology 1",
     ],
+    deliverables: [
+      "example deliverable"
+    ],
   }
 };
 
@@ -128,7 +131,7 @@ const projectSlice = createSlice({
       return state;
     },
     updateProjectInfo: (state, action) => {
-      const { projectName, projectDescription, technologiesUsed } = action.payload;
+      const { projectName, projectDescription, technologiesUsed, deliverables } = action.payload;
       if (projectName !== undefined) {
         state.projectInfo.projectName = projectName;
       }
@@ -137,6 +140,9 @@ const projectSlice = createSlice({
       }
       if (technologiesUsed !== undefined) {
         state.projectInfo.technologiesUsed = technologiesUsed;
+      }
+      if (deliverables !== undefined) {
+        state.projectInfo.deliverables = deliverables;
       }
     },
     setProjectState: (state, action) => {
