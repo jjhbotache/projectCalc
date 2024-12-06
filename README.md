@@ -8,7 +8,7 @@
 
 - ~~resolver bug de borrar tambien la config~~
 - ~~resolver bugs de crear~~
-- ~~añadir export de configs ~~
+- ~~añadir export de configs~~
 - ~~solve proyect info modal bug~~
 
 
@@ -27,19 +27,19 @@
 - ~~allow re arrange for the tasks~~
 - ~~history saver save steps in LS~~
 
-- add tabs for multi quotations
-- support quotation api
+- _add tabs for multi quotations_
+- _support quotation api_
 
 - ~~add a buy me a coffe~~
 - ~~add a donate with paypal~~
 - ~~add a rate me on github~~
 
-- add donate with nequi 
+- ~~add like it? pop up~~
+- _add send comments_
+- _add rate with stars_
 
-- add like it? pop up
-- add send comments
-- add rate with stars
-
+- add list of Deliverables
+- add analitycs
 
 
 ## bugs
