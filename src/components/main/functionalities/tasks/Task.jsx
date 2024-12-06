@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
 import { Trash, GripVertical } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
-import ExpandibleInput from '../../../global/ExpandibleInput';
+import ExpandibleInput from '@/components/global/ExpandibleInput';
 
 export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
   const dispatch = useDispatch();
@@ -39,10 +39,9 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
       )}
       <div className="w-9/12" title={task.name}>
         <ExpandibleInput
-          type="text"
           value={task.name}
           onChange={(e) => handleChange('name', e.target.value)}
-          disabled={reorderingMode} // Disable when reordering
+          disabled={reorderingMode} 
         />
       </div>
       <div className="w-2/12">
@@ -51,14 +50,14 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
           value={task.hours}
           onChange={(e) => handleChange('hours', Number(e.target.value))}
           className="w-full p-1 border md:rounded bg-white dark:bg-gray-700 dark:text-white"
-          disabled={reorderingMode} // Disable when reordering
+          disabled={reorderingMode} 
         />
       </div>
       <div className="w-1/12 flex items-center justify-center gap-1">
         <Checkbox
           checked={task.billed}
           onCheckedChange={(value) => handleChange('billed', value)}
-          disabled={reorderingMode} // Disable when reordering
+          disabled={reorderingMode} 
         />
       </div>
       <div className="w-1/12 flex justify-center">

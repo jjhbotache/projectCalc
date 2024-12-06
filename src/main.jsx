@@ -5,6 +5,7 @@ import store from './store.js';
 import { ToastContainer } from 'react-toastify';
 import './main.css'
 import 'react-toastify/dist/ReactToastify.css';
+import { Analytics } from "@vercel/analytics/react"
 
 
 createRoot(document.getElementById('root')).render(
@@ -23,5 +24,6 @@ createRoot(document.getElementById('root')).render(
       
       />
       <App />
+      <Analytics />
     </Provider>
 )

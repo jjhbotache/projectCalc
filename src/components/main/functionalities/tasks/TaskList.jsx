@@ -69,7 +69,7 @@ export default function TaskList({ tasks, sprintId }) {
         >
           {tasks.map((task, index) => (
             <Reorder.Item
-              key={task.name}
+              key={index}
               value={task}
             >
               <Task
@@ -85,7 +85,7 @@ export default function TaskList({ tasks, sprintId }) {
         <div className="flex flex-col gap-2">
           {tasks.map((task, index) => (
             <Task
-              key={task.name}
+              key={index}
               task={task}
               sprintId={sprintId}
               taskIndex={index}

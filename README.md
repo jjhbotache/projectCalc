@@ -45,4 +45,6 @@
 ## bugs
 - ~~fix bug when reorder functionality in mobile~~
 - ~~fix bug enhanced input functionality~~
-- fix dialogs wrong done
+- ~~fix dialogs wrong done~~
+- ~~fix expandible bug (expands when its not necessary)~~
+- ~~fix cant modify expandible input~~

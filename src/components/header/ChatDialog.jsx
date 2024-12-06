@@ -51,8 +51,7 @@ const ChatDialog = ({ open, onClose }) => {
             Chat with the bot to get help with your project.
           </DialogDescription>
         </DialogHeader>
-        {/* Display chat messages */}
-        <div className="h-full min-h-96 border border-white rounded-md overflow-y-auto flex flex-col">
+        <div className="h-full min-h-[65vh] border border-white rounded-md overflow-y-auto flex flex-col">
           {chatHistory.map((msg, index) => (
             <div
               key={index}
@@ -70,31 +69,32 @@ const ChatDialog = ({ open, onClose }) => {
           ))}
           <div ref={messagesEndRef} />
         </div>
+
         <DialogFooter>
-          <div className='w-full flex'>
-            <Input
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
-              placeholder="Type your message..."
-              className="w-10/12"
-            />
-            {
-            isLoading 
-              ?<LoaderCircle size={16} className="spin w-1/12" /> 
-              :<Button onClick={handleSend} className="p-0 w-1/12">
-                <Send size={16} className="" />
-              </Button>
-            }
-            <Button onClick={() => dispatch(resetChat())} className="p-0 w-1/12">
-              <RotateCcw size={16} className="" />
+        <div className='w-full flex'>
+          <Input
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
+            placeholder="Type your message..."
+            className="w-10/12"
+          />
+          {
+          isLoading 
+            ?<LoaderCircle size={16} className="spin w-1/12" /> 
+            :<Button onClick={handleSend} className="p-0 w-1/12">
+              <Send size={16} className="" />
             </Button>
-          </div>
+          }
+          <Button onClick={() => dispatch(resetChat())} className="p-0 w-1/12">
+            <RotateCcw size={16} className="" />
+          </Button>
+        </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
