@@ -15,11 +15,13 @@ import { createPortal } from 'react-dom';
 import ThanksModal from '@/components/modals/ThanksModal';
 import CancelModal from '@/components/modals/CancelModal';
 import ProductRatingDialog from '@/components/modals/ProductRatingDialog'; // Import the new dialog
+import { setProjectIds, setCurrentProjectId } from '@/slices/projectsSlices';
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();
   const project = useSelector((state) => state.project);
   const config = useSelector((state) => state.config);
+  const projects = useSelector((state) => state.projects);
   const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
   const { undo, redo, canUndo, canRedo } = useHistory();
   const [showConfetti, setShowConfetti] = useState(false);
@@ -34,6 +36,11 @@ export default function ProjectPlanner() {
   useEffect(() => {
     dispatch(loadAndSaveProjectFromLocalStorage({ type: 'import' }));
     dispatch(loadAndSaveConfigFromLocalStorage({ type: 'import' }));
+
+    const savedProjectIds = localStorage.getItem('projectIds');
+    const savedCurrentProjectId = localStorage.getItem('currentProjectId');
+    if (savedProjectIds) dispatch(setProjectIds(JSON.parse(savedProjectIds)));
+    if (savedCurrentProjectId) dispatch(setCurrentProjectId(savedCurrentProjectId)); 
   }, [dispatch]);
 
   useEffect(() => {
@@ -43,6 +50,15 @@ export default function ProjectPlanner() {
   useEffect(() => {
     dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' })); 
   }, [config]);
+
+
+  useEffect(() => {
+    localStorage.setItem('projectIds', JSON.stringify(projects.projectIds));
+  }, [projects.projectIds]);
+
+  useEffect(() => {
+    localStorage.setItem('currentProjectId', projects.currentProjectId);
+  }, [projects.currentProjectId]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

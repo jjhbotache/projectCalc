@@ -10,7 +10,7 @@ export default function toggleDarkMode() {
 }
 
 export function loadTheme() {
-  const darkMode = localStorage.getItem('theme') === 'dark';
+  const darkMode = localStorage.getItem('theme') === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches;
     darkMode 
       ? document.documentElement.classList.add('dark')
       : document.documentElement.classList.remove('dark');

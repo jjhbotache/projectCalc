@@ -28,6 +28,8 @@
 - ~~history saver save steps in LS~~
 
 - _add tabs for multi quotations_
+  - create slice for multiprojects and current id
+  - save all histories in LS
 - _support quotation api_
 
 - ~~add a buy me a coffe~~
@@ -39,7 +41,7 @@
 - _add rate with stars_
 
 - ~~add list of Deliverables~~
-- add analitycs
+- ~~add analitycs~~
 
 
 ## bugs
