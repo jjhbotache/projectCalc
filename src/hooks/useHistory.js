@@ -10,8 +10,6 @@ export default function useHistory() {
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
 
-
-
   // Save current project state to history whenever it changes
   useEffect(() => {
     // if the current project state is different from the last history state
@@ -55,5 +53,5 @@ export default function useHistory() {
       setCurrentIndex(currentIndex + 1);
     }
   };
-  return { undo, redo, canUndo, canRedo, saveHistory: saveHistoryInLS };
+  return { undo, redo, canUndo, canRedo,history };
 }

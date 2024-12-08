@@ -28,8 +28,11 @@
 - ~~history saver save steps in LS~~
 
 - _add tabs for multi quotations_
-  - create slice for multiprojects and current id
-  - save all histories in LS
+  how make it work?
+  I will keep the main slice to make the app works.
+  A bigger slice will manage the projects and its stories.
+  - setup the slice to work when start
+
 - _support quotation api_
 
 - ~~add a buy me a coffe~~

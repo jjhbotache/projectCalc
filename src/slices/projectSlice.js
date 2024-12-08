@@ -22,6 +22,7 @@ export const initialState = {
     initialFunctionality,    
   ],
   projectInfo:{
+    id: 0,
     projectName: 'My Project',
     projectDescription: '',
     technologiesUsed: [

@@ -16,7 +16,6 @@ import DownloadPDF from './DownloadPDF';
 import ChatDialog from './ChatDialog'; 
 import { calculateProjectDifferences } from '@/utils/calculate';
 import { calculateConfigurationDifferences } from '@/utils/calculate';
-import useHistory from '@/hooks/useHistory';
 
 const jsonStructure = JSON.stringify(initialState, null, 2);
 const iconsSize = 22;

@@ -15,7 +15,8 @@ import { createPortal } from 'react-dom';
 import ThanksModal from '@/components/modals/ThanksModal';
 import CancelModal from '@/components/modals/CancelModal';
 import ProductRatingDialog from '@/components/modals/ProductRatingDialog'; // Import the new dialog
-import { setProjectIds, setCurrentProjectId } from '@/slices/projectsSlices';
+import { registerProject } from '@/slices/projectsSlice';
+import { setCurrentProjectId, updateProject } from './slices/projectsSlice';
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();
@@ -23,44 +24,27 @@ export default function ProjectPlanner() {
   const config = useSelector((state) => state.config);
   const projects = useSelector((state) => state.projects);
   const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
-  const { undo, redo, canUndo, canRedo } = useHistory();
+  const { undo, redo, canUndo, canRedo, history } = useHistory();
   const [showConfetti, setShowConfetti] = useState(false);
   const [isThanksModalOpen, setIsThanksModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
   useEffect(() => {
     loadTheme();
+    
+    if (projects.projects.length === 0) { 
+      dispatch(
+        registerProject({
+          project: project,
+          history:[]
+          })
+      )
+      dispatch( setCurrentProjectId(
+        project.projectInfo.id
+      ))
+    }
+    
 
-  },[]);
-
-  useEffect(() => {
-    dispatch(loadAndSaveProjectFromLocalStorage({ type: 'import' }));
-    dispatch(loadAndSaveConfigFromLocalStorage({ type: 'import' }));
-
-    const savedProjectIds = localStorage.getItem('projectIds');
-    const savedCurrentProjectId = localStorage.getItem('currentProjectId');
-    if (savedProjectIds) dispatch(setProjectIds(JSON.parse(savedProjectIds)));
-    if (savedCurrentProjectId) dispatch(setCurrentProjectId(savedCurrentProjectId)); 
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(loadAndSaveProjectFromLocalStorage({ type: 'save' }));
-  }, [project]);
-
-  useEffect(() => {
-    dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' })); 
-  }, [config]);
-
-
-  useEffect(() => {
-    localStorage.setItem('projectIds', JSON.stringify(projects.projectIds));
-  }, [projects.projectIds]);
-
-  useEffect(() => {
-    localStorage.setItem('currentProjectId', projects.currentProjectId);
-  }, [projects.currentProjectId]);
-
-  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('thanks')) {
       setShowConfetti(true);
@@ -69,8 +53,42 @@ export default function ProjectPlanner() {
     if (params.get('cancel')) {
       setIsCancelModalOpen(true);
     }
-  }, []);
+      
+  },[]);
 
+  useEffect(() => {
+    dispatch(loadAndSaveProjectFromLocalStorage({ type: 'import' }));
+    dispatch(loadAndSaveConfigFromLocalStorage({ type: 'import' }));
+
+    // const savedProjectIds = localStorage.getItem('projectIds');
+    // const savedCurrentProjectId = localStorage.getItem('currentProjectId');
+    // if (savedProjectIds) dispatch(setProjectIds(JSON.parse(savedProjectIds)));
+    // if (savedCurrentProjectId) dispatch(setCurrentProjectId(savedCurrentProjectId)); 
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(loadAndSaveProjectFromLocalStorage({ type: 'save' }));
+    dispatch(
+      updateProject({
+        project: project,
+        history:history
+      })
+    )
+  }, [project,history]);
+
+  useEffect(() => {
+    dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' })); 
+  }, [config]);
+
+  useEffect(() => {
+    if (projects.projects.length > 0 ) {
+      
+      localStorage.setItem('projects', JSON.stringify(projects));
+    }
+  }, [projects]);
+
+
+  
   return (
     <>
       <SidebarProvider defaultOpen={true}>
