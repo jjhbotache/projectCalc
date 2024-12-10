@@ -9,7 +9,7 @@ const store = configureStore({
     project: projectReducer,
     config: configReducer,
     chat: chatReducer,
-    projects: projectsReducer, 
+    projectsSlice: projectsReducer, 
   },
 });
 

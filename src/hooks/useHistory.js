@@ -12,19 +12,39 @@ export default function useHistory() {
 
   // Save current project state to history whenever it changes
   useEffect(() => {
-    // if the current project state is different from the last history state
-    if ( JSON.stringify(history[currentIndex]) !== JSON.stringify(projectState) ) {
+
+    const selectedProjectId = projectState.projectInfo.id;
+    const lastHistoryProjectId = history[history.length-1]?.projectInfo.id;
+    const itsChangingProject = lastHistoryProjectId!=undefined ?
+      lastHistoryProjectId !== selectedProjectId
+      : false;
+    // console.log('itsChangingProject', itsChangingProject);
+    // console.log('currentProjectId', selectedProjectId);
+    // console.log('lastHistoryProjectId', lastHistoryProjectId);
+    // console.log('history', history);
+    
+    
+    
+    if ( 
+      JSON.stringify(history[currentIndex]) !== JSON.stringify(projectState) //only save if the state has changed
+      &&
+      (!itsChangingProject)
+    ) {
+      console.log('saving history');
+      
       const newHistory = history.slice(0, currentIndex + 1);
       newHistory.push(projectState);
       setHistory(newHistory);
       setCurrentIndex(currentIndex + 1);
     }
-
   }, [projectState]);
 
   useEffect(() => {
-    if (history.length > 1) {
+    if (history.length > 0) {
       saveHistoryInLS();
+    }else{
+      localStorage.removeItem('projectHistory');
+      localStorage.removeItem('historyIndex');
     }
   }, [history]);
 
@@ -53,5 +73,5 @@ export default function useHistory() {
       setCurrentIndex(currentIndex + 1);
     }
   };
-  return { undo, redo, canUndo, canRedo,history };
+  return { undo, redo, canUndo, canRedo,history, setHistory, currentIndex, setCurrentIndex };
 }

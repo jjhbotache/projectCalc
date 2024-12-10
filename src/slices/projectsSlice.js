@@ -31,13 +31,27 @@ const projectsSlice = createSlice({
 			const {
 				project,
 				history,
+				currentHistoryIndex
 			} = action.payload;
 
-			const projectIndex = state.projects.findIndex((project) => project.project.id === project.id);
+			
+			const projectIndex = state.projects.findIndex((proj) => proj.project.projectInfo.id === project.projectInfo.id);
+			
+			
+
 			if (projectIndex !== -1) {
+				
+				const finalHistoryIndex = currentHistoryIndex
+					? currentHistoryIndex
+					:
+					history
+						? history.length - 1
+						: null;
+
 				state.projects[projectIndex] = {
 					project,
-					history,
+					history: history || state.projects[projectIndex].history,
+					currentHistoryIndex: finalHistoryIndex,
 				};
 			}
 		},

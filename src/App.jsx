@@ -17,22 +17,24 @@ import CancelModal from '@/components/modals/CancelModal';
 import ProductRatingDialog from '@/components/modals/ProductRatingDialog'; // Import the new dialog
 import { registerProject } from '@/slices/projectsSlice';
 import { setCurrentProjectId, updateProject } from './slices/projectsSlice';
+import { setProjectState } from './slices/projectSlice';
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();
   const project = useSelector((state) => state.project);
   const config = useSelector((state) => state.config);
-  const projects = useSelector((state) => state.projects);
+  const projectsSlice = useSelector((state) => state.projectsSlice);
   const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
-  const { undo, redo, canUndo, canRedo, history } = useHistory();
+  const { undo, redo, canUndo, canRedo, history, setHistory,currentIndex:currentHistoryIndex,setCurrentIndex } = useHistory();
   const [showConfetti, setShowConfetti] = useState(false);
   const [isThanksModalOpen, setIsThanksModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+   
 
   useEffect(() => {
     loadTheme();
     
-    if (projects.projects.length === 0) { 
+    if (projectsSlice.projects.length === 0) { 
       dispatch(
         registerProject({
           project: project,
@@ -67,25 +69,40 @@ export default function ProjectPlanner() {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(loadAndSaveProjectFromLocalStorage({ type: 'save' }));
+    dispatch(loadAndSaveProjectFromLocalStorage({ type: 'save' })); // close to delete
+    
     dispatch(
       updateProject({
-        project: project,
-        history:history
+        project: project
       })
     )
-  }, [project,history]);
+  }, [project]);
+
+  useEffect(() => {
+    dispatch(
+      updateProject({
+        project,
+        history,
+        currentHistoryIndex
+      })
+    )
+  }, [history]);
 
   useEffect(() => {
     dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' })); 
   }, [config]);
 
   useEffect(() => {
-    if (projects.projects.length > 0 ) {
-      
-      localStorage.setItem('projects', JSON.stringify(projects));
-    }
-  }, [projects]);
+    if (projectsSlice.projects.length > 0 ) localStorage.setItem('projects', JSON.stringify(projectsSlice));
+  }, [projectsSlice.projects]);
+
+  useEffect(() => {
+    if (projectsSlice.currentProjectId===null) return;    
+    const projectToSet = projectsSlice.projects.find((p) => p.project.projectInfo.id === projectsSlice.currentProjectId);  
+    setHistory( projectToSet.history )
+    setCurrentIndex( projectToSet.currentHistoryIndex ) 
+    dispatch(setProjectState(projectToSet.project));
+  }, [projectsSlice.currentProjectId]);
 
 
   

@@ -14,6 +14,7 @@ import SidebarFooterContent from './SidebarFooterContent';
 import HelpContent from './HelpContent';
 import AppConfigs from './AppConfigs';
 import SupportDialog from './SupportDialog';
+import SidebarProjects from './SidebarProjects';
 
 const randIntervalSegs = () => (Math.random() * (600 - 120) )+ 120;
 
@@ -52,9 +53,6 @@ export default function Navigation() {
 
   const showPopup = useCallback(() => {
     setIsPopupOpen(true);
-    console.log('hasinteracted:', hasInteractedRef.current);
-
-    
     if (!hasInteractedRef.current) setTimeout(showPopup, randIntervalSegs() * 1000)
   }, [hasInteractedRef.current]);
 
@@ -75,8 +73,6 @@ export default function Navigation() {
   const handlePopupResponse = (response) => {
     setIsPopupOpen(false);
     if (response === 'yes') {
-      console.log('said yes');
-      
       hasInteractedRef.current = true;
       setIsSupportDialogOpen(true);
       setShowConfetti(true);
@@ -93,6 +89,7 @@ export default function Navigation() {
       </SidebarHeader>
 
       <SidebarContent>
+        <SidebarProjects />
         <SidebarFunctionalities functionalities={functionalities} />
       </SidebarContent>
 
