@@ -1,7 +1,7 @@
 'use client'
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, SidebarRail } from '@/components/ui/sidebar';
-import { deleteAll } from '@/slices/projectSlice';
+// import { deleteAll } from '@/slices/projectSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import ConfettiExplosion from 'react-confetti-explosion';
@@ -15,12 +15,15 @@ import HelpContent from './HelpContent';
 import AppConfigs from './AppConfigs';
 import SupportDialog from './SupportDialog';
 import SidebarProjects from './SidebarProjects';
+import { removeProject } from '@/slices/projectsSlice';
+import { deleteAll } from '../../slices/projectSlice';
 
 const randIntervalSegs = () => (Math.random() * (600 - 120) )+ 120;
 
 export default function Navigation() {
   const dispatch = useDispatch();
   const functionalities = useSelector((state) => state.project.functionalities);
+  const currentProjectId = useSelector((state) => state.projectsSlice.currentProjectId);
   const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false);
   const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
   const [isSupportDialogOpen, setIsSupportDialogOpen] = useState(false);
@@ -31,6 +34,7 @@ export default function Navigation() {
 
   const onDeleteAllProject = () => {
     dispatch(deleteAll());
+    dispatch(removeProject(currentProjectId));
     localStorage.removeItem('project');
   };
 

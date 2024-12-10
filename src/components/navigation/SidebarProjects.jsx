@@ -48,13 +48,13 @@ export default function SidebarProjects() {
               <div className='w-full flex items-center' onClick={()=>{
               handleChangeProject(p.project.projectInfo.id);
             }}>
-                <strong >
+                <strong className='mr-2'>
                   {p.project.projectInfo.id}
                 </strong>
                 {
                   currentProjectId == p.project.projectInfo.id 
-                  ? <strong>{p.project.projectInfo.projectName}</strong>  
-                  : <span>{p.project.projectInfo.projectName}</span>
+                  ? <strong className='underline '>{p.project.projectInfo.projectName}</strong>  
+                  : <span className='font-extralight'>{p.project.projectInfo.projectName}</span>
                 }
               </div>
             </SidebarMenuButton>

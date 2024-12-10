@@ -81,8 +81,6 @@ export default function ProjectPlanner() {
   }, [project]);
 
   useEffect(() => {
-    console.log("history changed - updatig porjectS");
-    
     dispatch(
       updateProject({
         project,
@@ -102,7 +100,6 @@ export default function ProjectPlanner() {
 
   useEffect(() => {
     if (projectsSlice.currentProjectId===null) return;    
-    console.log("project changed", projectsSlice.currentProjectId);
     
     const projectToSet = projectsSlice.projects.find((p) => p.project.projectInfo.id === projectsSlice.currentProjectId);  
     
