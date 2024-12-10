@@ -25,7 +25,7 @@ export default function ProjectPlanner() {
   const config = useSelector((state) => state.config);
   const projectsSlice = useSelector((state) => state.projectsSlice);
   const [isAppConfigsDialogOpen, setIsAppConfigsDialogOpen] = useState(false);
-  const { undo, redo, canUndo, canRedo, history, setHistory,currentIndex:currentHistoryIndex,setCurrentIndex } = useHistory();
+  const { undo, redo, canUndo, canRedo, history, currentIndex:currentHistoryIndex, loadHistoryAndIndex } = useHistory();
   const [showConfetti, setShowConfetti] = useState(false);
   const [isThanksModalOpen, setIsThanksModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
@@ -79,6 +79,8 @@ export default function ProjectPlanner() {
   }, [project]);
 
   useEffect(() => {
+    console.log("history changed - updatig porjectS");
+    
     dispatch(
       updateProject({
         project,
@@ -98,9 +100,15 @@ export default function ProjectPlanner() {
 
   useEffect(() => {
     if (projectsSlice.currentProjectId===null) return;    
+    console.log("project changed", projectsSlice.currentProjectId);
+    
     const projectToSet = projectsSlice.projects.find((p) => p.project.projectInfo.id === projectsSlice.currentProjectId);  
-    setHistory( projectToSet.history )
-    setCurrentIndex( projectToSet.currentHistoryIndex ) 
+    
+    
+    // setHistory( projectToSet.history )
+    // setCurrentIndex( projectToSet.currentHistoryIndex ) 
+    loadHistoryAndIndex(projectToSet.history, projectToSet.currentHistoryIndex);
+
     dispatch(setProjectState(projectToSet.project));
   }, [projectsSlice.currentProjectId]);
 

@@ -4,54 +4,60 @@ import { setProjectState } from '@/slices/projectSlice';
 
 export default function useHistory() {
   const dispatch = useDispatch();
-  const projectState = useSelector((state) => state.project);
-  const [history, setHistory] = useState(JSON.parse(localStorage.getItem('projectHistory') || '[]'));
-  const [currentIndex, setCurrentIndex] = useState(JSON.parse(localStorage.getItem('historyIndex') || '-1'));
+  const currentProject = useSelector((state) => state.project);
+  const [history, setHistory] = useState( [currentProject] );
+  const [currentIndex, setCurrentIndex] = useState( 0 );
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
 
+  
   // Save current project state to history whenever it changes
   useEffect(() => {
 
-    const selectedProjectId = projectState.projectInfo.id;
-    const lastHistoryProjectId = history[history.length-1]?.projectInfo.id;
-    const itsChangingProject = lastHistoryProjectId!=undefined ?
-      lastHistoryProjectId !== selectedProjectId
-      : false;
-    // console.log('itsChangingProject', itsChangingProject);
-    // console.log('currentProjectId', selectedProjectId);
-    // console.log('lastHistoryProjectId', lastHistoryProjectId);
-    // console.log('history', history);
+    const selectedProjectId = currentProject.projectInfo.id;
+    const lastHistoryProjectId =  history.length==0
+      ? undefined
+      : history[history.length-1].projectInfo.id;
+
+    const itsChangingBetweenProject = !(selectedProjectId === lastHistoryProjectId);
+    const currentHistoryState = JSON.stringify(history[currentIndex]);
+    const serializedProjectState = JSON.stringify(currentProject);
+    const differentThanBefore = currentHistoryState !== serializedProjectState;
     
     
     
-    if ( 
-      JSON.stringify(history[currentIndex]) !== JSON.stringify(projectState) //only save if the state has changed
-      &&
-      (!itsChangingProject)
-    ) {
-      console.log('saving history');
+
+    
+    if (differentThanBefore && (!itsChangingBetweenProject)) {
+      console.log("updating history cause projectState changed",differentThanBefore, "and not changing between projects",!itsChangingBetweenProject);
       
       const newHistory = history.slice(0, currentIndex + 1);
-      newHistory.push(projectState);
+      newHistory.push(currentProject);
       setHistory(newHistory);
       setCurrentIndex(currentIndex + 1);
     }
-  }, [projectState]);
 
+  }, [currentProject]);
+
+  
   useEffect(() => {
     if (history.length > 0) {
       saveHistoryInLS();
     }else{
-      localStorage.removeItem('projectHistory');
-      localStorage.removeItem('historyIndex');
+      // localStorage.removeItem('projectHistory');
+      // localStorage.removeItem('historyIndex');
     }
-  }, [history]);
 
-  useEffect(() => {
-    setCanUndo(currentIndex > 0);
-    setCanRedo(currentIndex < history.length - 1);
+    if (! (currentIndex===null)){
+      setCanUndo(currentIndex > 0);
+      setCanRedo(currentIndex < history.length - 1);
+    }
   }, [currentIndex, history]);
+
+  const loadHistoryAndIndex = (history, index) => {
+    setHistory(history);
+    setCurrentIndex(index);
+  }
 
   const saveHistoryInLS = () => {
     localStorage.setItem('projectHistory', JSON.stringify(history));
@@ -73,5 +79,5 @@ export default function useHistory() {
       setCurrentIndex(currentIndex + 1);
     }
   };
-  return { undo, redo, canUndo, canRedo,history, setHistory, currentIndex, setCurrentIndex };
+  return { undo, redo, canUndo, canRedo,history, currentIndex, loadHistoryAndIndex };
 }

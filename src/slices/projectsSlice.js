@@ -19,7 +19,6 @@ const projectsSlice = createSlice({
 				history,
 			} = action.payload;
 
-			console.log("registering: ", project);
 			
 			state.projects.push({
 				project,
@@ -38,7 +37,7 @@ const projectsSlice = createSlice({
 			const projectIndex = state.projects.findIndex((proj) => proj.project.projectInfo.id === project.projectInfo.id);
 			
 			
-
+			
 			if (projectIndex !== -1) {
 				
 				const finalHistoryIndex = currentHistoryIndex
