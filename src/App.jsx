@@ -16,7 +16,7 @@ import ThanksModal from '@/components/modals/ThanksModal';
 import CancelModal from '@/components/modals/CancelModal';
 import ProductRatingDialog from '@/components/modals/ProductRatingDialog'; // Import the new dialog
 import { registerProject } from '@/slices/projectsSlice';
-import { setCurrentProjectId, updateProject } from './slices/projectsSlice';
+import { setCurrentProjectId, updateProject, loadProjectsFromLocalStorage } from './slices/projectsSlice';
 import { setProjectState } from './slices/projectSlice';
 
 export default function ProjectPlanner() {
@@ -33,8 +33,10 @@ export default function ProjectPlanner() {
 
   useEffect(() => {
     loadTheme();
+    // load projects from LS
+    dispatch(loadProjectsFromLocalStorage());
     
-    if (projectsSlice.projects.length === 0) { 
+    if (projectsSlice.projects.length === 0 && localStorage.getItem('projects') === null) { 
       dispatch(
         registerProject({
           project: project,
@@ -105,8 +107,6 @@ export default function ProjectPlanner() {
     const projectToSet = projectsSlice.projects.find((p) => p.project.projectInfo.id === projectsSlice.currentProjectId);  
     
     
-    // setHistory( projectToSet.history )
-    // setCurrentIndex( projectToSet.currentHistoryIndex ) 
     loadHistoryAndIndex(projectToSet.history, projectToSet.currentHistoryIndex);
 
     dispatch(setProjectState(projectToSet.project));

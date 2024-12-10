@@ -13,16 +13,19 @@ const projectsSlice = createSlice({
 	name: 'projects',
 	initialState,
 	reducers: {
+
 		registerProject(state, action) {
 			const {
 				project,
 				history,
 			} = action.payload;
 
+			console.log("registering: ", project);
 			
 			state.projects.push({
 				project,
-				history,
+				history:[project],
+				currentHistoryIndex: 0,
 			});
 		},
 
@@ -37,7 +40,7 @@ const projectsSlice = createSlice({
 			const projectIndex = state.projects.findIndex((proj) => proj.project.projectInfo.id === project.projectInfo.id);
 			
 			
-			
+
 			if (projectIndex !== -1) {
 				
 				const finalHistoryIndex = currentHistoryIndex
@@ -61,10 +64,16 @@ const projectsSlice = createSlice({
 		removeProject(state, action) {
 			state.projects = state.projects.filter((project) => project.id !== action.payload);			
 		},
+		
+		loadProjectsFromLocalStorage(state) {
+			if (localStorage.getItem('projects')) {
+				return JSON.parse(localStorage.getItem('projects'));
+			}
+		},
 	},
 });
 
 
-export const { updateProject,registerProject, setCurrentProjectId, removeProject } = projectsSlice.actions;
+export const { updateProject,registerProject, setCurrentProjectId, removeProject, loadProjectsFromLocalStorage } = projectsSlice.actions;
 
 export default projectsSlice.reducer;
