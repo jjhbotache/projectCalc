@@ -34,7 +34,10 @@ export default function ProjectPlanner() {
   useEffect(() => {
     loadTheme();
     // load projects from LS
+    console.log('start proyects',projectsSlice.projects);
+    
     dispatch(loadProjectsFromLocalStorage());
+    dispatch(loadAndSaveConfigFromLocalStorage({ type: 'import' }));
     
     if (projectsSlice.projects.length === 0 && localStorage.getItem('projects') === null) { 
       dispatch(
@@ -60,15 +63,6 @@ export default function ProjectPlanner() {
       
   },[]);
 
-  useEffect(() => {
-    dispatch(loadAndSaveProjectFromLocalStorage({ type: 'import' }));
-    dispatch(loadAndSaveConfigFromLocalStorage({ type: 'import' }));
-
-    // const savedProjectIds = localStorage.getItem('projectIds');
-    // const savedCurrentProjectId = localStorage.getItem('currentProjectId');
-    // if (savedProjectIds) dispatch(setProjectIds(JSON.parse(savedProjectIds)));
-    // if (savedCurrentProjectId) dispatch(setCurrentProjectId(savedCurrentProjectId)); 
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(loadAndSaveProjectFromLocalStorage({ type: 'save' })); // close to delete
@@ -95,6 +89,8 @@ export default function ProjectPlanner() {
   }, [config]);
 
   useEffect(() => {
+    console.log('projectsSlice.projects',projectsSlice.projects);
+    
     if (projectsSlice.projects.length > 0 ) localStorage.setItem('projects', JSON.stringify(projectsSlice));
   }, [projectsSlice.projects]);
 

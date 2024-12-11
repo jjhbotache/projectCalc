@@ -3,7 +3,7 @@ import { initialState as initialProjectState } from '@/slices/projectSlice';
 import { deleteAll } from './projectSlice';
 
 
-const initialState = {
+const initialDefaultState = {
 	projects: [
 		// {
 		// 	project,
@@ -14,9 +14,14 @@ const initialState = {
 	currentProjectId: null,
 };
 
+
 const projectsSlice = createSlice({
 	name: 'projects',
-	initialState,
+	initialState: 
+		localStorage.getItem('projects')
+			? JSON.parse(localStorage.getItem('projects'))
+			: initialDefaultState
+	,
 	reducers: {
 
 		registerProject(state, action) {
