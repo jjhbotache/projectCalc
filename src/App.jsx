@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadAndSaveProjectFromLocalStorage } from '@/slices/projectSlice';
 import { loadAndSaveConfigFromLocalStorage } from '@/slices/configSlice'; // Import the action
 import Navigation from '@/components/navigation/Navigation';
 import AppConfigs from '@/components/navigation/AppConfigs';
@@ -65,7 +64,6 @@ export default function ProjectPlanner() {
 
 
   useEffect(() => {
-    dispatch(loadAndSaveProjectFromLocalStorage({ type: 'save' })); // close to delete
     
     dispatch(
       updateProject({

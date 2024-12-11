@@ -152,5 +152,5 @@ const projectSlice = createSlice({
   },
 });
 
-export const { updateFunctionalities, loadAndSaveProjectFromLocalStorage, deleteAll, updateProjectInfo, setProjectState } = projectSlice.actions;
+export const { updateFunctionalities,  deleteAll, updateProjectInfo, setProjectState } = projectSlice.actions;
 export default projectSlice.reducer;

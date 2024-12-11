@@ -46,6 +46,7 @@
 - ~~add list of Deliverables~~
 - ~~add analitycs~~
 
+- fix UI to fit the height
 
 ## bugs
 - ~~fix bug when reorder functionality in mobile~~
