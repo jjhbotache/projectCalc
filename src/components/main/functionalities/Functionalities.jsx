@@ -115,12 +115,13 @@ export default function Functionalities({ functionalities }) {
         )
       }
 
-      <Button onClick={addFunctionality} className="bg-blue-700 text-white hover:bg-blue-600 mb-10 rounded-full self-center p-2" >
-        <CirclePlus size={18} />
-      </Button>
+      <div  className="mb-11" >
+        <Button onClick={addFunctionality} className="bg-blue-700 text-white hover:bg-blue-600  rounded-full self-center p-2 aspect-square" >
+          <CirclePlus />
+        </Button>
+      </div>
 
       <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
-        <AlertDialogTrigger />
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Project Description</AlertDialogTitle>

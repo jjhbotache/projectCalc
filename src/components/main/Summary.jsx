@@ -17,11 +17,11 @@ export default function Summary() { // Removed props
   
   
   return (  
-    <div className="absolute bottom-0 z-20">
+    <div className="fixed bottom-0 z-20">
 
       <Drawer open={isDrawerOpen} onOpenChange={setDrawerOpen}>
 
-        <DrawerTrigger asChild className="dark:bg-gray-900 bg-slate-200 dark:text-white text-black bottom-0 mb-0 pb-0 h-auto rounded-t-full w-56 ">
+        <DrawerTrigger asChild className="dark:bg-gray-900 bg-slate-200 dark:text-white text-black bottom-0 mb-0 pb-0 h-auto rounded-t-full w-56 shadow-2xl ">
           <div className='h-full flex flex-col items-center justify-center'>
             <ChevronUp size={16} />
             <small>Summary</small>

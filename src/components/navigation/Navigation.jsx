@@ -16,7 +16,7 @@ import AppConfigs from './AppConfigs';
 import SupportDialog from './SupportDialog';
 import SidebarProjects from './SidebarProjects';
 import { removeProject } from '@/slices/projectsSlice';
-import { deleteAll } from '../../slices/projectSlice';
+import { deleteAll } from '@/slices/projectSlice';
 
 const randIntervalSegs = () => (Math.random() * (600 - 120) )+ 120;
 

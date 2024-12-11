@@ -104,6 +104,10 @@ svg{
   }
 }
 
+html,body, #root{
+  height: 100%;
+}
+
 .spin{
   animation: spin 1s linear infinite;
 }

@@ -61,7 +61,7 @@ export default function ProjectInfo() {
           <div>
             <Button variant="outline" size="sm" >
               <Wrench size={16}/>
-              Project Info
+              <span className='hidden md:block text-sm'> Project</span><span className='text-sx sm:text-sm'> Info</span>
             </Button>
           </div>
         </DialogTrigger>

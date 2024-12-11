@@ -109,8 +109,14 @@ export default function ProjectPlanner() {
     <>
       <SidebarProvider defaultOpen={true}>
         <div className="flex h-full w-full">
+
           <Navigation />
-          <main className="flex-1 p-4 pb-0 bg-white dark:bg-slate-950 dark:text-white min-h-screen flex flex-col items-center w-full gap-2 relative">
+
+          <main className="
+          flex-1 px-4 bg-white dark:bg-slate-950 dark:text-white 
+          min-h-screen flex flex-col items-center w-full gap-2 relative
+          overflow-y-auto
+          ">
             <Header 
               undo={undo}
               redo={redo}
@@ -119,6 +125,7 @@ export default function ProjectPlanner() {
             <Functionalities functionalities={project.functionalities} />
             <Summary />
           </main>
+
         </div>
       </SidebarProvider>
       {showConfetti && createPortal(

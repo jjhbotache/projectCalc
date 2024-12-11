@@ -90,7 +90,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
       transition={{ duration: 0.3 }}
     >
       {/* sticky header */}
-      <div className="flex items-center sticky top-[4rem] z-10 p-4 bg-white shadow-sm dark:bg-gray-900 rounded-xl gap-2 dark:bg-opacity-85 bg-opacity-bg-opacity-85">
+      <div className="flex items-center sticky top-[8rem] z-10 p-4 bg-white shadow-sm dark:bg-gray-900 rounded-xl gap-2 dark:bg-opacity-95 bg-opacity-bg-opacity-85">
         {/* drag handle */}
         <div
           className="reorder-handle cursor-grab"

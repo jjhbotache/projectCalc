@@ -96,11 +96,11 @@ export default function Header({
 
 
   return (
-    <header className="flex  items-center justify-between p-4 py-2 dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 sticky top-0 z-20 pb-5">
+    <header className="flex  items-center justify-between p-4 py-2 shadow-xl dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 gap-y-1 sticky top-0 mt-4 z-20 pb-5">
       {/* sidebar  btn & logo */}
       <div className='flex items-center gap-4 text-4xl w-full'>
         <SidebarTrigger className="block" />
-        <p className='truncate w-full block mb-2'>{projectName}</p>
+        <p className='truncate w-full block '>{projectName}</p>
       </div>
 
       {/* project data */}

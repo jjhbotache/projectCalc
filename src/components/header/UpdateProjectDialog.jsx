@@ -5,14 +5,15 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 export default function UpdateProjectDialog({ isUpdateDialogOpen, setIsUpdateDialogOpen, projectDifferences, configDifferences, handleConfirmUpdate }) {
   return (
     <AlertDialog open={isUpdateDialogOpen} onOpenChange={setIsUpdateDialogOpen}>
-      <AlertDialogContent className="h-[90%] overflow-y-auto">
+      <AlertDialogContent className="h-[90%] overflow-y-auto  *:break-all">
         <AlertDialogHeader>
-          <AlertDialogTitle>Confirmar Actualización</AlertDialogTitle>
+          <AlertDialogTitle>Confirm Update</AlertDialogTitle>
           <AlertDialogDescription>
-            Revisa los cambios y decide si deseas actualizar el proyecto.
+            Review the changes and decide if you want to update the project.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="flex flex-col mb-4">
+
+        <div className="flex flex-col mb-4  ">
           <div className="flex font-bold border-b">
             <div className="w-1/3 p-2">Type</div>
             <div className="w-2/3 p-2">Details</div>
@@ -21,7 +22,7 @@ export default function UpdateProjectDialog({ isUpdateDialogOpen, setIsUpdateDia
             diff.functionality && (diff.type === 'added' || diff.type === 'edited') ? (
               <Accordion key={index} type="single" collapsible>
                 <AccordionItem value={`item-${index}`}>
-                  <AccordionTrigger className={`flex border-l-4 p-2 ${
+                  <AccordionTrigger className={`flex border-l-4 p-2  ${
                     diff.type === 'added'
                       ? 'border-green-500'
                       : diff.type === 'edited'
@@ -76,15 +77,16 @@ export default function UpdateProjectDialog({ isUpdateDialogOpen, setIsUpdateDia
             )
           ))}
         </div>
-        <div className="flex flex-col">
-          <div className="flex font-bold border-b">
+
+        <div className="flex flex-col ">
+          <div className="flex font-bold border-b ">
             <div className="w-1/2 p-2">Configuration Name</div>
             <div className="w-1/2 p-2">New Value</div>
           </div>
           {configDifferences.map((diff, index) => (
             <div
               key={index}
-              className={`flex border-l-4 p-2 ${
+              className={`flex border-l-4 p-2  ${
                 diff.type === 'added' || diff.type === 'edited'
                     ? 'border-blue-500'
                     : diff.type === 'not modified'
@@ -93,15 +95,15 @@ export default function UpdateProjectDialog({ isUpdateDialogOpen, setIsUpdateDia
               }`}
             >
               <div className="w-1/2">{diff.key}</div>
-              <div className="w-1/2">
+              <div className="w-1/2 ">
                 {diff.newValue !== undefined ? diff.newValue.toString() : 'N/A'}
               </div>
             </div>
           ))}
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => setIsUpdateDialogOpen(false)}>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirmUpdate}>Actualizar</AlertDialogAction>
+          <AlertDialogCancel onClick={() => setIsUpdateDialogOpen(false)}>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleConfirmUpdate}>Update</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
