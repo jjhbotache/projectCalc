@@ -15,8 +15,8 @@ import ThanksModal from '@/components/modals/ThanksModal';
 import CancelModal from '@/components/modals/CancelModal';
 import ProductRatingDialog from '@/components/modals/ProductRatingDialog'; // Import the new dialog
 import { registerProject } from '@/slices/projectsSlice';
-import { setCurrentProjectId, updateProject, loadProjectsFromLocalStorage } from './slices/projectsSlice';
-import { setProjectState } from './slices/projectSlice';
+import { setCurrentProjectId, updateProject } from '@/slices/projectsSlice';
+import { initialState, setProjectState } from './slices/projectSlice';
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();
@@ -36,7 +36,6 @@ export default function ProjectPlanner() {
     // load projects from LS
     console.log('start proyects',projectsSlice.projects);
     
-    dispatch(loadProjectsFromLocalStorage());
     dispatch(loadAndSaveConfigFromLocalStorage({ type: 'import' }));
     
     if (projectsSlice.projects.length === 0 && localStorage.getItem('projects') === null) { 
@@ -65,23 +64,15 @@ export default function ProjectPlanner() {
 
 
   useEffect(() => {
-    
+    if (JSON.stringify(project) === JSON.stringify(initialState)) return;
     dispatch(
       updateProject({
-        project: project
+        project: project,
+        history:history || [],
+        currentHistoryIndex:currentHistoryIndex || 0
       })
     )
-  }, [project]);
-
-  useEffect(() => {
-    dispatch(
-      updateProject({
-        project,
-        history,
-        currentHistoryIndex
-      })
-    )
-  }, [history]);
+  }, [project,history]);
 
   useEffect(() => {
     dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' })); 
@@ -94,13 +85,9 @@ export default function ProjectPlanner() {
   }, [projectsSlice.projects]);
 
   useEffect(() => {
-    if (projectsSlice.currentProjectId===null) return;    
-    
-    const projectToSet = projectsSlice.projects.find((p) => p.project.projectInfo.id === projectsSlice.currentProjectId);  
-    
-    
+    if (projectsSlice.currentProjectId===null) return;        
+    const projectToSet = projectsSlice.projects.find((p) => p.project.projectInfo.id === projectsSlice.currentProjectId);    
     loadHistoryAndIndex(projectToSet.history, projectToSet.currentHistoryIndex);
-
     dispatch(setProjectState(projectToSet.project));
   }, [projectsSlice.currentProjectId]);
 

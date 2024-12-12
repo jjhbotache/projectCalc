@@ -13,7 +13,7 @@ export default defineConfig({
         name: 'DevKalk',
         short_name: 'DevKalk',
         description: 'Calculadora de desarrollo para proyectos de software',
-        theme_color: '#ffffff',
+        theme_color: 'transparent',
         icons: [
           {
             src: 'icons/pwa-192x192.png',

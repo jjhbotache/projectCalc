@@ -35,7 +35,7 @@ export default function SidebarProjects() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Proyectos</SidebarGroupLabel>
+      <SidebarGroupLabel>Projects</SidebarGroupLabel>
       <SidebarMenu>
         <SidebarMenuButton asChild>
           <div className='flex w-full' onClick={handleCreateProject}>

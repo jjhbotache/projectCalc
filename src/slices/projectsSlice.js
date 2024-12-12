@@ -101,15 +101,10 @@ const projectsSlice = createSlice({
 			
 		},
 
-		loadProjectsFromLocalStorage(state) {
-			if (localStorage.getItem('projects')) {
-				return JSON.parse(localStorage.getItem('projects'));
-			}
-		},
 	},
 });
 
 
-export const { updateProject,registerProject, setCurrentProjectId, removeProject, loadProjectsFromLocalStorage } = projectsSlice.actions;
+export const { updateProject,registerProject, setCurrentProjectId, removeProject } = projectsSlice.actions;
 
 export default projectsSlice.reducer;
