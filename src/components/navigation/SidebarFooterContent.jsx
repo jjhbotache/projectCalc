@@ -60,17 +60,19 @@ export default function SidebarFooterContent({ onConfig, onDeleteAllProject, onH
         {open && (
           <SidebarMenuItem className="mt-auto">
             <motion.p
-              className="text-xs text-gray-400 pl-3 pt-3 w-full"
+              className="text-xs text-gray-400 pl-3 pt-3 w-full flex flex-col gap-1 justify-center items-start"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <span className="text-gray-500 mb-1 block">Created by:</span>
-              <a className='underline hover:cursor-pointer' target="_blank" href="https://juanjosehuertas.vercel.app">Juan Jose Huertas Botache</a>
-              <a href="https://github.com/jjhbotache" target="_blank" className=" ml-1 inline-grid place-items-end hover:cursor-pointer hover:text-gray-500">
-                <i className="fi fi-brands-github"></i>
-              </a>
+              <span className="text-gray-500 block basis-full">Created by:</span>
+              <div className="flex items-center gap-0.5">
+                <a className='underline hover:cursor-pointer' target="_blank" href="https://juanjosehuertas.vercel.app">Juan Jose Huertas Botache</a>
+                <a href="https://github.com/jjhbotache" target="_blank" className=" ml-1 inline-grid place-items-end hover:cursor-pointer hover:text-gray-500">
+                  <i className="fi fi-brands-github pt-0.5"></i>
+                </a>
+              </div>
             </motion.p>
           </SidebarMenuItem>
         )}

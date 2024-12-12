@@ -88,7 +88,6 @@ export default function Navigation() {
   return <>
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <SidebarTrigger className="block md:hidden"/>
         <SidebarHeaderContent />
       </SidebarHeader>
 
