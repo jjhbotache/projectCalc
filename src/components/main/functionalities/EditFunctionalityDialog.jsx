@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import useGemini from '@/hooks/useGemini';
 import { Sparkles } from 'lucide-react';
 
-export default function EditFunctionalityDialog({ functionality, setUpdatedFunctionality, setIsUpdateDialogOpen }) {
+export default function EditFunctionalityDialog({ functionality, setUpdatedFunctionality, setIsUpdateDialogOpen, disabled }) {
   const { editFunctionality } = useGemini();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [inputText, setInputText] = useState('');
@@ -37,7 +37,7 @@ export default function EditFunctionalityDialog({ functionality, setUpdatedFunct
 
   return (
     <>
-      <Button onClick={() => setIsDialogOpen(true)} className="p-2">
+      <Button onClick={() => setIsDialogOpen(true)} className="p-2" disabled={disabled}>
         <Sparkles size={12} />
       </Button>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

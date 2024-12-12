@@ -46,7 +46,6 @@
 - ~~add list of Deliverables~~
 - ~~add analitycs~~
 
-- fix UI to fit the height
 
 ## bugs
 - ~~fix bug when reorder functionality in mobile~~
@@ -54,3 +53,6 @@
 - ~~fix dialogs wrong done~~
 - ~~fix expandible bug (expands when its not necessary)~~
 - ~~fix cant modify expandible input~~
+- ~~fix UI to fit the height~~
+- ~~fix scroll functionalities~~
+- fix activated undo redo arrows

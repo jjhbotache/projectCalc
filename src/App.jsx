@@ -28,6 +28,7 @@ export default function ProjectPlanner() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [isThanksModalOpen, setIsThanksModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [dragEnabled, setDragEnabled] = useState(false);
    
 
   useEffect(() => {
@@ -121,8 +122,10 @@ export default function ProjectPlanner() {
               undo={undo}
               redo={redo}
               canUndo={canUndo}
-              canRedo={canRedo}   />
-            <Functionalities functionalities={project.functionalities} />
+              canRedo={canRedo}
+              dragEnabled={dragEnabled}
+              setDragEnabled={setDragEnabled}   />
+            <Functionalities functionalities={project.functionalities} dragEnabled={dragEnabled} />
             <Summary />
           </main>
 

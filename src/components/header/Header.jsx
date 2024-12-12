@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Moon, Sun, Sparkles, MessageCircle, X, File, Undo, Redo } from 'lucide-react';
+import { Moon, Sun, Sparkles, MessageCircle, X, File, Undo, Redo, Move, Lock, ArrowUpDown } from 'lucide-react';
 import toggleDarkMode from '../../utils/toggleDarkMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { initialState, updateProjectInfo, updateFunctionalities } from '../../slices/projectSlice';
@@ -26,6 +26,8 @@ export default function Header({
   redo,
   canUndo,
   canRedo,
+  dragEnabled,
+  setDragEnabled,
 }) {
   const dispatch = useDispatch();
   const project = useSelector(state => state.project);
@@ -139,11 +141,20 @@ export default function Header({
           </Button>
          )}
 
-        
       </div>
 
       
       <div className="absolute bottom-0 -left-2 transform translate-y-1/2 flex gap-1">
+        {/* Toggle Reordering */}
+        <Button
+            onClick={() => setDragEnabled(!dragEnabled)}
+            className="p-0 h-6 shadow-2xl"
+            variant="outline"
+          >
+            <ArrowUpDown className={
+              (!dragEnabled ? "text-gray-700" : "text-white" )
+            } />
+        </Button>
         <Button onClick={undo} disabled={!canUndo} className="p-0 h-6 shadow-2xl" variant="outline" title="Undo">
           <Undo />
         </Button>

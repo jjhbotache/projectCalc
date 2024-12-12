@@ -25,7 +25,7 @@ import { motion, AnimatePresence } from 'framer-motion'; // Import motion and An
 import { calculateTaskDifferences } from '@/utils/calculate';
 import ExpandibleInput from '../../global/ExpandibleInput';
 
-export default function Functionality({ functionality, isCollapsed, onToggle, dragControls }) {
+export default function Functionality({ functionality, isCollapsed, onToggle, dragControls, dragEnabled }) {
   if (!functionality) return null;
   
   const dispatch = useDispatch();
@@ -92,24 +92,27 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
       {/* sticky header */}
       <div className="flex items-center sticky top-[8rem] z-10 p-4 bg-white shadow-sm dark:bg-gray-900 rounded-xl gap-2 dark:bg-opacity-95 bg-opacity-bg-opacity-85">
         {/* drag handle */}
-        <div
-          className="reorder-handle cursor-grab"
-          onPointerDown={(e) => dragControls.start(e)}
-        >
-          <GripVertical size={16} />
-        </div>
+        {dragEnabled && dragControls && (
+          <div
+            className="reorder-handle cursor-grab"
+            onPointerDown={(e) => dragControls.start(e)}
+          >
+            <GripVertical size={16} />
+          </div>
+        )}
 
         {/* functionality name */}
         <Label className="block text-gray-800 dark:text-gray-200">{functionality.id})</Label>
         <ExpandibleInput
           value={functionality.name}
           onChange={(e) => handleFieldChange('name', e.target.value)}
+          disabled={dragEnabled}
         />
 
         {/* delete */}
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive" className="p-2">
+            <Button variant="destructive" className="p-2" disabled={dragEnabled}>
               <Trash size={12} />
             </Button>
           </AlertDialogTrigger>
@@ -135,12 +138,14 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
           functionality={functionality}
           setUpdatedFunctionality={setUpdatedFunctionality}
           setIsUpdateDialogOpen={setIsUpdateDialogOpen}
+          disabled={dragEnabled}
         />
         
         {/* expand */}
         <Button
         onClick={onToggle}
         className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 grid place-items-center"
+        disabled={dragEnabled}
       >{isCollapsed ? <ArrowDownFromLine size={12} /> : <ArrowUpFromLine size={12} />}</Button>
 
       </div>
@@ -162,7 +167,7 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
       {/* expand btn */}
       
       <AnimatePresence>
-        {!isCollapsed && (
+        {!isCollapsed && !dragEnabled  && (
           <motion.div
             className='bg-gray-950 bg-opacity-20 md:rounded-xl md:p-2'
             initial={{ height: 0, opacity: 0 }}

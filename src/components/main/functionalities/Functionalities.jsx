@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import { Reorder } from 'framer-motion'; // Eliminar useDragControls de aquí
 import { useIsMobile } from '@/hooks/use-mobile';
 
-export default function Functionalities({ functionalities }) {
+export default function Functionalities({ functionalities, dragEnabled }) {
   const [expandedFunctionalityId, setExpandedFunctionalityId] = useState(null);
   const dispatch = useDispatch();
   const project = useSelector((state) => state.project);
@@ -88,6 +88,7 @@ export default function Functionalities({ functionalities }) {
                 expandedFunctionalityId === functionality.id ? null : functionality.id
               );
             }}
+            dragEnabled={dragEnabled} // Pass dragEnabled prop
           />
         ))}
       </Reorder.Group>
