@@ -76,7 +76,11 @@ export default function Functionalities({ functionalities, dragEnabled }) {
         axis="y"
         values={functionalities}
         onReorder={handleReorder}
-        className='flex flex-col gap-8 w-full my-4'
+        className={`flex flex-col ${
+          !dragEnabled
+          ? 'gap-3'
+          : 'gap-8'
+        } w-full my-4`}
       >
         {functionalities.map((functionality) => (
           <ReorderFunctionalityItem
@@ -88,7 +92,7 @@ export default function Functionalities({ functionalities, dragEnabled }) {
                 expandedFunctionalityId === functionality.id ? null : functionality.id
               );
             }}
-            dragEnabled={dragEnabled} // Pass dragEnabled prop
+            dragEnabled={dragEnabled}
           />
         ))}
       </Reorder.Group>

@@ -25,7 +25,7 @@ import { motion, AnimatePresence } from 'framer-motion'; // Import motion and An
 import { calculateTaskDifferences } from '@/utils/calculate';
 import ExpandibleInput from '../../global/ExpandibleInput';
 
-export default function Functionality({ functionality, isCollapsed, onToggle, dragControls, dragEnabled }) {
+export default function Functionality({ functionality, isCollapsed, onToggle, dragEnabled }) {
   if (!functionality) return null;
   
   const dispatch = useDispatch();
@@ -92,10 +92,9 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
       {/* sticky header */}
       <div className="flex items-center sticky top-[8rem] z-10 p-4 bg-white shadow-sm dark:bg-gray-900 rounded-xl gap-2 dark:bg-opacity-95 bg-opacity-bg-opacity-85">
         {/* drag handle */}
-        {dragEnabled && dragControls && (
+        {dragEnabled  && (
           <div
             className="reorder-handle cursor-grab"
-            onPointerDown={(e) => dragControls.start(e)}
           >
             <GripVertical size={16} />
           </div>
