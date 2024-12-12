@@ -33,8 +33,6 @@ export default function ProjectPlanner() {
 
   useEffect(() => {
     loadTheme();
-    // load projects from LS
-    console.log('start proyects',projectsSlice.projects);
     
     dispatch(loadAndSaveConfigFromLocalStorage({ type: 'import' }));
     
@@ -79,7 +77,6 @@ export default function ProjectPlanner() {
   }, [config]);
 
   useEffect(() => {
-    console.log('projectsSlice.projects',projectsSlice.projects);
     
     if (projectsSlice.projects.length > 0 ) localStorage.setItem('projects', JSON.stringify(projectsSlice));
   }, [projectsSlice.projects]);

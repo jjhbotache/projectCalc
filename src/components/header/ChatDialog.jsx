@@ -84,13 +84,13 @@ const ChatDialog = ({ open, onClose }) => {
             placeholder="Type your message..."
             className="w-10/12"
           />
-          {
-          isLoading 
-            ?<LoaderCircle size={16} className="spin w-1/12" /> 
-            :<Button onClick={handleSend} className="p-0 w-1/12">
-              <Send size={16} className="" />
-            </Button>
-          }
+          <Button  onClick={handleSend} className="p-0 w-1/12">
+            {
+            isLoading 
+              ?<LoaderCircle className="spin" /> 
+              :<Send height={16}/>
+            }
+          </Button>
           <Button onClick={() => dispatch(resetChat())} className="p-0 w-1/12">
             <RotateCcw size={16} className="" />
           </Button>

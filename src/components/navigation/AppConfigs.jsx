@@ -30,53 +30,29 @@ export default function AppConfigs({ open, onOpenChange }) {
   
   const dispatch = useDispatch();
 
-  const [hoursPerDay, setHoursPerDay] = useState(config.hoursPerDay);
-  const [workingDaysPerWeek, setWorkingDaysPerWeek] = useState(config.workingDaysPerWeek);
-  const [hourlyRate, setHourlyRate] = useState(config.hourlyRate);
-  const [geminiApiKey, setGeminiApiKey] = useState(config.geminiApiKey);
-  const [technologiesKnown, setTechnologiesKnown] = useState(config.technologiesKnown);
   const [newTechName, setNewTechName] = useState('');
   const [newTechExpertise, setNewTechExpertise] = useState('beginner');
   const [isGeminiDialogOpen, setIsGeminiDialogOpen] = useState(false);
   const [newGeminiApiKey, setNewGeminiApiKey] = useState('');
   const fileInputRef = useRef(null);
 
-  useEffect(() => {
-    setHoursPerDay(config.hoursPerDay);
-    setWorkingDaysPerWeek(config.workingDaysPerWeek);
-    setHourlyRate(config.hourlyRate);
-    setGeminiApiKey(config.geminiApiKey);
-    setTechnologiesKnown(config.technologiesKnown);
-  }, [config]);
-
   const handleAddTechnology = () => {
     if (newTechName.trim()) {
-      setTechnologiesKnown([
-        ...technologiesKnown,
-        { name: newTechName.trim(), expertise: newTechExpertise }
-      ]);
+      const updatedTechnologies = [
+        ...config.technologiesKnown,
+        { name: newTechName.trim(), expertise: newTechExpertise },
+      ];
+      dispatch(updateConfig({ technologiesKnown: updatedTechnologies }));
+      dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' }));
       setNewTechName('');
       setNewTechExpertise('beginner');
     }
   };
 
   const handleRemoveTechnology = (index) => {
-    setTechnologiesKnown(technologiesKnown.filter((_, i) => i !== index));
-  };
-
-  const handleSave = () => {
-    dispatch(
-      updateConfig({
-        hoursPerDay,
-        workingDaysPerWeek,
-        hourlyRate,
-        geminiApiKey,
-        technologiesKnown,
-      })
-    );
+    const updatedTechnologies = config.technologiesKnown.filter((_, i) => i !== index);
+    dispatch(updateConfig({ technologiesKnown: updatedTechnologies }));
     dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' }));
-    onOpenChange(false);
-    toast.success('Settings saved successfully');
   };
 
   const handleSaveGeminiApiKey = () => {
@@ -142,8 +118,11 @@ export default function AppConfigs({ open, onOpenChange }) {
               <Label>Hourly Rate</Label>
               <Input
                 type="number"
-                value={hourlyRate}
-                onChange={(e) => setHourlyRate(Number(e.target.value))}
+                value={config.hourlyRate}
+                onChange={(e) => {
+                  dispatch(updateConfig({ hourlyRate: Number(e.target.value) }));
+                  dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' }));
+                }}
                 min={0}
               />
             </div>
@@ -151,8 +130,11 @@ export default function AppConfigs({ open, onOpenChange }) {
               <Label>Hours per Day</Label>
               <Input
                 type="number"
-                value={hoursPerDay}
-                onChange={(e) => setHoursPerDay(Number(e.target.value))}
+                value={config.hoursPerDay}
+                onChange={(e) => {
+                  dispatch(updateConfig({ hoursPerDay: Number(e.target.value) }));
+                  dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' }));
+                }}
                 min={1}
                 max={24}
               />
@@ -161,8 +143,11 @@ export default function AppConfigs({ open, onOpenChange }) {
               <Label>Working Days per Week</Label>
               <Input
                 type="number"
-                value={workingDaysPerWeek}
-                onChange={(e) => setWorkingDaysPerWeek(Number(e.target.value))}
+                value={config.workingDaysPerWeek}
+                onChange={(e) => {
+                  dispatch(updateConfig({ workingDaysPerWeek: Number(e.target.value) }));
+                  dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' }));
+                }}
                 min={1}
                 max={7}
               />
@@ -170,9 +155,16 @@ export default function AppConfigs({ open, onOpenChange }) {
             <div className='flex flex-col gap-2'>
               <Label>Gemini API Key</Label>
               <span>
-                ***********{geminiApiKey.slice(-4)}
+              {
+                  config.geminiApiKey 
+                  ? config.geminiApiKey.slice(0, 4) + "*************"
+                  : "No API Key"
+                }
               </span>
               <Button onClick={() => setIsGeminiDialogOpen(true)}>Update Gemini API Key</Button>
+              <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer"><small className="text-gray-500 underline">
+                Get your Gemini API Key here
+              </small></a>
             </div>
             <div className="space-y-2">
               <Label>Technologies</Label>
@@ -204,7 +196,7 @@ export default function AppConfigs({ open, onOpenChange }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {technologiesKnown.map((tech, index) => (
+                  {config.technologiesKnown.map((tech, index) => (
                     <TableRow key={index}>
                       <TableCell>{tech.name}</TableCell>
                       <TableCell className="capitalize">{tech.expertise}</TableCell>
@@ -223,12 +215,6 @@ export default function AppConfigs({ open, onOpenChange }) {
               </Table>
             </div>
             
-          </div>
-          <div className="mt-4 flex justify-end space-x-2">
-            <Button variant="secondary" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSave}>Save</Button>
           </div>
           <DialogClose />
         </DialogContent>

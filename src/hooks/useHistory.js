@@ -29,7 +29,6 @@ export default function useHistory() {
 
     
     if (differentThanBefore && (!itsChangingBetweenProject)) {
-      console.log("updating history cause projectState changed",differentThanBefore, "and not changing between projects",!itsChangingBetweenProject);
       
       const newHistory = history.slice(0, currentIndex + 1);
       newHistory.push(currentProject);

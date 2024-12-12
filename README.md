@@ -27,11 +27,7 @@
 - ~~allow re arrange for the tasks~~
 - ~~history saver save steps in LS~~
 
-- _add tabs for multi quotations_
-  how make it work?
-  I will keep the main slice to make the app works.
-  A bigger slice will manage the projects and its stories.
-  - setup the slice to work when start
+- ~~add tabs for multi quotations~~
 
 - _support quotation api_
 
@@ -46,6 +42,7 @@
 - ~~add list of Deliverables~~
 - ~~add analitycs~~
 
+- updating config dialog to constantly update
 
 ## bugs
 - ~~fix bug when reorder functionality in mobile~~
@@ -55,4 +52,4 @@
 - ~~fix cant modify expandible input~~
 - ~~fix UI to fit the height~~
 - ~~fix scroll functionalities~~
-- fix activated undo redo arrows
+- ~~fix activated undo redo arrows~~

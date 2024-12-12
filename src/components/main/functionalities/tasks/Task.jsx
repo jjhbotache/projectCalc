@@ -10,6 +10,8 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
   const dispatch = useDispatch();
 
   const handleChange = (field, value) => {
+    console.log('field', field, 'value', value);
+    
     dispatch(updateFunctionalities({
       type: 'UPDATE_TASK',
       payload: {
@@ -30,6 +32,9 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
     }));
   };
 
+  console.log('task', task);
+  
+
   return (
     <div className="flex items-center w-full md:px-4 py-2 bg-white dark:bg-gray-800 md:rounded-lg shadow-sm">
       {reorderingMode && (
@@ -48,7 +53,7 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
         <Input
           type="number"
           value={task.hours}
-          onChange={(e) => handleChange('hours', Number(e.target.value))}
+          onChange={(e) => handleChange('hours', parseInt(e.target.value))}
           className="w-full p-1 border md:rounded bg-white dark:bg-gray-700 dark:text-white"
           disabled={reorderingMode} 
         />

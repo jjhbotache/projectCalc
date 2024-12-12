@@ -58,8 +58,6 @@ const projectSlice = createSlice({
           state.functionalities = state.functionalities.filter(f => f.id !== payload.id);
           break;
         case 'UPDATE_TASK':
-          console.log(
-            'updating!');
           const funcToUpdate = state.functionalities.find(f => f.id === payload.functionalityId);
           if (funcToUpdate && funcToUpdate.tasks[payload.taskIndex]) {
             const taskNames = funcToUpdate.tasks.map(task => task.name);
