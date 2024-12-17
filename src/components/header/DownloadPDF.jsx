@@ -2,7 +2,6 @@ import { PDFDownloadLink, Document, Page, Text, StyleSheet, View, Image } from '
 import { useSelector } from 'react-redux';
 import { selectConfig } from '@/slices/configSlice';
 import { calculateFunctionalityDuration, calculateTotals, calculateFunctionTotalPrices } from '@/utils/calculate';
-import { useMemo } from 'react';
 import PDFHeader from './PDFHeader';
 import PDFFooter from './PDFFooter';
 
@@ -110,7 +109,7 @@ const styles = StyleSheet.create({
 
 const ProjectPDF = ({ project, config }) => {
   const { hourlyRate } = config; // Extract necessary parameters
-  const totals = useMemo(() => calculateTotals(project, config), [project, config]); // Calculate totals
+  const totals = calculateTotals(project, config); // Calculate totals
   
   return (
     <Document>
@@ -145,15 +144,8 @@ const ProjectPDF = ({ project, config }) => {
       
       {/* Functionalities */}
       {project.functionalities.map(func => {
-        const prices = useMemo(
-          () => calculateFunctionTotalPrices(func, hourlyRate),
-          [func, hourlyRate]
-        );
-
-        const duration = useMemo(
-          () => calculateFunctionalityDuration(func.tasks),
-          [func.tasks]
-        );
+        const prices = calculateFunctionTotalPrices(func, hourlyRate);
+        const duration = calculateFunctionalityDuration(func.tasks);
         
         return (
           <Page key={func.id} style={styles.page}>
