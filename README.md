@@ -42,7 +42,10 @@
 - ~~add list of Deliverables~~
 - ~~add analitycs~~
 
-- updating config dialog to constantly update
+- ~~updating config dialog to constantly update~~
+- ~~when reloaded, no complete history updated~~
+- ~~Add credits in pdf~~
+- ~~privatize code~~
 
 ## bugs
 - ~~fix bug when reorder functionality in mobile~~

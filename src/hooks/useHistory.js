@@ -5,8 +5,12 @@ import { setProjectState } from '@/slices/projectSlice';
 export default function useHistory() {
   const dispatch = useDispatch();
   const currentProject = useSelector((state) => state.project);
-  const [history, setHistory] = useState( [currentProject] );
-  const [currentIndex, setCurrentIndex] = useState( 0 );
+  const [history, setHistory] = useState( 
+    localStorage.getItem('projectHistory') || [currentProject]
+  );
+  const [currentIndex, setCurrentIndex] = useState( 
+    localStorage.getItem('historyIndex') || 0
+   );
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
 
@@ -15,9 +19,10 @@ export default function useHistory() {
   useEffect(() => {
 
     const selectedProjectId = currentProject.projectInfo.id;
+    
     const lastHistoryProjectId =  history.length==0
       ? undefined
-      : history[history.length-1].projectInfo.id;
+      : history[history.length-1].projectInfo?.id;
 
     const itsChangingBetweenProject = !(selectedProjectId === lastHistoryProjectId);
     const currentHistoryState = JSON.stringify(history[currentIndex]);

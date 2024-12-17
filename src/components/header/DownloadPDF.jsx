@@ -1,7 +1,10 @@
-import { PDFDownloadLink, Document, Page, Text, StyleSheet, View, } from '@react-pdf/renderer';
+import { PDFDownloadLink, Document, Page, Text, StyleSheet, View, Image } from '@react-pdf/renderer';
 import { useSelector } from 'react-redux';
 import { selectConfig } from '@/slices/configSlice';
 import { calculateFunctionalityDuration, calculateTotals, calculateFunctionTotalPrices } from '@/utils/calculate';
+import { useMemo } from 'react';
+import PDFHeader from './PDFHeader';
+import PDFFooter from './PDFFooter';
 
 // Define base styles outside StyleSheet.create
 const tableColBase = {
@@ -98,16 +101,22 @@ const styles = StyleSheet.create({
   dividerSpace: {
     marginTop: 10, // Adjusted spacing
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
 });
 
-// Create PDF Document Component
 const ProjectPDF = ({ project, config }) => {
   const { hourlyRate } = config; // Extract necessary parameters
-  const totals = calculateTotals(project, config); // Calculate totals
+  const totals = useMemo(() => calculateTotals(project, config), [project, config]); // Calculate totals
   
   return (
     <Document>
       <Page style={styles.page}>
+        <PDFHeader />
+
         <Text style={styles.h1}>{project.projectInfo.projectName}</Text>
         <Text style={styles.h3}>{project.projectInfo.projectDescription}</Text>
 
@@ -130,16 +139,26 @@ const ProjectPDF = ({ project, config }) => {
         <View style={styles.dividerSpace} />
         <Text style={styles.h3}>Total Price: ${totals.projectCost}</Text>
         <View style={styles.divider} />
+
+        <PDFFooter />
       </Page>
       
       {/* Functionalities */}
       {project.functionalities.map(func => {
-        const prices = calculateFunctionTotalPrices(func, hourlyRate);
-        
-        const duration = calculateFunctionalityDuration(func.tasks); // Calculate duration
+        const prices = useMemo(
+          () => calculateFunctionTotalPrices(func, hourlyRate),
+          [func, hourlyRate]
+        );
+
+        const duration = useMemo(
+          () => calculateFunctionalityDuration(func.tasks),
+          [func.tasks]
+        );
         
         return (
           <Page key={func.id} style={styles.page}>
+            <PDFHeader />
+            
             <Text style={styles.h3}>{func.id}) {func.name} - Total: ${prices.totalPrice}</Text>
             <Text style={styles.h3}>Duration: {duration} hrs</Text>
             <Text style={styles.h3}>Labor Cost: ${prices.laborCost.toFixed(2)}</Text>
@@ -165,12 +184,16 @@ const ProjectPDF = ({ project, config }) => {
                 );
               })}
             </View>
+
+            <PDFFooter />
           </Page>
         );
       })}
       
       {/* Summary */}
       <Page style={styles.page}>
+        <PDFHeader />
+
         {/* Deliverables */}
         <Text style={styles.h2}>Deliverables:</Text>
         {project.projectInfo.deliverables.map((item, index) => (
@@ -182,6 +205,8 @@ const ProjectPDF = ({ project, config }) => {
         <Text style={styles.h2}>Total Project Cost: ${totals.projectCost.toFixed(2)}</Text>
         <Text style={styles.h2}>Monthly Cost: ${totals.monthlyCost.toFixed(2)}</Text>
         <Text style={styles.h2}>Total Duration: {totals.months.toFixed(1)} Months</Text>
+
+        <PDFFooter />
       </Page>
     </Document>
   );
