@@ -67,15 +67,15 @@ export default function TaskList({ tasks, sprintId }) {
           onReorder={handleReorder}
           className="flex flex-col gap-2"
         >
-          {tasks.map((task, index) => (
+          {tasks.map((task) => (
             <Reorder.Item
-              key={index}
+              key={task.id}
               value={task}
             >
               <Task
                 task={task}
                 sprintId={sprintId}
-                taskIndex={index}
+                taskIndex={tasks.indexOf(task)}
                 reorderingMode={reorderingMode}
               />
             </Reorder.Item>
@@ -83,12 +83,12 @@ export default function TaskList({ tasks, sprintId }) {
         </Reorder.Group>
       ) : (
         <div className="flex flex-col gap-2">
-          {tasks.map((task, index) => (
+          {tasks.map((task) => (
             <Task
-              key={index}
+              key={task.id}
               task={task}
               sprintId={sprintId}
-              taskIndex={index}
+              taskIndex={tasks.indexOf(task)}
               reorderingMode={reorderingMode}
             />
           ))}

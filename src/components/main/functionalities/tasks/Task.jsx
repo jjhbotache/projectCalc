@@ -32,9 +32,6 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
     }));
   };
 
-  console.log('task', task);
-  
-
   return (
     <div className="flex items-center w-full md:px-4 py-2 bg-white dark:bg-gray-800 md:rounded-lg shadow-sm">
       {reorderingMode && (

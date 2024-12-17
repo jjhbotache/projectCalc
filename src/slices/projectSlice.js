@@ -6,6 +6,7 @@ export const initialFunctionality = {
   name: 'Default Functionality',
   tasks: [
     {
+      id: 0, // Start with ID 0
       name: 'Default Task',
       hours: 0,
       billed: true,
@@ -74,9 +75,15 @@ const projectSlice = createSlice({
           if (funcToAddTask) {
             const taskNames = funcToAddTask.tasks.map(task => task.name);
             if (!taskNames.includes(payload.task.name)) {
+              // Get the highest existing ID and add 1
+              const nextId = funcToAddTask.tasks.length > 0 
+                ? Math.max(...funcToAddTask.tasks.map(t => t.id)) + 1 
+                : 0;
+              
               funcToAddTask.tasks.push({
                 ...payload.task,
-                billed: true, // Ensure billed defaults to true
+                id: nextId,
+                billed: true,
               });
             } else {
               console.error('Task with the same name already exists.');
