@@ -86,7 +86,7 @@ export default function Header({
       dispatch(updateProjectInfo(updatedProject.projectInfo));
       dispatch(updateFunctionalities({ type: 'SET_ALL', payload: updatedProject.functionalities }));
       setIsUpdateDialogOpen(false);
-      toast.success('Proyecto actualizado con éxito 🚀');
+      toast.success('Project updated successfully 🚀');
     }
   };
 
