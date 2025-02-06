@@ -1,58 +1,46 @@
-# Todo
-- ~~resolver json structure bug~~
-- ~~collapsable con cambios en funcionalidades~~
-- ~~agregar drag and drop~~
-- ~~exportar pdf~~
-- ~~agregar experticia a la peticion del proyecto~~
-- ~~agregar chat con ia sobre el proyecto~~
+# ProjectCalc
 
-- ~~resolver bug de borrar tambien la config~~
-- ~~resolver bugs de crear~~
-- ~~añadir export de configs~~
-- ~~solve proyect info modal bug~~
+ProjectCalc is a Progressive Web App (PWA) designed for freelancer developers. It is a tool that helps create precise project quotations using Artificial Intelligence and improving estimation accuracy.
+
+## Project Overview
+
+ProjectCalc aims to simplify project estimation by combining manual inputs with AI-powered suggestions. It allows users to create, edit, and manage project functionalities and tasks while offering features like PDF export, configuration import/export, and dynamic project editing.
+
+## Architecture
+
+- **Frontend:** The app is built using React and Redux Toolkit. It follows a component-based architecture with modular and reusable UI components.
+- **User Interface:** TailwindCSS is used for styling, ensuring a responsive design that works seamlessly on both desktop and mobile devices. The app also leverages Radix UI and Lucide React for accessible components and icons.
+- **State Management:** Redux Toolkit manages the global state, which includes project details, configurations, and user interactions.
+- **Local Persistence:** Project state is persisted using local storage and cookies. This ensures continuity of user settings such as sidebar states and recent projects.
+- **PWA Features:** The application supports offline capabilities, providing a native-app-like experience with improved performance and reliability.
+
+## Technologies Used
+
+- **React:** For building the user interface.
+- **Redux Toolkit:** For efficient state management.
+- **TailwindCSS:** For rapid and customizable UI styling.
+- **PWA Standards:** For offline support and native feel.
+- **Additional Libraries:**
+  - React Toastify for notifications.
+  - Radix UI for accessible component design.
+  - Lucide React for vector icons.
+  - Tailwindcss-animate for smooth UI animations.
+  - Vite (or a similar bundler) for fast build performance.
+
+## Setup and Development
+
+1. Install dependencies:
+   - `npm install` or `yarn install`
+2. Run development server:
+   - `npm run dev` or `yarn dev`
+3. Build the application:
+   - `npm run build` or `yarn build`
+4. Deploy as a PWA to your chosen hosting environment.
+
+## Additional Information
+
+- The app supports dynamic project creation with configuration management.
+- Users can benefit from AI-powered suggestions for project estimations.
+- The design ensures ease of use for managing project functionalities and tasks.
 
 
-- ~~solve tasks name unvisible~~
-- ~~name of the project dynamic (one line max)~~
-- ~~todo a ingls~~
-  - ~~chat~~
-  - ~~settings~~
-  - ~~help option~~
-  - ~~sidebar~~
-  - ~~main~~
-  - ~summary~
-  - ~~pdf~~
-- ~~create a help description~~
-- ~~add context to btns~~
-- ~~allow re arrange for the tasks~~
-- ~~history saver save steps in LS~~
-
-- ~~add tabs for multi quotations~~
-
-- _support quotation api_
-
-- ~~add a buy me a coffe~~
-- ~~add a donate with paypal~~
-- ~~add a rate me on github~~
-
-- ~~add like it? pop up~~
-- _add send comments_
-- _add rate with stars_
-
-- ~~add list of Deliverables~~
-- ~~add analitycs~~
-
-- ~~updating config dialog to constantly update~~
-- ~~when reloaded, no complete history updated~~
-- ~~Add credits in pdf~~
-- ~~privatize code~~
-
-## bugs
-- ~~fix bug when reorder functionality in mobile~~
-- ~~fix bug enhanced input functionality~~
-- ~~fix dialogs wrong done~~
-- ~~fix expandible bug (expands when its not necessary)~~
-- ~~fix cant modify expandible input~~
-- ~~fix UI to fit the height~~
-- ~~fix scroll functionalities~~
-- ~~fix activated undo redo arrows~~
