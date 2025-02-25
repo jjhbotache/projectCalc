@@ -6,11 +6,18 @@ export const initialState = {
   workingDaysPerWeek: 5,
   technologiesKnown: [], // Array of { name: string, expertise: "beginner" | "intermediate" | "advanced" }
   geminiApiKey: '', // Add Gemini API key to initial state
+  model: 'gemini-1.5-flash', // new property for selected model
 };
+
+
+const sliceInitialState = localStorage.getItem('config') != null 
+  ? JSON.parse(localStorage.getItem('config'))
+  : initialState;
+
 
 const configSlice = createSlice({
   name: 'config',
-  initialState,
+  initialState:sliceInitialState,
   reducers: {
     updateConfig: (state, action) => {
       return {

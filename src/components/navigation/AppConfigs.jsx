@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -11,7 +11,6 @@ import { loadAndSaveConfigFromLocalStorage, updateConfig, importConfig, exportCo
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
 import {
   Table,
   TableHead,
@@ -24,6 +23,7 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@
 import { DialogDescription } from '@radix-ui/react-dialog';
 import { toast } from 'react-toastify';
 import { Import, SquareArrowUpRight } from 'lucide-react';
+import useGemini from '@/hooks/useGemini';
 
 export default function AppConfigs({ open, onOpenChange }) {
   const config = useSelector((state) => state.config);
@@ -35,6 +35,14 @@ export default function AppConfigs({ open, onOpenChange }) {
   const [isGeminiDialogOpen, setIsGeminiDialogOpen] = useState(false);
   const [newGeminiApiKey, setNewGeminiApiKey] = useState('');
   const fileInputRef = useRef(null);
+  const [models, setModels] = useState([]);
+  const { listModels } = useGemini();
+
+  useEffect(() => {
+    listModels().then((models) => {
+      setModels(models); 
+    });
+  }, []);
 
   const handleAddTechnology = () => {
     if (newTechName.trim()) {
@@ -48,7 +56,7 @@ export default function AppConfigs({ open, onOpenChange }) {
       setNewTechExpertise('beginner');
     }
   };
-
+  
   const handleRemoveTechnology = (index) => {
     const updatedTechnologies = config.technologiesKnown.filter((_, i) => i !== index);
     dispatch(updateConfig({ technologiesKnown: updatedTechnologies }));
@@ -83,6 +91,12 @@ export default function AppConfigs({ open, onOpenChange }) {
 
   const handleImportButtonClick = () => {
     fileInputRef.current.click();
+  };
+
+  const handleChangeModel = (value) => {
+    const cleanValue = value.startsWith('models/') ? value.replace('models/', '') : value;
+    dispatch(updateConfig({ model: cleanValue }));
+    dispatch(loadAndSaveConfigFromLocalStorage({ type: 'save' }));
   };
 
   return (
@@ -151,6 +165,21 @@ export default function AppConfigs({ open, onOpenChange }) {
                 min={1}
                 max={7}
               />
+            </div>
+            <div>
+              <Label>Model</Label>
+              <Select value={"models/"+config.model} onValueChange={handleChangeModel}>
+                <SelectTrigger >
+                  <SelectValue placeholder="Select model" />
+                </SelectTrigger>
+                <SelectContent>
+                  {models.map((m) => (
+                    <SelectItem key={m.name} value={m.name}>
+                      {m.displayName || m.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div className='flex flex-col gap-2'>
               <Label>Gemini API Key</Label>

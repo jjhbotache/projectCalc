@@ -7,12 +7,16 @@ import exhaustedGeminiResponse from '../mocks/exhaustedGeminiResponse.json'; // 
 export default function useGemini() {
     const config = useSelector((state) => state.config);
     const project = useSelector((state) => state.project);
-    const { geminiApiKey: apiKey } = config;
+    const { geminiApiKey: apiKey, model } = config; // now includes model
     const chatHistory = useSelector((state) => state.chat.history);
     const dispatch = useDispatch();
 
+    
+    
+
+    // Updated generateContent: use model from config
     const generateContent = async (inputText) => {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -24,7 +28,7 @@ export default function useGemini() {
                         parts: [{ text: `
                             Current project Info: ${JSON.stringify(project.projectInfo)}
                             Configurations: ${JSON.stringify(config)}
-                            ---
+                            ---  
                             Take into account the expertise and techs of the programmer: ${JSON.stringify(config.technologiesKnown)}
                         ` }]
                     },
@@ -35,16 +39,53 @@ export default function useGemini() {
                 ]
             })
         });
-        
-
-        
         const data = await response.json();
         console.log(data);
         
         if (data.status !== undefined) {
-            throw new Error( data.message );
+            throw new Error(data.message);
         }
         return data;
+    };
+
+    // New function: listModels
+    const listModels = async () => {
+        if (!apiKey) {
+            console.log('API key is missing while listing models');
+            return [];
+        }
+        
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+            const data = await response.json();
+            // Filter models that support generateContent
+            /*
+            models: [{
+                "name": "models/gemini-1.5-flash-001-tuning",
+                "version": "001",
+                "displayName": "Gemini 1.5 Flash 001 Tuning",
+                "description": "Version of Gemini 1.5 Flash that supports tuning, our fast and versatile multimodal model for scaling across diverse tasks, released in May of 2024.",
+                "inputTokenLimit": 16384,
+                "outputTokenLimit": 8192,
+                "supportedGenerationMethods": [
+                    "generateContent",
+                    "countTokens",
+                    "createTunedModel"
+                ],
+                "temperature": 1,
+                "topP": 0.95,
+                "topK": 64,
+                "maxTemperature": 2
+            }]
+            */
+            const models = data.models?.filter(model => 
+                model.supportedGenerationMethods?.includes('generateContent')
+            ) || [];
+            return models;
+        } catch (error) {
+            console.error('Error listing models:', error);
+            return [];
+        }
     };
 
     const editFunctionality = async (inputText, functionality) => {
@@ -61,13 +102,11 @@ export default function useGemini() {
             ${initialFunctionalityJson}
 
             ANSWER ONLY WITH THE JSON FORMAT
-        `
+        `;
         const result = await generateContent(prompt);
         const text = result.candidates[0].content.parts[0].text;
         const parsedText = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
-
         const updatedFunctionality = JSON.parse(parsedText);
-
         return updatedFunctionality;
     };
 
@@ -84,7 +123,7 @@ export default function useGemini() {
             ${projectJsonFormat}
 
             ANSWER ONLY WITH THE JSON FORMAT
-        `
+        `;
         const result = await generateContent(prompt);
         if (!result) return null; // Handle the case when result is null
         const text = result.candidates[0].content.parts[0].text;
@@ -105,7 +144,7 @@ export default function useGemini() {
             ${initialProjectJson}
 
             ANSWER ONLY WITH THE JSON FORMAT
-        `
+        `;
         const result = await generateContent(prompt);
         if (!result) return null; // Handle the case when result is null
         const text = result.candidates[0].content.parts[0].text;
@@ -135,7 +174,7 @@ export default function useGemini() {
                     Totals: ${JSON.stringify(calculateTotals(project, config))}
                     ---
                     We are here to talk about the proyect
-                    ---
+                    ---  
                     ` }]
         };
 
@@ -154,7 +193,7 @@ export default function useGemini() {
         };
         
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -190,5 +229,6 @@ export default function useGemini() {
         }
     };
 
-    return { generateProjectFromDescription, editFunctionality, editProject, sendMessage };
+
+    return { generateProjectFromDescription, editFunctionality, editProject, sendMessage, listModels };
 };
