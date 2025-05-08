@@ -15,7 +15,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction, 
 } from '@/components/ui/alert-dialog';
-import { ArrowDownFromLine, ArrowUpFromLine,  Sparkles, TimerReset, Trash, GripVertical } from 'lucide-react';
+import { ArrowDownFromLine, ArrowUpFromLine, Sparkles, TimerReset, Trash, GripVertical, Copy, MoreVertical } from 'lucide-react';
 import { calculateFunctionTotalPrices } from '@/utils/calculate';
 import TaskList from './tasks/TaskList';
 import { useState, useEffect } from 'react';
@@ -24,12 +24,21 @@ import ConfirmUpdateDialog from './ConfirmUpdateDialog'; // Import new component
 import { motion, AnimatePresence } from 'framer-motion'; // Import motion and AnimatePresence
 import { calculateTaskDifferences } from '@/utils/calculate';
 import ExpandibleInput from '../../global/ExpandibleInput';
+import { useIsMobile } from '@/hooks/use-mobile';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export default function Functionality({ functionality, isCollapsed, onToggle, dragEnabled }) {
   if (!functionality) return null;
   
   const dispatch = useDispatch();
   const config = useSelector((state) => state.config); 
+  const project = useSelector((state) => state.project);
+  const isMobile = useIsMobile();
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [updatedFunctionality, setUpdatedFunctionality] = useState(null);
   const [taskDifferences, setTaskDifferences] = useState([]);
@@ -78,6 +87,15 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
     setIsUpdateDialogOpen(false);
   };
 
+  const cloneFunctionality = (functionalityId) => {
+    dispatch(updateFunctionalities({
+      type: 'CLONE_FUNCTIONALITY',
+      payload: {
+        functionalityId: functionalityId
+      }
+    }));
+  };
+
   const {totalPrice, laborCost} = calculateFunctionTotalPrices(functionality, config.hourlyRate);
 
   return (
@@ -108,45 +126,83 @@ export default function Functionality({ functionality, isCollapsed, onToggle, dr
           disabled={dragEnabled}
         />
 
-        {/* delete */}
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="destructive" className="p-2" disabled={dragEnabled}>
+        {/* Hidden AI edit button for dropdown menu reference */}
+        <div className="hidden">
+          <EditFunctionalityDialog
+            functionality={functionality}
+            setUpdatedFunctionality={setUpdatedFunctionality}
+            setIsUpdateDialogOpen={setIsUpdateDialogOpen}
+            disabled={dragEnabled}
+            data-functionality-id={functionality.id}
+          />
+        </div>
+
+        {/* expand button - always visible */}
+        <Button
+          onClick={onToggle}
+          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 grid place-items-center"
+          disabled={dragEnabled}
+        >
+          {isCollapsed ? <ArrowDownFromLine size={12} /> : <ArrowUpFromLine size={12} />}
+        </Button>
+
+        {isMobile ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="p-2">
+                <MoreVertical size={16} />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => cloneFunctionality(functionality.id)}>
+                <Copy size={16} className="mr-2" />
+                Clone
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onSelect={(e) => {
+                  e.preventDefault(); // Prevent closing the dropdown
+                  document.querySelector(`button[data-functionality-id="${functionality.id}"]`)?.click();
+                }}
+              >
+                <Sparkles size={16} className="mr-2" />
+                Edit with AI
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {removeFunctionality(functionality.id)}} 
+              >
+                <span className="flex items-center text-red-600" ><Trash size={16} className="mr-2" />Delete</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <>
+            
+
+            {/* edit with AI */}
+            <EditFunctionalityDialog
+              functionality={functionality}
+              setUpdatedFunctionality={setUpdatedFunctionality}
+              setIsUpdateDialogOpen={setIsUpdateDialogOpen}
+              disabled={dragEnabled}
+            />
+            
+            {/* clone functionality */}
+            <Button
+              onClick={() => cloneFunctionality(functionality.id)}
+              className="bg-green-500 text-white p-2 rounded hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 grid place-items-center"
+              disabled={dragEnabled}
+              title="Clone functionality"
+            >
+              <Copy size={12} />
+            </Button>
+
+            {/* delete */}
+            <Button variant="destructive" className="p-2" disabled={dragEnabled} title="Delete functionality" onClick={() => removeFunctionality(functionality.id)}>
               <Trash size={12} />
             </Button>
-          </AlertDialogTrigger>
-
-          <AlertDialogContent >
-
-            <AlertDialogHeader>
-              <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
-              <AlertDialogDescription >
-                Are you sure you want to remove this functionality?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={() => removeFunctionality(functionality.id)}>Confirm</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-
-        {/* edit with AI */}
-        <EditFunctionalityDialog
-          functionality={functionality}
-          setUpdatedFunctionality={setUpdatedFunctionality}
-          setIsUpdateDialogOpen={setIsUpdateDialogOpen}
-          disabled={dragEnabled}
-        />
-        
-        {/* expand */}
-        <Button
-        onClick={onToggle}
-        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 grid place-items-center"
-        disabled={dragEnabled}
-      >{isCollapsed ? <ArrowDownFromLine size={12} /> : <ArrowUpFromLine size={12} />}</Button>
-
+          </>
+        )}
       </div>
 
       {/* details */}

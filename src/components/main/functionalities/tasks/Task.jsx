@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import { updateFunctionalities } from '@/slices/projectSlice';
 import { Input } from '@/components/ui/input';
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from '@/components/ui/alert-dialog';
-import { Trash, GripVertical } from 'lucide-react';
+import { Trash, GripVertical, Copy } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import ExpandibleInput from '@/components/global/ExpandibleInput';
 
@@ -32,6 +32,16 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
     }));
   };
 
+  const handleCloneTask = () => {
+    dispatch(updateFunctionalities({
+      type: 'CLONE_TASK',
+      payload: {
+        functionalityId: sprintId,
+        taskIndex: taskIndex,
+      },
+    }));
+  };
+
   return (
     <div className="flex items-center w-full md:px-4 py-2 bg-white dark:bg-gray-800 md:rounded-lg shadow-sm">
       {reorderingMode && (
@@ -39,14 +49,14 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
           <GripVertical size={16} />
         </div>
       )}
-      <div className="w-9/12" title={task.name}>
+      <div className="w-8/12 sm:w-9/12" title={task.name}>
         <ExpandibleInput
           value={task.name}
           onChange={(e) => handleChange('name', e.target.value)}
           disabled={reorderingMode} 
         />
       </div>
-      <div className="w-2/12">
+      <div className="w-2/12 sm:w-1/12">
         <Input
           type="number"
           value={task.hours}
@@ -62,11 +72,22 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
           disabled={reorderingMode} 
         />
       </div>
-      <div className="w-1/12 flex justify-center">
+      <div className="w-2/12 sm:w-1/12 flex justify-center gap-3">
+        {/* Clone button */}
+        <button 
+          onClick={handleCloneTask} 
+          className="text-green-600 hover:text-green-800"
+          title="Clone task"
+          disabled={reorderingMode}
+        >
+          <Copy size={19} />
+        </button>
+
+        {/* Delete button */}
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <button className="text-red-600 hover:text-red-800">
-              <Trash size={24} />
+              <Trash size={19} />
             </button>
           </AlertDialogTrigger>
 

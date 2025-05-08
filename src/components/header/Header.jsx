@@ -46,7 +46,14 @@ export default function Header({
   const [configDifferences, setConfigDifferences] = useState([]);
   const [jsonStructureOpen, setJsonStructureOpen] = useState(false);
   const [isChatDialogOpen, setIsChatDialogOpen] = useState(false); 
-  const [isChatInHeader, setIsChatInHeader] = useState(false);
+  const [isChatInHeader, setIsChatInHeader] = useState(() => {
+    const savedPosition = sessionStorage.getItem('isChatInHeader');
+    return savedPosition ? JSON.parse(savedPosition) : false;
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('isChatInHeader', JSON.stringify(isChatInHeader));
+  }, [isChatInHeader]);
 
   
 
@@ -98,11 +105,11 @@ export default function Header({
 
 
   return (
-    <header className="flex  items-center justify-between p-4 py-2 shadow-xl dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 gap-y-1 sticky top-0 mt-4 z-20 pb-5">
+    <header className="flex  items-center justify-between p-4 py-2 pb-2 shadow-xl dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 gap-y-1 sticky top-0 mt-4 z-20 ">
       {/* sidebar  btn & logo */}
-      <div className='flex items-center gap-4 text-4xl w-full'>
+      <div className='flex items-center gap-4 text-4xl w-full border border-b-gray-600 mb-1.5'>
         <SidebarTrigger className="block" />
-        <p className='truncate w-full block '>{projectName}</p>
+        <p className='truncate w-full block h-[1.4em]'>{projectName}</p>
       </div>
 
       {/* project data */}

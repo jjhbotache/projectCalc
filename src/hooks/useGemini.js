@@ -110,6 +110,26 @@ export default function useGemini() {
         return updatedFunctionality;
     };
 
+    const addFunctionality = async (description) => {
+        const initialFunctionalityJson = JSON.stringify(initialFunctionality);
+        const prompt = `
+            Create a new functionality based on this description:
+            ${description}
+            
+            ---
+            The functionality must be given in the following JSON format:
+            ${initialFunctionalityJson}
+
+            ANSWER ONLY WITH THE JSON FORMAT
+        `;
+        const result = await generateContent(prompt);
+        if (!result) return null;
+        const text = result.candidates[0].content.parts[0].text;
+        const parsedText = text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1);
+        const newFunctionality = JSON.parse(parsedText);
+        return newFunctionality;
+    };
+
     const generateProjectFromDescription = async (description) => {
         // from a project description, generate a project in the form of a JSON object
 
@@ -137,11 +157,12 @@ export default function useGemini() {
     const editProject = async (inputText) => {
         const initialProjectJson = JSON.stringify(initialState);
         const prompt = `
-            Edit the following current project according to the following description:
+            Rewrite the project but edit it according to the following prompt:
             ${inputText}
             ---
             The project must be given in the following JSON format:
             ${initialProjectJson}
+            ---
 
             ANSWER ONLY WITH THE JSON FORMAT
         `;
@@ -154,7 +175,6 @@ export default function useGemini() {
 
         return updatedProject;
     };
-
 
     // chat
     const sendMessage = async (message) => {
@@ -230,5 +250,5 @@ export default function useGemini() {
     };
 
 
-    return { generateProjectFromDescription, editFunctionality, editProject, sendMessage, listModels };
+    return { generateProjectFromDescription, editFunctionality, editProject, sendMessage, listModels, addFunctionality };
 };

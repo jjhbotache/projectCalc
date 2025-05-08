@@ -37,7 +37,12 @@ export default function EditFunctionalityDialog({ functionality, setUpdatedFunct
 
   return (
     <>
-      <Button onClick={() => setIsDialogOpen(true)} className="p-2" disabled={disabled}>
+      <Button 
+        onClick={() => setIsDialogOpen(true)} 
+        className="p-2" 
+        disabled={disabled}
+        data-functionality-id={functionality.id}
+      >
         <Sparkles size={12} />
       </Button>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

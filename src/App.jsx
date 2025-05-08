@@ -13,7 +13,7 @@ import ConfettiExplosion from 'react-confetti-explosion';
 import { createPortal } from 'react-dom';
 import ThanksModal from '@/components/modals/ThanksModal';
 import CancelModal from '@/components/modals/CancelModal';
-import ProductRatingDialog from '@/components/modals/ProductRatingDialog'; // Import the new dialog
+// import ProductRatingDialog from '@/components/modals/ProductRatingDialog'; // Import the new dialog
 import { registerProject } from '@/slices/projectsSlice';
 import { setCurrentProjectId, updateProject } from '@/slices/projectsSlice';
 import { initialState, setProjectState } from './slices/projectSlice';
@@ -89,7 +89,6 @@ export default function ProjectPlanner() {
   }, [projectsSlice.currentProjectId]);
 
 
-  
   return (
     <>
       <SidebarProvider defaultOpen={true}>
@@ -117,10 +116,10 @@ export default function ProjectPlanner() {
       </SidebarProvider>
       {showConfetti && createPortal(
         <ConfettiExplosion 
-          zIndex={999999}
-          className='*:z-[999999] fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/3'
-          onComplete={() => setShowConfetti(false)} 
-          duration={5000}
+        zIndex={999999}
+        className='*:z-[999999] fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/3'
+        onComplete={() => setShowConfetti(false)} 
+        duration={5000}
         />,
         document.body
       )}

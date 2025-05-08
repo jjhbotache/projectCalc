@@ -47,6 +47,11 @@
 - ~~Add credits in pdf~~
 - ~~privatize code~~
 
+- ~~add clone functions (tasks & functionalities)~~
+- ~~add add functionality with AI~~
+- ~~add money converter~~
+- add json editor mode
+
 ## bugs
 - ~~fix bug when reorder functionality in mobile~~
 - ~~fix bug enhanced input functionality~~

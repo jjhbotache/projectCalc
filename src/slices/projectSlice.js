@@ -103,6 +103,52 @@ const projectSlice = createSlice({
             func.tasks = payload.newTasks;
           }
           break;
+        case 'CLONE_TASK':
+          const funcWithTaskToClone = state.functionalities.find(f => f.id === payload.functionalityId);
+          if (funcWithTaskToClone && funcWithTaskToClone.tasks[payload.taskIndex]) {
+            const originalTask = funcWithTaskToClone.tasks[payload.taskIndex];
+            
+            // Get the highest existing task ID and add 1
+            const nextId = funcWithTaskToClone.tasks.length > 0 
+              ? Math.max(...funcWithTaskToClone.tasks.map(t => t.id)) + 1 
+              : 0;
+            
+            // Create a cloned task with a new ID and modified name
+            const clonedTask = {
+              ...originalTask,
+              id: nextId,
+              name: `${originalTask.name} (Clone)`
+            };
+            
+            // Insert the cloned task right after the original task
+            funcWithTaskToClone.tasks.splice(payload.taskIndex + 1, 0, clonedTask);
+          }
+          break;
+        case 'CLONE_FUNCTIONALITY':
+          const functionalityToClone = state.functionalities.find(f => f.id === payload.functionalityId);
+          if (functionalityToClone) {
+            // Generate a new unique ID
+            const newId = Math.max(...state.functionalities.map(f => Number(f.id))) + 1;
+            
+            // Deep clone the tasks to ensure we don't keep references
+            const clonedTasks = functionalityToClone.tasks.map(task => ({
+              ...task,
+              id: task.id, // Keep original task IDs as they're scoped to the functionality
+            }));
+            
+            // Create the cloned functionality
+            const clonedFunctionality = {
+              ...functionalityToClone,
+              id: newId,
+              name: `${functionalityToClone.name} (Clone)`,
+              tasks: clonedTasks
+            };
+            
+            // Find the index of the original functionality and insert the clone right after it
+            const originalIndex = state.functionalities.findIndex(f => f.id === payload.functionalityId);
+            state.functionalities.splice(originalIndex + 1, 0, clonedFunctionality);
+          }
+          break;
         default:
           break;
       }
