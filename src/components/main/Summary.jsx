@@ -90,10 +90,6 @@ export default function Summary() {
           </DialogDescription>
           
           
-          {/* Attribution link as required by the API */}
-          <small className="text-gray-500 text-xs mb-2">
-            <a href="https://www.exchangerate-api.com" className="underline">Rates By Exchange Rate API</a>
-          </small>
           
           <div className="flex flex-col gap-4 my-12">
             <div className="flex items-center">
@@ -165,8 +161,9 @@ export default function Summary() {
             </Button>
             
             {lastUpdated && (
-              <small className="text-gray-500 text-xs">
+              <small className="text-gray-500 text-xs flex flex-col ">
                 Rates: {new Date(lastUpdated).toLocaleDateString()}
+                <a href="https://www.exchangerate-api.com" className="underline">Rates By Exchange Rate API</a>
               </small>
             )}
           </div>
