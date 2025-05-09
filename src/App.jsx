@@ -13,10 +13,13 @@ import ConfettiExplosion from 'react-confetti-explosion';
 import { createPortal } from 'react-dom';
 import ThanksModal from '@/components/modals/ThanksModal';
 import CancelModal from '@/components/modals/CancelModal';
+import JsonEditorMode from '@/components/header/JsonEditorMode';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // import ProductRatingDialog from '@/components/modals/ProductRatingDialog'; // Import the new dialog
 import { registerProject } from '@/slices/projectsSlice';
 import { setCurrentProjectId, updateProject } from '@/slices/projectsSlice';
-import { initialState, setProjectState } from './slices/projectSlice';
+import { initialState, setProjectState } from '@/slices/projectSlice';
+import { ProjectValidationProvider } from '@/utils/ProjectValidationUtil';
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();
@@ -29,6 +32,7 @@ export default function ProjectPlanner() {
   const [isThanksModalOpen, setIsThanksModalOpen] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [dragEnabled, setDragEnabled] = useState(false);
+  const [editorMode, setEditorMode] = useState("graphical");
    
 
   useEffect(() => {
@@ -90,7 +94,7 @@ export default function ProjectPlanner() {
 
 
   return (
-    <>
+    <ProjectValidationProvider>
       <SidebarProvider defaultOpen={true}>
         <div className="flex h-full w-full">
 
@@ -107,9 +111,34 @@ export default function ProjectPlanner() {
               canUndo={canUndo}
               canRedo={canRedo}
               dragEnabled={dragEnabled}
-              setDragEnabled={setDragEnabled}   />
-            <Functionalities functionalities={project.functionalities} dragEnabled={dragEnabled} />
-            <Summary />
+              setDragEnabled={setDragEnabled}
+              editorMode={editorMode}
+              setEditorMode={setEditorMode} />
+            
+            {/* Editor Mode Tabs */}
+            <div className="flex w-full justify-center mb-4 mt-2">
+              <Tabs 
+                value={editorMode} 
+                onValueChange={setEditorMode}
+                className="w-[400px]"
+              >
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="graphical">Graphical Editor</TabsTrigger>
+                  <TabsTrigger value="json">JSON Editor</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+            
+            {editorMode === "graphical" ? (
+              <>
+                <Functionalities functionalities={project.functionalities} dragEnabled={dragEnabled} />
+                <Summary />
+              </>
+            ) : (
+              <div className="w-full h-full px-4">
+                <JsonEditorMode />
+              </div>
+            )}
           </main>
 
         </div>
@@ -135,6 +164,6 @@ export default function ProjectPlanner() {
         window.history.replaceState({}, document.title, window.location.pathname);
         setIsCancelModalOpen(false)
       }} />
-    </>
+    </ProjectValidationProvider>
   );
 }

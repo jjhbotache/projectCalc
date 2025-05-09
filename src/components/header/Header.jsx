@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Moon, Sun, Sparkles, MessageCircle, X, File, Undo, Redo, Move, Lock, ArrowUpDown } from 'lucide-react';
+import { Moon, Sun, Sparkles, MessageCircle, X, File, Undo, Redo, Move, Lock, ArrowUpDown, Code } from 'lucide-react';
 import toggleDarkMode from '../../utils/toggleDarkMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { initialState, updateProjectInfo, updateFunctionalities } from '../../slices/projectSlice';
@@ -28,6 +28,8 @@ export default function Header({
   canRedo,
   dragEnabled,
   setDragEnabled,
+  editorMode,
+  setEditorMode
 }) {
   const dispatch = useDispatch();
   const project = useSelector(state => state.project);
@@ -54,8 +56,6 @@ export default function Header({
   useEffect(() => {
     sessionStorage.setItem('isChatInHeader', JSON.stringify(isChatInHeader));
   }, [isChatInHeader]);
-
-  
 
   useEffect(() => {
     if (isUpdateDialogOpen && updatedProject) {
@@ -103,7 +103,6 @@ export default function Header({
     setTimeout(() => setCopied(false), 2000);
   };
 
-
   return (
     <header className="flex  items-center justify-between p-4 py-2 pb-2 shadow-xl dark:bg-gray-800 bg-slate-200 dark:text-white rounded-lg w-full flex-wrap gap-2 gap-y-1 sticky top-0 mt-4 z-20 ">
       {/* sidebar  btn & logo */}
@@ -123,8 +122,6 @@ export default function Header({
             <File size={iconsSize} />
           </Button>
         </DownloadPDF>
-
-        
 
         <JsonMenu
           project={project}
@@ -169,10 +166,6 @@ export default function Header({
           <Redo />
         </Button>
       </div>
-
-
-
-      
 
       {/* Botón de Chat Flotante */}
       {!isChatInHeader && (
