@@ -19,7 +19,6 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { registerProject } from '@/slices/projectsSlice';
 import { setCurrentProjectId, updateProject } from '@/slices/projectsSlice';
 import { initialState, setProjectState } from '@/slices/projectSlice';
-import { ProjectValidationProvider } from '@/utils/ProjectValidationUtil';
 
 export default function ProjectPlanner() {
   const dispatch = useDispatch();
@@ -93,8 +92,7 @@ export default function ProjectPlanner() {
   }, [projectsSlice.currentProjectId]);
 
 
-  return (
-    <ProjectValidationProvider>
+  return <>
       <SidebarProvider defaultOpen={true}>
         <div className="flex h-full w-full">
 
@@ -164,6 +162,5 @@ export default function ProjectPlanner() {
         window.history.replaceState({}, document.title, window.location.pathname);
         setIsCancelModalOpen(false)
       }} />
-    </ProjectValidationProvider>
-  );
+  </>;
 }
