@@ -84,26 +84,9 @@ export default function Task({ task, sprintId, taskIndex, reorderingMode }) {
         </button>
 
         {/* Delete button */}
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <button className="text-red-600 hover:text-red-800">
-              <Trash size={19} />
-            </button>
-          </AlertDialogTrigger>
-
-          <AlertDialogContent >
-            <AlertDialogHeader>
-              <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
-              <AlertDialogDescription>
-                Are you sure you want to delete this task? This action cannot be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <button className="text-red-600 hover:text-red-800" onClick={handleDelete}>
+          <Trash size={19} />
+        </button>
       </div>
     </div>
   );
