@@ -14,7 +14,8 @@ export default function useHistory() {
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
 
-  
+  const MAX_HISTORY_LENGTH = 50;
+
   // Save current project state to history whenever it changes
   useEffect(() => {
 
@@ -28,22 +29,21 @@ export default function useHistory() {
     const currentHistoryState = JSON.stringify(history[currentIndex]);
     const serializedProjectState = JSON.stringify(currentProject);
     const differentThanBefore = currentHistoryState !== serializedProjectState;
-    
-    
-    
 
-    
     if (differentThanBefore && (!itsChangingBetweenProject)) {
-      
-      const newHistory = history.slice(0, currentIndex + 1);
+      let newHistory = history.slice(0, currentIndex + 1);
       newHistory.push(currentProject);
+
+      if (newHistory.length > MAX_HISTORY_LENGTH) {
+        newHistory = newHistory.slice(newHistory.length - MAX_HISTORY_LENGTH);
+      }
+
       setHistory(newHistory);
-      setCurrentIndex(currentIndex + 1);
+      setCurrentIndex(Math.min(currentIndex + 1, MAX_HISTORY_LENGTH - 1));
     }
 
   }, [currentProject]);
 
-  
   useEffect(() => {
     if (history.length > 0) {
       saveHistoryInLS();
